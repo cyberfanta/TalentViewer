@@ -35,4 +35,5 @@ Julio 23, 2021
 7pm Inicio oficial de la programación de la app. Se hace la creación del proyecto y se incorpora la lógica para el viewBinding que es la nueva forma de trabajar los view para Android.
 1am La primera interfaz ha sido diagramada en Figma.
 1:30am Detecto un error gigante en mi Android Studio version 4.2.2, al parecer no actualizaron el plugin de compilación para que sea compatible con el SDK building tools 31.0.0. El problema se presenta con un jar dx.jar que no está presente, solo está la version d8.jar.
+2:30am Decidí a última hora agregar algo de configuración a los colores del toolbar de la aplicación, para mejorar el look and feel.
 Finalizo por el día de hoy. Procedo a tomar un descanzo para continuar mañana.
