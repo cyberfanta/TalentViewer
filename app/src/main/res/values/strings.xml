@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Talent Viewer</string>
+
+    <string name="content_description">Content</string>
+
+    <string name="main_activity_search_hint">Search</string>
+    <string name="main_activity_button_bios_name">Bios</string>
+    <string name="main_activity_button_jobs_name">Jobs</string>
+
+
 </resources>

@@ -12,4 +12,6 @@
     <color name="black_torre">#FF33475B</color>
     <color name="gray_torre">#FFB4B4B6</color>
     <color name="green_torre">#FFCDDC39</color>
+    <color name="green_torre_34">#57CDDC39</color>
+    <color name="green_torre_00">#00CDDC39</color>
 </resources>
