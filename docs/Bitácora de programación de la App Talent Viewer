@@ -1,0 +1,38 @@
+Bitácora de programación de la App Talent Viewer
+
+Preparativos:
+De la experiencia pasada en la anterior prueba técnica, me queda la mejora en la documentación del proyecto, mejorar en la tiempo que me toma hacer alguna cosas para dedicar un poco más tiempo en los items de la interfaz que la agregar valor y vistosidad. Finalmente, reutilizar el trabajo de otros desarrolladores en preparación a esto, busque algunas herramientas interesantes que me va a ayudar en este desafío.
+
+Construí el Scaffold del proyecto. Decidí hacerlo en Kotlin, ya que como se puede ver en mi GitHub, tengo muchos proyectos en Java y quiero agregar más proyecto en Kotlin, esto me ayuda a demostrar conocimiento.
+
+Luego decidí construirlo con una arquitectura MVP. Actualmente estoy realizando el Curso de Arquitecturas Android de Platzi y aunque MVVM es la siguiente parte del curso que voy a explorar, la idea de MVP como una alternativa de arquitectura que facilita que el usuario pueda tener una app que responda sin tener delays, me agrada bastante.
+
+Luego para ahorrar tiempo, cree el proyecto en mi GitHub, https://github.com/cyberfanta/TalentViewer.
+
+Cree el archivo Readme.md ya que por la presión personal de cumplir la meta, siempre lo dejo para el final. Esto aumenta el chance de ignorarlo y no quiero que eso pase.
+
+A continuación, debía agregarle una licencia de uso. Realmente de este proyecto lo que me interesa es la experiencia de realizarlo y que, si dado el caso alguien decide utilizarlo, por lo menos indiquen que el autor original soy yo. Por lo tanto y reconociendo que me queda un largo camino que explorar en el tema de las licencias, me he decidido por la licencia Apache 2.0, que según lo que me indica GitHub, cumple con lo que estoy buscando.
+
+El correo llegó y visualicé que se trata de hacer una aplicación api rest del portal Torre.co. Esto me indicó que mi app debería ser no solo funcional, sino también poseer una temática formal.
+
+Así que antes de iniciar el reto decidí construir una interfaz basada en algunas plantillas que vi por internet para apps móviles.
+
+Decidí hacerlo en Figma, los colores de torre.co se basan principalmente en Verde #CDDC39, Negro #33475B, Gris #B4B4B6 y Blanco #F9FFFF
+
+El enlace al proyecto figma es https://www.figma.com/file/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?node-id=10%3A1153
+Y el enlace al prototipo es https://www.figma.com/proto/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?page-id=1%3A19&node-id=10%3A1153&viewport=523%2C275%2C0.4222502112388611&scaling=scale-down&starting-point-node-id=10%3A1153&show-proto-sidebar=1
+por si desean ver el diseño planificado y elijo Figma por ser colaborativa, de software libre y super simple para hacer diseños de una manera rápida. Y me encanta.
+
+Luego entré al servidor Api provisto para el ejercicío, el correo no decía que tipo de aplicativo se podía realizar, así que me decidí por realizar una app de Android, que es la especilidad a la cual quiero orientar mi carrera profesional.
+
+Analizo los 4 endpoint provistos. Los métodos Get funcionan de manera estandar para proveer la información a detalle tanto de los usuarios como de las oportunidades de trabajo. Los métodos Post tienen que pasar en el header el tipo de Content-Type, el cual debe ser application/json. Es un problema con el cual ya había lidiado en el pasado.
+
+Al incluir uno de los vectores en el proyecto, me doy cuenta que la exportación de archivos SVG de Figma no es perfecto. Así que me tocó utilizar Adobe Illustrator para arreglar los SVG.
+
+Decido integrar el uso de la herramienta de Firebase, para poder contar con analíticas de uso, y visualizar errores que puedan existir en otros dispositivos. Ver como los usuarios utilizan la aplicación y poder realizar análisis de UX para mejorarla en el futuro. La herramienta de performance para ver el tiempo que demora la App en responder.
+
+Julio 23, 2021
+7pm Inicio oficial de la programación de la app. Se hace la creación del proyecto y se incorpora la lógica para el viewBinding que es la nueva forma de trabajar los view para Android.
+1am La primera interfaz ha sido diagramada en Figma.
+1:30am Detecto un error gigante en mi Android Studio version 4.2.2, al parecer no actualizaron el plugin de compilación para que sea compatible con el SDK building tools 31.0.0. El problema se presenta con un jar dx.jar que no está presente, solo está la version d8.jar.
+Finalizo por el día de hoy. Procedo a tomar un descanzo para continuar mañana.
