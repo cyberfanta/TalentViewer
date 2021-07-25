@@ -20,7 +20,7 @@ data class Peoples(
 	val size: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ResultsItem1?>? = null
+	val results: List<PeopleItem?>? = null
 )
 
 data class Intern(
@@ -90,7 +90,7 @@ data class SkillsItem1(
 	val weight: Double? = null
 )
 
-data class ResultsItem1(
+data class PeopleItem(
 
 	@field:SerializedName("professionalHeadline")
 	val professionalHeadline: String? = null,

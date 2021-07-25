@@ -20,7 +20,7 @@ data class Opportunities(
 	val size: Int? = null,
 
 	@field:SerializedName("results")
-	val results: List<ResultsItem?>? = null
+	val results: List<OpportunityItem?>? = null
 )
 
 data class OrganizationsItem3(
@@ -81,7 +81,7 @@ data class Aggregators(
 	val any: Any? = null
 )
 
-data class ResultsItem(
+data class OpportunityItem(
 
 	@field:SerializedName("created")
 	val created: String? = null,
