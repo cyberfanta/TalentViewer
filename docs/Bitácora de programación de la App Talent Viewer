@@ -37,3 +37,8 @@ Julio 23, 2021
 1:30am Detecto un error gigante en mi Android Studio version 4.2.2, al parecer no actualizaron el plugin de compilación para que sea compatible con el SDK building tools 31.0.0. El problema se presenta con un jar dx.jar que no está presente, solo está la version d8.jar.
 2:30am Decidí a última hora agregar algo de configuración a los colores del toolbar de la aplicación, para mejorar el look and feel.
 Finalizo por el día de hoy. Procedo a tomar un descanzo para continuar mañana.
+
+Julio 24,2021
+12pm Inicio del día de trabajo, la meta de hoy es programar toda la lógica para obtener los datos desde la API, y desplegar en la vista inicial la cual tendrá 2 recyclerview que desplegaran la lista de empleos y la lista de usuarios.
+
+2am Logré colocar el código y arreglé varios problemas con las clases. Actualmente se despliega la UI principal. Quedan para mañana varios errores estéticos que me toca resolver.

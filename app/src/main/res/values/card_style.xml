@@ -9,11 +9,12 @@
         <item name="autoSizeMaxTextSize">24sp</item>
         <item name="autoSizeMinTextSize">18sp</item>
     </style>
+    <style name="card_text_normal_white" parent="card_text_extras">
+        <item name="autoSizeMaxTextSize">24sp</item>
+        <item name="autoSizeMinTextSize">18sp</item>
+        <item name="android:textColor">@color/white_torre</item>
+    </style>
     <style name="card_text_extras">
-        <item name="android:paddingStart">12dp</item>
-        <item name="android:paddingEnd">12dp</item>
-        <item name="android:paddingTop">3dp</item>
-        <item name="android:paddingBottom">3dp</item>
         <item name="android:textColor">@color/black_torre</item>
         <item name="autoSizeStepGranularity">1sp</item>
         <item name="autoSizeTextType">uniform</item>
@@ -21,7 +22,7 @@
         <item name="android:gravity">center</item>
     </style>
     <style name="card_background">
-        <item name="cardBackgroundColor">@color/green_torre</item>
+        <item name="cardBackgroundColor">@color/white_torre</item>
         <item name="cardCornerRadius">40dp</item>
         <item name="cardElevation">10dp</item>
     </style>

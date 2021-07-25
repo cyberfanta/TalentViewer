@@ -12,10 +12,10 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <ImageView
-            android:id="@+id/picture"
+            android:id="@+id/organizations_picture"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginStart="32dp"
@@ -37,7 +37,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/name"
+            android:id="@+id/objective"
             style="@style/card_text_bold"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -46,13 +46,28 @@
             android:layout_marginEnd="32dp"
             android:layout_marginBottom="4dp"
             android:text="@string/content_description"
-            app:layout_constraintBottom_toTopOf="@id/guideline2"
+            app:layout_constraintBottom_toTopOf="@id/organizations_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/picture"
+            app:layout_constraintStart_toEndOf="@id/organizations_picture"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/professionalHeadline"
+            android:id="@+id/organizations_name"
+            style="@style/card_text_normal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="32dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/content_description"
+            app:layout_constraintBottom_toBottomOf="@id/guideline2"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/organizations_picture"
+            app:layout_constraintTop_toTopOf="@+id/guideline2" />
+
+        <TextView
+            android:id="@+id/compensation"
             style="@style/card_text_normal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -63,8 +78,8 @@
             android:text="@string/content_description"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/picture"
-            app:layout_constraintTop_toTopOf="@+id/guideline2" />
+            app:layout_constraintStart_toEndOf="@id/organizations_picture"
+            app:layout_constraintTop_toBottomOf="@id/organizations_name" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -20,12 +20,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TalentViewer"
         tools:ignore="AllowBackup">
-        <activity android:name=".views.BioActivity" />
-        <activity android:name=".views.JobActivity" />
+        <activity android:name=".views.BioActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
+        <activity android:name=".views.JobActivity"
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" />
         <activity
             android:name=".views.MainActivity"
             android:exported="true"
-            tools:ignore="Instantiatable">
+            android:configChanges="orientation|screenSize"
+            android:screenOrientation="portrait"
+            tools:ignore="LockedOrientationActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
