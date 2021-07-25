@@ -11,6 +11,8 @@ import com.cyberfanta.talentviewer.models.*
 import com.cyberfanta.talentviewer.presenters.PageData
 import com.cyberfanta.talentviewer.views.cards.OpportunitiesAdapter
 import com.cyberfanta.talentviewer.views.cards.PeoplesAdapter
+import com.daimajia.androidanimations.library.Techniques
+import com.daimajia.androidanimations.library.YoYo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -22,6 +24,7 @@ import java.util.*
 class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener {
     //To bind view with logical part
     private lateinit var viewBinding: ActivityMainBinding
+    private lateinit var deviceDimension: IntArray
 
     //Manage RecyclerViews
     private lateinit var peopleAdapter: PeoplesAdapter
@@ -33,6 +36,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private var querySize = 20
     private var peopleOffset = 0
     private var opportunityOffset = 0
+    private var opportunitySwitch = true //true: Opportunity - false: Peoples
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,8 +45,11 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
 
         viewBinding.searchView.setOnQueryTextListener(this)
 
+        calculateDeviceDimensions()
+
         fillRecyclerViewBios()
         fillRecyclerViewJobs()
+        bindOnClickListener()
     }
 
     private fun fillRecyclerViewBios() {
@@ -51,14 +58,25 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding.recyclerViewBios.adapter = peopleAdapter
 
         getPeoples(PageData(peopleOffset.toString(), querySize.toString(), ""))
+        DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
     }
 
     private fun fillRecyclerViewJobs() {
         opportunityAdapter = OpportunitiesAdapter (opportunityList)
-        viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
-        viewBinding.recyclerViewBios.adapter = opportunityAdapter
+        viewBinding.recyclerViewJobs.layoutManager = LinearLayoutManager(this)
+        viewBinding.recyclerViewJobs.adapter = opportunityAdapter
 
         getOpportunities(PageData(opportunityOffset.toString(), querySize.toString(), ""))
+    }
+
+    private fun bindOnClickListener() {
+        viewBinding.jobsButton.setOnClickListener { jobsButtonPressed() }
+        viewBinding.biosButton.setOnClickListener { biosButtonPressed() }
+
+    }
+
+    private fun calculateDeviceDimensions() {
+        deviceDimension = DeviceUtils.calculateDeviceDimensions(this)
     }
 
 //    ---
@@ -157,6 +175,8 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }
 
+//    ---
+
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (!query.isNullOrEmpty()) {
             hideKeyboard()
@@ -181,10 +201,34 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         return true
     }
 
-//    ---
-
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(viewBinding.mainLayout.windowToken, 0)
+    }
+
+//    ---
+
+    private fun jobsButtonPressed () {
+        if (!opportunitySwitch) {
+            DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 1f * deviceDimension[0], 0f)
+            DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
+            opportunitySwitch = true
+        } else {
+            YoYo.with(Techniques.Shake)
+                .duration(500)
+                .playOn(viewBinding.jobsButton)
+        }
+    }
+
+    private fun biosButtonPressed () {
+        if (opportunitySwitch) {
+            DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 0f, 1f * deviceDimension[0])
+            DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, -1f * deviceDimension[0], 0f)
+            opportunitySwitch = false
+        } else {
+            YoYo.with(Techniques.Shake)
+                .duration(500)
+                .playOn(viewBinding.biosButton)
+        }
     }
 }

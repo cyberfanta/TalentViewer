@@ -59,4 +59,7 @@ dependencies {
 
     //Implement async tasks
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.6'
+
+    //Implement animations for recyclerView swaps
+    implementation 'com.daimajia.androidanimations:library:2.4@aar'
 }

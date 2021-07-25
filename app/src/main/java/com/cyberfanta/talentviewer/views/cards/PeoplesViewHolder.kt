@@ -11,5 +11,7 @@ class PeoplesViewHolder (view: View) : RecyclerView.ViewHolder(view) {
 
     fun bind (item: PeopleItem?){
         Picasso.get().load(item?.picture).into(viewBinding.picture)
+        viewBinding.name.text = item?.name
+        viewBinding.professionalHeadline.text = item?.professionalHeadline
     }
 }
