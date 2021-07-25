@@ -42,3 +42,6 @@ Julio 24,2021
 12pm Inicio del día de trabajo, la meta de hoy es programar toda la lógica para obtener los datos desde la API, y desplegar en la vista inicial la cual tendrá 2 recyclerview que desplegaran la lista de empleos y la lista de usuarios.
 
 2am Logré colocar el código y arreglé varios problemas con las clases. Actualmente se despliega la UI principal. Quedan para mañana varios errores estéticos que me toca resolver.
+
+Julio 25,2021
+11am La meta de hoy es arreglar un problema estético con las tarjetas de los recyclerviews. Agregar las animaciones al presionar los botones del footer. Y activar la vista a detalle de las oportunidades de empleo.

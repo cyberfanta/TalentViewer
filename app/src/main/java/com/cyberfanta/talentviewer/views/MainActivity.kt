@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
@@ -18,20 +17,29 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
-class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener {
+    //To bind view with logical part
     private lateinit var viewBinding: ActivityMainBinding
+
+    //Manage RecyclerViews
     private lateinit var peopleAdapter: PeoplesAdapter
-    private val peopleList = mutableListOf<PeopleItem>()
     private lateinit var opportunityAdapter: OpportunitiesAdapter
+    private val peopleList = mutableListOf<PeopleItem>()
     private val opportunityList = mutableListOf<OpportunityItem>()
+
+    //Manage query sizes
+    private var querySize = 20
+    private var peopleOffset = 0
+    private var opportunityOffset = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-//        viewBinding.searchView.setOnQueryTextListener(this)
+        viewBinding.searchView.setOnQueryTextListener(this)
 
         fillRecyclerViewBios()
         fillRecyclerViewJobs()
@@ -42,7 +50,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewBios.adapter = peopleAdapter
 
-        getPeoples(PageData("0", "30", ""))
+        getPeoples(PageData(peopleOffset.toString(), querySize.toString(), ""))
     }
 
     private fun fillRecyclerViewJobs() {
@@ -50,7 +58,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewBios.adapter = opportunityAdapter
 
-        getOpportunities(PageData("0", "30", ""))
+        getOpportunities(PageData(opportunityOffset.toString(), querySize.toString(), ""))
     }
 
 //    ---
@@ -70,7 +78,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 } else {
                     showError()
                 }
-                hideKeyboard()
             }
         }
     }
@@ -97,7 +104,6 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 } else {
                     showError()
                 }
-                hideKeyboard()
             }
         }
     }
@@ -153,7 +159,12 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (!query.isNullOrEmpty()) {
-            TODO("Not yet implemented")
+            hideKeyboard()
+
+            opportunityList.clear()
+            opportunityOffset = 0
+            getOpportunities(PageData(opportunityOffset.toString(), querySize.toString(), query.lowercase(Locale.getDefault())))
+//            TODO("getPeoples")
         }
         return true
     }

@@ -8,6 +8,8 @@
                 android:startColor="@color/gray_torre"
                 android:type="linear"
                 />
+            <!--                android:startColor="@color/green_torre_34"-->
+            <!--                android:endColor="@color/gray_torre"-->
             <stroke
                 android:width="2dp"
                 android:color="@color/black_torre"

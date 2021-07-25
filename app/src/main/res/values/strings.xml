@@ -9,4 +9,5 @@
 
     <string name="error_loading">Error loading data from API server</string>
 
+    <string name="card_compensation_hidden">Compensation Hidden</string>
 </resources>

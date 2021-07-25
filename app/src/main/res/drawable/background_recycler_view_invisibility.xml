@@ -4,10 +4,12 @@
         <shape>
             <gradient
                 android:angle="270"
-                android:endColor="@color/green_torre"
                 android:startColor="@color/green_torre_00"
+                android:endColor="@color/green_torre_10"
                 android:type="linear"
                 />
+<!--            android:endColor="@color/gray_torre"-->
+<!--            android:startColor="@color/green_torre_00"-->
         </shape>
     </item>
 </layer-list>

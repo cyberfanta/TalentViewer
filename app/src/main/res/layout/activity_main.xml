@@ -28,6 +28,9 @@
         android:id="@+id/recycler_view_bios"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +42,9 @@
         android:id="@+id/recycler_view_jobs"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintBottom_toBottomOf="@id/view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -49,19 +55,20 @@
     <View
         android:id="@+id/view"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="10dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/background_recycler_view_invisibility"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bios_button1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
         android:id="@+id/bios_button"
         style="@style/footer_text_bold"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/main_activity_button_bios_name"
-        app:layout_constraintBottom_toBottomOf="@id/view"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".15"
         app:layout_constraintStart_toStartOf="parent" />
@@ -69,10 +76,31 @@
     <TextView
         android:id="@+id/jobs_button"
         style="@style/footer_text_bold"
-        android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         android:text="@string/main_activity_button_jobs_name"
-        app:layout_constraintBottom_toBottomOf="@id/view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".85"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/bios_button1"
+        style="@style/footer_text_bold"
+        android:layout_marginBottom="16dp"
+        android:text="@string/main_activity_button_bios_name"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias=".15"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/jobs_button1"
+        style="@style/footer_text_bold"
+        android:layout_marginBottom="16dp"
+        android:text="@string/main_activity_button_jobs_name"
+        app:backgroundTint="@null"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias=".85"
         app:layout_constraintStart_toStartOf="parent" />
