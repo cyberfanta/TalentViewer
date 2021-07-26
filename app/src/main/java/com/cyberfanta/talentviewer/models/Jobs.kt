@@ -236,7 +236,7 @@ data class StrengthsItem(
 data class Compensation(
 
 	@field:SerializedName("minAmount")
-	val minAmount: Int? = null,
+	val minAmount: Double? = null,
 
 	@field:SerializedName("code")
 	val code: String? = null,
@@ -263,7 +263,7 @@ data class Compensation(
 	val conversionCurrency: String? = null,
 
 	@field:SerializedName("maxAmount")
-	val maxAmount: Int? = null
+	val maxAmount: Double? = null
 )
 
 data class Owner(
@@ -281,7 +281,7 @@ data class Owner(
 	val verified: Boolean? = null,
 
 	@field:SerializedName("weight")
-	val weight: Int? = null,
+	val weight: Float? = null,
 
 	@field:SerializedName("hasBio")
 	val hasBio: Boolean? = null,
@@ -374,7 +374,7 @@ data class Person(
 	val flags: Flags? = null,
 
 	@field:SerializedName("weight")
-	val weight: Int? = null,
+	val weight: Float? = null,
 
 	@field:SerializedName("hasBio")
 	val hasBio: Boolean? = null,

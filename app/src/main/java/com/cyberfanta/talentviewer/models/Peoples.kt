@@ -147,7 +147,7 @@ data class Pagination1(
 	val next: String? = null,
 
 	@field:SerializedName("previous")
-	val previous: Any? = null
+	val previous: String? = null
 )
 
 data class Meta1(

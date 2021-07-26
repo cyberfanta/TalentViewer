@@ -296,7 +296,7 @@ data class Person2(
 	val flags: Flags2? = null,
 
 	@field:SerializedName("weight")
-	val weight: Int? = null,
+	val weight: Float? = null,
 
 	@field:SerializedName("locale")
 	val locale: String? = null,
@@ -629,7 +629,7 @@ data class StrengthsItem2(
 	val name: String? = null,
 
 	@field:SerializedName("weight")
-	val weight: Int? = null,
+	val weight: Float? = null,
 
 	@field:SerializedName("id")
 	val id: String? = null,

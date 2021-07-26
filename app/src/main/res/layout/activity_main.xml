@@ -84,4 +84,24 @@
         app:layout_constraintHorizontal_bias=".85"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <ImageView
+        android:id="@+id/bios_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/content_description"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_bios"
+        app:layout_constraintEnd_toEndOf="@+id/recycler_view_bios"
+        app:srcCompat="@drawable/ic_loading" />
+
+    <ImageView
+        android:id="@+id/jobs_loading"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:contentDescription="@string/content_description"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/recycler_view_jobs"
+        app:layout_constraintEnd_toEndOf="@id/recycler_view_jobs"
+        app:srcCompat="@drawable/ic_loading" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

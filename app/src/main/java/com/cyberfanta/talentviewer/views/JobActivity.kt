@@ -1,15 +1,198 @@
 package com.cyberfanta.talentviewer.views
 
+import android.os.Build
 import android.os.Bundle
+import android.view.View
+import android.widget.TextView
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
+import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
+import com.cyberfanta.talentviewer.models.APIService
+import com.cyberfanta.talentviewer.models.Jobs
+import com.squareup.picasso.Picasso
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class JobActivity : AppCompatActivity() {
+    //To bind view with logical part
     private lateinit var viewBinding: ActivityJobBinding
+
+    //Storage the device dimension
+    private var deviceDimension = intArrayOf(0, 0)
+    private var id = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityJobBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
+
+        getDeviceDimensions()
+
+        DeviceUtils.setAnimation(viewBinding.loading, "rotation", 1000, true, 0f, 360f)
+
+        setRandomKenBurnsBackground()
+        loadObject()
     }
+
+    /**
+     * Get the device dimension
+     */
+    private fun getDeviceDimensions(){
+        deviceDimension[0] = intent.getStringExtra("deviceWidth")!!.toInt()
+        deviceDimension[1] = intent.getStringExtra("deviceHeight")!!.toInt()
+        id = intent.getStringExtra("id")!!
+    }
+
+    /**
+     * Set a random background each run
+     */
+    private fun setRandomKenBurnsBackground(){
+        when (DeviceUtils.getRandomNumber(1, 8)) {
+            1 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_1)
+            2 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_2)
+            3 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_3)
+            4 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_4)
+            5 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_5)
+            6 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_6)
+            7 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_7)
+            8 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_8)
+        }
+    }
+
+    /**
+     * Load the view data
+     */
+    private fun loadObject() {
+        CoroutineScope(Dispatchers.IO).launch {
+            val call : Response<Jobs> = getRetrofitJob().create(APIService::class.java).getJob(id)
+            val response : Jobs? = call.body()
+            runOnUiThread {
+                if (call.isSuccessful) {
+                    Picasso.get().load(response?.organizations?.get(0)?.picture)
+                        .into(viewBinding.picture)
+
+                    response?.objective?.let{ viewBinding.objective.text = response.objective }
+                    response?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = response.organizations.get(0)?.name }
+
+                    var string = getString(R.string.card_compensation_hidden)
+                    response?.compensation?.visible?.let{
+                        if (response.compensation.visible) {
+                            string = ""
+                            response.compensation.minAmount?.let { string += response.compensation.minAmount.toString() + " " + response.compensation.currency }
+                            response.compensation.maxAmount?.let {
+                                if (response.compensation.maxAmount > 0)
+                                    string += " - " + response.compensation.maxAmount.toString() + " " + response.compensation.currency
+                            }
+                            response.compensation.periodicity?.let { string += " " + response.compensation.periodicity }
+                        }
+                    }
+                    viewBinding.compensation.text = string
+
+                    response?.details?.let {
+                        var textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_top))
+                        textView.text = getString(R.string.detail_details)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_middle))
+                        var text = ""
+                        for (detail in response.details)
+                            text += detail?.content + "\n"
+                        textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    response?.strengths?.let {
+                        var textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_strengths)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_middle))
+                        var text = ""
+                        for (detail in response.strengths)
+                            text += "• " + detail?.name + ": " + detail?.experience + "\n"
+                        textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    response?.languages?.let {
+                        var textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_languages)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_middle))
+                        var text = ""
+                        for (detail in response.languages)
+                            text += "• " + detail?.language?.name + ": " + detail?.fluency + "\n"
+                        textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    if (response?.place?.remote != null || response?.commitment?.code != null) {
+                        var textView = TextView(
+                            ContextThemeWrapper(
+                                this@JobActivity,
+                                R.style.detail_scrollview_container_middle_dark
+                            )
+                        )
+                        textView.text = getString(R.string.detail_others)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView(
+                            ContextThemeWrapper(
+                                this@JobActivity,
+                                R.style.detail_scrollview_container_bottom
+                            )
+                        )
+                        var text = "• "
+                        if (response.place?.remote != null) {
+                            if (!response.place.remote) {
+                                text += "No "
+                            }
+                            text += getString(R.string.detail_remote) +  "\n• "
+                        }
+
+                        if (response.commitment?.code != null)
+                            text += response.commitment.code
+                        else
+                            text = text.substring(0, text.length - 3)
+
+                        textView.text = text
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    viewBinding.applyNowButton.setOnClickListener {
+                        DeviceUtils.openURL(this@JobActivity,
+                            "https://torre.co/jobs/$id"
+                        )
+                    }
+
+                } else {
+                    showError()
+                }
+
+                //Deactivating Loading Arrow
+                viewBinding.loading.visibility = View.INVISIBLE
+            }
+        }
+    }
+
+    private fun getRetrofitJob(): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl("https://torre.co/api/opportunities/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
+
+    private fun showError() {
+        Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
+    }
+
 }

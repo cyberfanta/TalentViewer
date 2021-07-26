@@ -2,6 +2,7 @@
     <string name="app_name">Talent Viewer</string>
 
     <string name="content_description">Content Description Content Description</string>
+    <string name="content_description_empty"> </string>
 
     <string name="main_activity_search_hint">Search</string>
     <string name="main_activity_button_bios_name">Bios</string>
@@ -10,4 +11,11 @@
     <string name="error_loading">Error loading data from API server</string>
 
     <string name="card_compensation_hidden">Compensation Hidden</string>
+
+    <string name="detail_details">Details</string>
+    <string name="detail_strengths">Requirements</string>
+    <string name="detail_languages">Languages</string>
+    <string name="detail_others">Others</string>
+    <string name="detail_remote">Remote Work</string>
+
 </resources>

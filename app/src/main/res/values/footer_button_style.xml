@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="background_view">
-        <item name="android:background">@drawable/background_green_borderless</item>
+        <item name="android:background">@drawable/background_green_white_border</item>
         <item name="android:paddingTop">3dp</item>
         <item name="android:paddingBottom">3dp</item>
         <item name="android:paddingStart">12dp</item>
