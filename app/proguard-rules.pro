@@ -21,9 +21,6 @@
 #-renamesourcefileattribute SourceFile
 
 #For future use
-#-keep class com.cyberfanta.talentviewer.models.* { *; }
-#-keep class com.cyberfanta.talentviewer.models.character.* { *; }
-#-keep class com.cyberfanta.talentviewer.models.location.* { *; }
-#-keep class com.cyberfanta.talentviewer.models.episode.* { *; }
-#-dontwarn java.lang.instrument.ClassFileTransformer
-#-dontwarn sun.misc.SignalHandler
+-keep class com.cyberfanta.talentviewer.models.* { *; }
+-dontwarn java.lang.instrument.ClassFileTransformer
+-dontwarn sun.misc.SignalHandler

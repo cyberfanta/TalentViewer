@@ -66,7 +66,7 @@
         android:id="@+id/buttons"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
@@ -74,6 +74,7 @@
         <Button
             android:id="@+id/bios_button"
             style="@style/footer_text_bold"
+            android:layout_marginBottom="6dp"
             android:text="@string/main_activity_button_bios_name"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -84,6 +85,7 @@
         <Button
             android:id="@+id/jobs_button"
             style="@style/footer_text_bold"
+            android:layout_marginBottom="6dp"
             android:text="@string/main_activity_button_jobs_name"
             app:backgroundTint="@null"
             app:layout_constraintBottom_toBottomOf="parent"
