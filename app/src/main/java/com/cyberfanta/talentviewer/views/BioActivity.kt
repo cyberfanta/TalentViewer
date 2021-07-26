@@ -82,7 +82,7 @@ class BioActivity : AppCompatActivity() {
                         viewBinding.professionalHeadline.text = response.person.professionalHeadline
                     }
 
-                    //
+                    //TODO: Add more data here
 
                     viewBinding.applyNowButton.setOnClickListener {
                         DeviceUtils.openURL(this@BioActivity,

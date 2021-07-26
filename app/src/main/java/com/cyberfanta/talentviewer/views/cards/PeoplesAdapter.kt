@@ -36,7 +36,7 @@ class PeoplesAdapter (private val items: List<PeopleItem?>) : RecyclerView.Adapt
         private val viewBinding = CardPeopleBinding.bind(view)
 
         fun bind (item: PeopleItem?){
-            Picasso.get().load(item?.picture).into(viewBinding.picture)
+            item?.picture?.let { Picasso.get().load(item.picture).into(viewBinding.picture) }
             item?.name?.let{ viewBinding.name.text = item.name }
             item?.professionalHeadline?.let { viewBinding.professionalHeadline.text =
                 item.professionalHeadline

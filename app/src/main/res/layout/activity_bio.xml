@@ -31,19 +31,19 @@ tools:context=".views.BioActivity">
     android:orientation="horizontal"
     app:layout_constraintGuide_percent=".35" />
 
-<com.pkmmte.view.CircularImageView
-    android:id="@+id/picture"
-    android:layout_width="140dp"
-    android:layout_height="140dp"
-    android:layout_marginTop="8dp"
-    android:adjustViewBounds="true"
-    android:src="@android:mipmap/sym_def_app_icon"
-    app:border="true"
-    app:border_color="@color/white_torre"
-    app:border_width="2dp"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toTopOf="parent" />
+    <com.pkmmte.view.CircularImageView
+        android:id="@+id/picture"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
+        android:layout_marginTop="8dp"
+        android:adjustViewBounds="true"
+        android:src="@android:mipmap/sym_def_app_icon"
+        app:border="true"
+        app:border_color="@color/white_torre"
+        app:border_width="2dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 <Button
     android:id="@+id/apply_now_button"

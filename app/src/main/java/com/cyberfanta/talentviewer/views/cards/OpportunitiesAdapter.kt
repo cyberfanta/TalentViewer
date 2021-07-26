@@ -36,9 +36,7 @@ class OpportunitiesAdapter (private val items: List<OpportunityItem?>) : Recycle
         private val viewBinding = CardOpportunityBinding.bind(view)
 
         fun bind (item: OpportunityItem?) {
-            Picasso.get().load(item?.organizations?.get(0)?.picture)
-                .into(viewBinding.organizationsPicture)
-
+            item?.organizations?.get(0)?.picture?.let { Picasso.get().load(item.organizations.get(0)?.picture).into(viewBinding.organizationsPicture) }
             item?.objective?.let{ viewBinding.objective.text = item.objective }
             item?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = item.organizations.get(0)?.name }
 
