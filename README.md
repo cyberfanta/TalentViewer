@@ -49,12 +49,8 @@ The link for the project is [Here](https://www.figma.com/file/2PDqUTu9WmAAfjjwvr
 If you want also can access to the UI [Prototipe](https://www.figma.com/proto/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?page-id=1%3A19&node-id=10%3A1153&viewport=523%2C275%2C0.4222502112388611&scaling=scale-down&starting-point-node-id=10%3A1153)
 
 ## Screenshots 🖼
-<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175922_Talent%20Viewer.webp" alt="Screenshot 1" width="200"/>
-<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175941_Talent%20Viewer.webp" alt="Screenshot 2" width="200"/>
-<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175950_Talent%20Viewer.webp" alt="Screenshot 3" width="200"/>
-<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180000_Talent%20Viewer.webp" alt="Screenshot 4" width="200"/>
-<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180013_Talent%20Viewer.webp" alt="Screenshot 5" width="200"/>
-<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180043_Talent%20Viewer.webp" alt="Screenshot 6" width="200"/>
+<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175922_Talent%20Viewer.webp" alt="Screenshot 1" width="200"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175941_Talent%20Viewer.webp" alt="Screenshot 2" width="200"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175950_Talent%20Viewer.webp" alt="Screenshot 3" width="200"/>
+<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180000_Talent%20Viewer.webp" alt="Screenshot 4" width="200"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180013_Talent%20Viewer.webp" alt="Screenshot 5" width="200"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180043_Talent%20Viewer.webp" alt="Screenshot 6" width="200"/>
 
 ## Try this project ⚔
 **Use this project on your phone** with this [APK](https://github.com/cyberfanta/TalentViewer/blob/master/app/release/app-debug.apk), just install it and enjoy.
