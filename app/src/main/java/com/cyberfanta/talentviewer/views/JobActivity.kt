@@ -1,11 +1,9 @@
 package com.cyberfanta.talentviewer.views
 
-import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import com.cyberfanta.talentviewer.R
@@ -28,7 +26,9 @@ class JobActivity : AppCompatActivity() {
     private var deviceDimension = intArrayOf(0, 0)
     private var id = ""
 
-
+    /**
+     * The initial point of this activity
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewBinding = ActivityJobBinding.inflate(layoutInflater)
@@ -80,7 +80,7 @@ class JobActivity : AppCompatActivity() {
                         .into(viewBinding.picture)
 
                     response?.objective?.let{ viewBinding.objective.text = response.objective }
-                    response?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = response.organizations.get(0)?.name }
+                    response?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = response.organizations[0]?.name }
 
                     var string = getString(R.string.card_compensation_hidden)
                     response?.compensation?.visible?.let{
@@ -173,7 +173,6 @@ class JobActivity : AppCompatActivity() {
                             "https://torre.co/jobs/$id"
                         )
                     }
-
                 } else {
                     showError()
                 }
@@ -184,6 +183,9 @@ class JobActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Retrofit implementation to get a job detail
+     */
     private fun getRetrofitJob(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://torre.co/api/opportunities/")
@@ -191,6 +193,9 @@ class JobActivity : AppCompatActivity() {
             .build()
     }
 
+    /**
+     * Show error message when device have a problem with the internet
+     */
     private fun showError() {
         Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }

@@ -39,7 +39,7 @@
                 android:layout_height="wrap_content" />
 
             <TextView
-                android:id="@+id/organizations_name"
+                android:id="@+id/organizationsName"
                 style="@style/card_text_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

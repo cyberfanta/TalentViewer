@@ -128,7 +128,7 @@ data class ExperiencesItem(
 	val toMonth: String? = null,
 
 	@field:SerializedName("weight")
-	val weight: Int? = null,
+	val weight: Double? = null,
 
 	@field:SerializedName("media")
 	val media: List<Any?>? = null,
@@ -281,7 +281,7 @@ data class Person2(
 	val professionalHeadline: String? = null,
 
 	@field:SerializedName("completion")
-	val completion: Int? = null,
+	val completion: Double? = null,
 
 	@field:SerializedName("showPhone")
 	val showPhone: Boolean? = null,
@@ -349,8 +349,11 @@ data class OpportunitiesItem(
 	@field:SerializedName("field")
 	val field: String? = null,
 
+//	@field:SerializedName("data")
+//	val data: List<DataItem?>? = null,
+
 	@field:SerializedName("data")
-	val data: List<DataItem?>? = null,
+	val data1: Any? = null,
 
 	@field:SerializedName("interest")
 	val interest: String? = null,
@@ -497,7 +500,7 @@ data class JobsItem(
 	val toMonth: String? = null,
 
 	@field:SerializedName("weight")
-	val weight: Int? = null,
+	val weight: Double? = null,
 
 	@field:SerializedName("media")
 	val media: List<Any?>? = null,

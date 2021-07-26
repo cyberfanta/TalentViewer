@@ -82,6 +82,6 @@ class OpportunitiesAdapter (private val items: List<OpportunityItem?>) : Recycle
             bottomReachedListener?.onBottomReached(position)
     }
 
+    //Return item count
     override fun getItemCount(): Int = items.size
-
 }

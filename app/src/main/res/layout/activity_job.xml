@@ -76,7 +76,7 @@
             style="@style/detail_text_bold" />
 
         <TextView
-            android:id="@+id/organizations_name"
+            android:id="@+id/organizationsName"
             style="@style/detail_text_normal" />
 
         <TextView

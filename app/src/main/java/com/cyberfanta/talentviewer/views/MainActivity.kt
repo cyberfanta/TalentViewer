@@ -44,7 +44,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private var currentAggregators = ""
     private var opportunityOffset = 0
     private var opportunitySwitch = true //true: Opportunity - false: Peoples
-    private var currentIdSearch = -1
 
     //To control coroutines
     private var loadingJobs = false
@@ -73,6 +72,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
 
     }
 
+    /**
+     * The initialize the bios recyclerView
+     */
     private fun fillRecyclerViewBios() {
         peopleAdapter = PeoplesAdapter (peopleList)
         viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
@@ -80,8 +82,64 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
 
         getPeoples(PageData(peopleOffset.toString(), querySize.toString(), currentAggregators))
         DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
+
+        peopleAdapter.setOnItemClickListener(object:
+            PeoplesAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+//                FirebaseManager.logEvent("Character Detail: " + (position+1) + " - " + queryManager.getCharacterDetail(position+1).name, "Get_Character_Detail")
+
+                //Activating Loading Arrow
+                viewBinding.biosLoading.visibility = View.VISIBLE
+
+                peopleList[position].username?.let { getBio(it) }
+            }
+        })
+
+        peopleAdapter.setOnBottomReachedListener(object:
+            PeoplesAdapter.OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+                if (!loadingBios) {
+                    //Activating Loading Arrow
+                    viewBinding.biosLoading.visibility = View.VISIBLE
+
+//                FirebaseManager.logEvent("Character Page: $characterPagesLoaded", "Get_Character_Page")
+                    getPeoples(
+                        PageData(
+                            peopleOffset.toString(),
+                            querySize.toString(),
+                            currentAggregators
+                        )
+                    )
+                }
+            }
+        })
+
+        viewBinding.recyclerViewBios.addOnScrollListener(object:
+            RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    if (!loadingBios) {
+                        //Activating Loading Arrow
+                        viewBinding.biosLoading.visibility = View.VISIBLE
+
+//                    FirebaseManager.logEvent("Character Page: $characterPagesLoaded", "Get_Character_Page")
+                        getPeoples(
+                            PageData(
+                                peopleOffset.toString(),
+                                querySize.toString(),
+                                currentAggregators
+                            )
+                        )
+                    }
+                }
+            }
+        })
     }
 
+    /**
+     * The initialize the jobs recyclerView
+     */
     private fun fillRecyclerViewJobs() {
         opportunityAdapter = OpportunitiesAdapter (opportunityList)
         viewBinding.recyclerViewJobs.layoutManager = LinearLayoutManager(this)
@@ -97,7 +155,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 //Activating Loading Arrow
                 viewBinding.jobsLoading.visibility = View.VISIBLE
 
-//                currentIdSearch = position + 1
                 opportunityList[position].id?.let { getJob(it) }
             }
         })
@@ -142,7 +199,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 }
             }
         })
-
     }
 
     /**
@@ -172,8 +228,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         exitProcess(0)
     }
 
-//    ---
-
+    /**
+     * Load people list into bio recycler view
+     */
     private fun getPeoples(pageData: PageData) {
         CoroutineScope(Dispatchers.IO).launch {
             val call : Response<Peoples> = getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
@@ -193,6 +250,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         }
     }
 
+    /**
+     * Retrofit implementation to get a people list
+     */
     private fun getRetrofitPeoples(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://search.torre.co/people/_search/")
@@ -200,6 +260,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             .build()
     }
 
+    /**
+     * Load opportunity list into job recycler view
+     */
     private fun getOpportunities(pageData: PageData) {
         CoroutineScope(Dispatchers.IO).launch {
             val call : Response<Opportunities> = getRetrofitOpportunities().create(APIService::class.java).getOpportunities(pageData.toString())
@@ -222,6 +285,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         }
     }
 
+    /**
+     * Retrofit implementation to get a opportunity list
+     */
     private fun getRetrofitOpportunities(): Retrofit {
         return Retrofit.Builder()
             .baseUrl("https://search.torre.co/opportunities/_search/")
@@ -229,25 +295,23 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             .build()
     }
 
-    fun getBio(id: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Bios> = getRetrofitBio().create(APIService::class.java).getBio(id)
-            val response : Bios? = call.body()
-            if (call.isSuccessful){
-                TODO("Not yet implemented")
-            } else {
-                showError()
-            }
-        }
+    /**
+     * Open the BioActivity to show the details of a bio
+     */
+    fun getBio(username: String) {
+        val intent = Intent(this, BioActivity::class.java)
+        intent.putExtra("deviceWidth", deviceDimension[0].toString())
+        intent.putExtra("deviceHeight", deviceDimension[1].toString())
+        intent.putExtra("username", username)
+        startActivity(intent)
+
+        //Deactivating Loading Arrow
+        viewBinding.biosLoading.visibility = View.INVISIBLE
     }
 
-    private fun getRetrofitBio(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://torre.bio/api/bios/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
+    /**
+     * Open the JobActivity to show the details of a job
+     */
     fun getJob(id: String) {
         val intent = Intent(this, JobActivity::class.java)
         intent.putExtra("deviceWidth", deviceDimension[0].toString())
@@ -259,12 +323,16 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding.jobsLoading.visibility = View.INVISIBLE
     }
 
+    /**
+     * Show error message when device have a problem with the internet
+     */
     private fun showError() {
         Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }
 
-//    ---
-
+    /**
+     * Called when user clicks on submit button
+     */
     override fun onQueryTextSubmit(query: String?): Boolean {
         if (!query.isNullOrEmpty()) {
             hideKeyboard()
@@ -316,13 +384,17 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         return true
     }
 
+    /**
+     * Hide the keyboard after the searchView submit the text
+     */
     private fun hideKeyboard() {
         val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(viewBinding.mainLayout.windowToken, 0)
     }
 
-//    ---
-
+    /**
+     * Manage the swap animation when press jobs button
+     */
     private fun jobsButtonPressed () {
         if (!opportunitySwitch) {
             DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 1f * deviceDimension[0], 0f)
@@ -335,6 +407,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         }
     }
 
+    /**
+     * Manage the swap animation when press bios button
+     */
     private fun biosButtonPressed () {
         if (opportunitySwitch) {
             DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 0f, 1f * deviceDimension[0])
