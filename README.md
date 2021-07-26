@@ -42,7 +42,7 @@ With architecture MVP (Model View Presenter) to make sure that the app will make
 
 ## Class Diagram 🎯
 The graphical internal description of this project can be found [Here](https://github.com/cyberfanta/TalentViewer/blob/master/docs/Class%20Diagram.drawio)
-and the picture is here: <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/Class%20Diagram.png" alt="Screenshot 1" width="200"/>
+and the picture is here: <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/Class%20Diagram.png" alt="Screenshot 1" width="600"/>
 
 ## Programming Log 📔
 The log about how I made this app can be found [here](https://github.com/cyberfanta/TalentViewer/blob/master/docs/Programming%20log%20of%20the%20Desaf%C3%ADoBetterfl%20App.txt)
