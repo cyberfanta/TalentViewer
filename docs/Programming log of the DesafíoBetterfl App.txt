@@ -1,0 +1,55 @@
+Talent Viewer App Programming Log
+
+Preparations:
+From my experience in the previous technical test, I still have the improvement in the project documentation, improving the time it takes me to do some things to spend a little more time on the interface items than adding value and attractiveness. Finally, reuse the work of other developers in preparation for this, look for some interesting tools that will help me in this challenge.
+
+I built the Scaffold of the project. I decided to do it in Kotlin, since as you can see in my GitHub, I have many projects in Java and I want to add more project in Kotlin, this helps me to demonstrate knowledge.
+
+Then I decided to build it with an MVP architecture. I am currently taking the Platzi Android Architectures Course and although MVVM is the next part of the course that I am going to explore, the idea of MVP as an architecture alternative that makes it easier for the user to have an app that responds without delays, I like it pretty.
+
+Then to save time, create the project on my GitHub, https://github.com/cyberfanta/TalentViewer.
+
+Create the Readme.md file because of personal pressure to meet the goal, I always save it for last. This increases the chance of ignoring it and I don't want that to happen.
+
+Next, I had to add a user license to it. What really interests me about this project is the experience of carrying it out and that, if necessary, someone decides to use it, at least they indicate that the original author is me. Therefore, and recognizing that I have a long way to go about licenses, I have decided on the Apache 2.0 license, which according to what GitHub tells me, meets what I am looking for.
+
+The mail arrived and I visualized that it is about making an API REST application of the Torre.co portal. This told me that my app should not only be functional, but also have a formal theme.
+
+So before starting the challenge, I decided to build an interface based on some templates that I saw on the internet for mobile apps.
+
+I decided to do it in Figma, torre.co colors are mainly based on Green #CDDC39, Black #33475B, Gray #B4B4B6 and White #F9FFFF
+
+The link to the Figma project is https://www.figma.com/file/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?node-id=10%3A1153
+And the link to the prototype is https://www.figma.com/proto/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?page-id=1%3A19&node-id=10%3A1153&viewport=523%2C275%2C0.4222502112388611&scaling=scale-down point-node-id = 10% 3A1153 & show-proto-sidebar = 1
+In case you want to see the planned design and I choose Figma for being collaborative, free software and super simple to make designs quickly. And I love it.
+
+Then I entered the API server provided for the exercise, the email did not say what type of application could be made, so I decided to make an Android app, which is the specialty to which I want to guide my professional career.
+
+I analyze the 4 endpoints provided. Get methods work in a standard way to provide detailed information about both users and job opportunities. The Post methods must pass in the header the type of Content-Type, which must be application / json. It is a problem that I have dealt with in the past.
+
+By including one of the vectors in the project, I realize that the export of SVG files from Figma is not perfect. So, I had to use Adobe Illustrator to fix the SVGs.
+
+I decide to integrate the use of the Firebase tool, in order to have usage analytics, and visualize errors that may exist on other devices. See how users use the application and be able to perform UX analysis to improve it in the future. The performance tool to see the time it takes for the App to respond.
+
+July 23, 2021
+7pm Official start of the app's programming. The project is created and the logic for the view binding is incorporated, which is the new way of working with view for Android.
+1am, The first interface has been diagrammed in Figma.
+1:30 am, I detect a giant bug in my Android Studio version 4.2.2, apparently, they did not update the build plugin to be compatible with the SDK building tools 31.0.0. The problem occurs with a jar dx.jar that is not present, there is only the d8.jar version.
+2:30 am, I decided at the last minute to add some configuration to the application's toolbar colors, to improve the look and feel.
+I end for today. I proceed to take a break to continue tomorrow.
+
+
+July 24,2021
+12pm, Start of the workday, today's goal is to program all the logic to obtain the data from the API and display in the initial view which will have 2 recycler view that will display the list of jobs and the list of users.
+
+2am, I managed to put the code in and fixed several problems with the classes. The main UI is currently displayed. There are several aesthetic errors that I have to resolve tomorrow.
+
+
+July 25,2021
+11am, Today's goal is to fix an aesthetic problem with the recycler views cards. Add the animations when pressing the footer buttons. And activate the detailed view of job opportunities.
+
+4am, I close the day with a lot of changes, they include the activation of the data load from the OnScrollListener. Then to open a new view with OnClickListeners. Both were applied in the recycler View Jobs. In the design of the Activity Job Detail, a background with the effect of Ken Burns was added, in turn this background changes randomly to have variety and visibility. A button was added so that if the user wants to enter the torre.co portal and take the job opportunity, then he can do it. Various other UI issues have been fixed.
+
+July 26,2021
+12pm Today's goal is to activate all the elements already configured now in the bios recycler view. Make the intradocumented. Make the final class diagram. Do the README.md. Incorporate firebase.
+3pm Activation of the recycler view for bios, ready. Intradocument, ready.
