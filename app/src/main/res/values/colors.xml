@@ -18,4 +18,18 @@
     <color name="green_torre_10">#25CDDC39</color>
     <color name="green_torre_05">#12CDDC39</color>
     <color name="green_torre_00">#00CDDC39</color>
+
+    <!--    Menu Colors-->
+    <color name="cream">#FFFFE9B2</color>
+    <color name="cream_dark">#FFFEDF92</color>
+    <color name="soft_black_37">#CC464B56</color>
+    <color name="shadow_0_color_buttom">#40BEAC64</color>
+    <color name="shadow_1_color_buttom">#30C2B689</color>
+    <color name="shadow_2_color_buttom">#20C8C1A7</color>
+    <color name="shadow_3_color_buttom">#10D3D0C4</color>
+    <color name="color_background_button">@color/cream_dark</color>
+    <color name="colorSource4Down">@color/cream</color>
+    <color name="color_strokes">#FFBFA53F</color>
+    <color name="textColorPrimary">@color/black</color>
+
 </resources>

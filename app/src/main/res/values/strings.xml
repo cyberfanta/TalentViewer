@@ -18,4 +18,30 @@
     <string name="detail_others">Others</string>
     <string name="detail_remote">Remote Work</string>
 
+    <!--    Ads View-->
+    <string name="ads_banner" translatable="false">ca-app-pub-2321980263900338/1599942696</string>
+    <string name="ads_interstitial" translatable="false">ca-app-pub-2321980263900338/6684748418</string>
+
+    <!--    Menu-->
+    <string name="item_policy">Privacy Policy</string>
+    <string name="item_policy_page" translatable="false">https://docs.google.com/document/d/1jO9nnmsjG2ZO0Si1rEBTAP2kmTin5h-qIb4nhuAN5H0/edit?usp=sharing</string>
+    <string name="item_rate">Rate this app</string>
+    <string name="item_about">About</string>
+    <string name="item_rate_success">Thanks for your review</string>
+    <string name="item_rate_fail">Error rating this app</string>
+
+
+    <!--    Author Menu-->
+    <string name="authorName1" translatable="false">Julio César Alberto</string>
+    <string name="authorName2" translatable="false">León Anhuamán</string>
+    <string name="authorProfession" translatable="false">Android Developer - UI/UX Designer</string>
+    <string name="authorEmail" translatable="false">julioleon2004@gmail.com</string>
+    <string name="authorEmailBody">Write your comment here</string>
+    <string name="authorEmailSubject">User Comment</string>
+    <string name="authorEmailChooser">Send email to this author using:</string>
+    <string name="authorPhone" translatable="false">+58 (424) 225.92.20</string>
+    <string name="poweredBy">Supported by:</string>
+    <string name="poweredByName" translatable="false">torre.co</string>
+    <string name="poweredByUrl" translatable="false">https://torre.co/</string>
+
 </resources>

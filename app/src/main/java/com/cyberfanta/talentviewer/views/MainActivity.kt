@@ -1,17 +1,26 @@
 package com.cyberfanta.talentviewer.views
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
 import com.cyberfanta.talentviewer.models.*
+import com.cyberfanta.talentviewer.presenters.AdsManager
+import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PageData
+import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.cyberfanta.talentviewer.views.cards.OpportunitiesAdapter
 import com.cyberfanta.talentviewer.views.cards.PeoplesAdapter
 import com.daimajia.androidanimations.library.Techniques
@@ -22,14 +31,19 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.system.exitProcess
 
 class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener {
+    @Suppress("PrivatePropertyName", "unused")
+    private val TAG = this::class.java.simpleName
+
     //To bind view with logical part
     private lateinit var viewBinding: ActivityMainBinding
 
-    //Storage the device dimension
+    //UI variables
+    private var authorOpened: Boolean = false
     private lateinit var deviceDimension: IntArray
 
     //Manage RecyclerViews
@@ -58,6 +72,13 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        //Obtain the FirebaseAnalytics instance
+        FirebaseManager(this)
+        FirebaseManager.logEvent("$TAG: Opened", "App_Opened")
+
+        //Obtain rate my app instance
+        RateAppManager(this)
+
         //Set search view listeners
         viewBinding.searchView.setOnQueryTextListener(this)
 
@@ -69,7 +90,8 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         fillRecyclerViewJobs()
         bindOnClickListener()
 
-
+        //Loading ads manager
+//        AdsManager.loadBannerAds(applicationContext, deviceDimension[0].toFloat())
     }
 
     /**
@@ -207,7 +229,27 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private fun bindOnClickListener() {
         viewBinding.jobsButton.setOnClickListener { jobsButtonPressed() }
         viewBinding.biosButton.setOnClickListener { biosButtonPressed() }
-
+        viewBinding.author.setOnClickListener {
+            authorSelected(viewBinding.author)
+            authorOpened = false
+        }
+        viewBinding.authorId.setOnClickListener {
+            FirebaseManager.logEvent("Sending email: Author", "Send_Email")
+            @Suppress("SpellCheckingInspection")
+            @SuppressLint("SimpleDateFormat")
+            val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+            DeviceUtils.sendAuthorEmail(
+                this,
+                "masterjulioleon@gmail.com",
+                getString(R.string.app_name) + " --- " + getString(R.string.authorEmailSubject) + " --- " + dateHour,
+                getString(R.string.authorEmailBody) + "",
+                getString(R.string.authorEmailChooser) + ""
+            )
+        }
+        viewBinding.poweredId.setOnClickListener {
+            FirebaseManager.logEvent("Open website: API - " + getString(R.string.poweredByUrl), "Open_Api")
+            DeviceUtils.openURL(this, getString(R.string.poweredByUrl))
+        }
     }
 
     /**
@@ -228,6 +270,31 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         exitProcess(0)
     }
 
+    /**
+     * Process the behavior of the app when user press back button
+     */
+    override fun onBackPressed() {
+        val constraintLayout : ConstraintLayout = findViewById(R.id.author)
+        if (authorOpened) {
+            authorSelected(constraintLayout)
+            authorOpened = false
+
+            FirebaseManager.logEvent("Device Button: Back", "Device_Button")
+            return
+        }
+
+        FirebaseManager.logEvent("$TAG: Closed", "App_Closed")
+        super.onBackPressed()
+    }
+
+//    /**
+//     * Actions made when app start
+//     */
+//    override fun onStart() {
+//        AdsManager.attachBannerAd(viewBinding.adView)
+//        super.onStart()
+//    }
+//
     /**
      * Load people list into bio recycler view
      */
@@ -400,10 +467,16 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 1f * deviceDimension[0], 0f)
             DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
             opportunitySwitch = true
+
+            //Firebase Data Collection
+            FirebaseManager.logEvent("Footer Button: Jobs", "Footer_Button")
         } else {
             YoYo.with(Techniques.Shake)
                 .duration(500)
                 .playOn(viewBinding.jobsButton)
+
+            //Firebase Data Collection
+            FirebaseManager.logEvent("Footer Button: Jobs - Dance", "Footer_Button")
         }
     }
 
@@ -415,10 +488,69 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 0f, 1f * deviceDimension[0])
             DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, -1f * deviceDimension[0], 0f)
             opportunitySwitch = false
+
+            //Firebase Data Collection
+            FirebaseManager.logEvent("Footer Button: Bios", "Footer_Button")
         } else {
             YoYo.with(Techniques.Shake)
                 .duration(500)
                 .playOn(viewBinding.biosButton)
+
+            //Firebase Data Collection
+            FirebaseManager.logEvent("Footer Button: Bios - Dance", "Footer_Button")
         }
     }
+
+    //Main Menu
+    /**
+     * Show the developer info
+     */
+    private fun authorSelected(view: View) {
+        DeviceUtils.setAnimation(view, "translationX", 300, false, 0f, deviceDimension[0].toFloat())
+    }
+
+    /**
+     * Create the setting menu of the application
+     */
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu, menu)
+        return true
+    }
+
+    /**
+     * Handle the setting menu of the application
+     */
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.item_policy -> {
+                FirebaseManager.logEvent("Menu: Policy", "Open_Menu")
+                val uri = Uri.parse(getString(R.string.item_policy_page))
+                val intent = Intent(Intent.ACTION_VIEW, uri)
+                startActivity(intent)
+                return true
+            }
+            R.id.item_rate -> {
+                FirebaseManager.logEvent("Menu: Rate App", "Open_Menu")
+                RateAppManager.requestReview(applicationContext)
+                return true
+            }
+            R.id.item_about -> {
+                FirebaseManager.logEvent("Menu: Author", "Open_Menu")
+                viewBinding.author.visibility = View.VISIBLE
+                DeviceUtils.setAnimation(
+                    viewBinding.author,
+                    "translationX",
+                    300,
+                    false,
+                    deviceDimension[0].toFloat(),
+                    0f
+                )
+                authorOpened = true
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 }
