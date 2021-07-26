@@ -43,6 +43,9 @@ With architecture MVP (Model View Presenter) to make sure that the app will make
 ## Class Diagram 🎯
 The graphical internal description of this project can be found [Here](https://github.com/cyberfanta/TalentViewer/blob/master/docs/Class%20Diagram.drawio)
 
+## Programming Log 📔
+The log about how I made this app can be found [here](https://github.com/cyberfanta/TalentViewer/blob/master/docs/Programming%20log%20of%20the%20Desaf%C3%ADoBetterfl%20App.txt)
+
 ## UI Design 🎨
 The planning for the UI was made using [Figma](https://www.figma.com/downloads/)
 The link for the project is [Here](https://www.figma.com/file/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?node-id=1%3A19)
