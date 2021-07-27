@@ -4,11 +4,10 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
+import android.view.*
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityBioBinding
@@ -23,8 +22,10 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 class BioActivity : AppCompatActivity() {
     @Suppress("PrivatePropertyName", "unused")
@@ -53,10 +54,12 @@ class BioActivity : AppCompatActivity() {
         setRandomKenBurnsBackground()
         loadObject()
 
+        bindOnClickListener()
+
 //        AdsManager.attachBannerAd (adView)
 
         //Load firebase manager
-        FirebaseManager.logEvent("$TAG: Opened", "Activity_Jobs")
+        FirebaseManager.logEvent("$TAG: Opened", "Activity_Bio")
     }
 
     /**
@@ -145,7 +148,160 @@ class BioActivity : AppCompatActivity() {
                         viewBinding.professionalHeadline.text = response.person.professionalHeadline
                     }
 
-                    //TODO: Add more data here
+                    response?.person?.summaryOfBio?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_top))
+                        textView.text = getString(R.string.detail_summaryOfBio)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+                        val text = "• " + response.person.summaryOfBio
+                        textView.text = text
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    response?.person?.links?.let {
+                        val textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_contact)
+                        viewBinding.dataShower.addView(textView)
+
+                        val scrollView = ScrollView(ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+
+                        val linearLayout = LinearLayout(this@BioActivity)
+                        linearLayout.orientation = LinearLayout.HORIZONTAL
+                        linearLayout.layoutParams =
+                            LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.MATCH_PARENT
+                            )
+
+                        @SuppressLint("UseCompatLoadingForDrawables")
+                        for (link in response.person.links){
+                            val imageView = ImageView(this@BioActivity)
+                            when (link?.name){
+                                "facebook" ->  imageView.setImageResource(R.drawable.ic_facebook)
+                                "github" ->  imageView.setImageResource(R.drawable.ic_github)
+                                "gitlab" ->  imageView.setImageResource(R.drawable.ic_gitlab)
+                                "instagram" ->  imageView.setImageResource(R.drawable.ic_instagram)
+                                "linkedin" ->  imageView.setImageResource(R.drawable.ic_linkedin)
+                                "medium" ->  imageView.setImageResource(R.drawable.ic_medium)
+                                "twitter" ->  imageView.setImageResource(R.drawable.ic_twitter)
+                                else ->  imageView.setImageResource(R.drawable.ic_www)
+                            }
+                            val layoutParams = LinearLayout.LayoutParams(
+                                DeviceUtils.convertDpToPx(this@BioActivity, 50f),
+                                DeviceUtils.convertDpToPx(this@BioActivity, 50f)
+                            )
+                            layoutParams.setMargins(0, 0, DeviceUtils.convertDpToPx(this@BioActivity, 8f), 0)
+                            imageView.layoutParams = layoutParams
+
+                            link?.address?.let {
+                                imageView.setOnClickListener {
+                                    try {
+                                        DeviceUtils.openURL(this@BioActivity, link.address)
+                                    } catch (exception: Exception) {
+                                        Toast.makeText(this@BioActivity, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
+                                    }
+                                }
+                            }
+
+                            linearLayout.addView(imageView)
+                        }
+
+                        scrollView.addView(linearLayout)
+                        viewBinding.dataShower.addView(scrollView)
+                    }
+
+                    response?.strengths?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_strengths_bio)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+                        var text = ""
+                        for (detail in response.strengths)
+                            text += detail?.name + "\n"
+                        textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    response?.interests?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_interests)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+                        var text = ""
+                        for (detail in response.interests)
+                            text += detail?.name + "\n"
+                        textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    response?.jobs?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_jobs)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+                        var text = ""
+                        var counter = 1
+                        for (detail in response.jobs) {
+                            text += "($counter)\n"
+                            text += getString(R.string.detail_jobs_name) + ": " + detail?.name + "\n"
+
+                            text += getString(R.string.detail_jobs_organizations) + ":\n"
+                            for (organization in detail?.organizations!!)
+                                text += organization?.name + "\n"
+
+                            text += getString(R.string.detail_jobs_responsibilities) + ":\n"
+                            for (responsibilitie in detail.responsibilities!!)
+                                text += "$responsibilitie\n"
+
+
+                            text += getString(R.string.detail_jobs_from) + ": " + detail.fromMonth + " " + detail.fromYear + "\n"
+                            detail.toMonth?.let { text += getString(R.string.detail_jobs_to) + ": " + detail.toMonth + " " + detail.toYear + "\n" }
+
+                            text += "\n"
+                            counter++
+                        }
+                        textView.text = text.substring(0, text.length - 2)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+                    response?.languages?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_languages)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_bottom))
+                        var text = ""
+                        for (detail in response.languages)
+                            text += detail?.language + ": " + detail?.fluency + "\n"
+                        textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
+
+//                    experiences
+//                    awards
+//                    projects
+//                    publications
+//                    education
+//                    opportunities
+//                    personalityTraitsResults
+//                    professionalCultureGenomeResults
+
+//                    response?.person?.summaryOfBio?.let {
+//                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+//                        textView.text = getString(R.string.detail_summaryOfBio)
+//                        viewBinding.dataShower.addView(textView)
+//
+//                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+//                        var text = ""
+//                        for (detail in response.details)
+//                            text += detail?.content + "\n"
+//                        textView.text = text.substring(0, text.length - 1)
+//                        viewBinding.dataShower.addView(textView)
+//                    }
 
                     viewBinding.applyNowButton.setOnClickListener {
                         DeviceUtils.openURL(this@BioActivity,

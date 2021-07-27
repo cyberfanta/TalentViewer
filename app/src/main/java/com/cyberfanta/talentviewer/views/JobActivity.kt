@@ -61,7 +61,7 @@ class JobActivity : AppCompatActivity() {
 //        AdsManager.attachBannerAd (adView)
 
         //Load firebase manager
-        FirebaseManager.logEvent("$TAG: Opened", "Activity_Jobs")
+        FirebaseManager.logEvent("$TAG: Opened", "Activity_Job")
    }
 
     /**
