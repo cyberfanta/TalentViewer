@@ -18,13 +18,15 @@ class RateAppManager (context: Context) {
             val request = reviewManager?.requestReviewFlow()
             request?.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    val reviewInfo = task.result
                     FirebaseManager.logEvent("Menu: Rate App - Success", "Open_Menu")
+                    FirebaseManager.logEvent(reviewInfo.toString(), "Rate_App")
                     Toast.makeText(
                         context,
                         R.string.item_rate_success,
                         Toast.LENGTH_SHORT
                     ).show()
-                    Log.i(TAG, "Rate App Result: " + task.result.toString())
+                    Log.i(TAG, "Rate App Result: $reviewInfo")
                 } else {
                     FirebaseManager.logEvent("Menu: Rate App - Fail", "Open_Menu")
                     Toast.makeText(context, R.string.item_rate_fail, Toast.LENGTH_SHORT)

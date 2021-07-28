@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -17,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
 import com.cyberfanta.talentviewer.models.*
-import com.cyberfanta.talentviewer.presenters.AdsManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PageData
 import com.cyberfanta.talentviewer.presenters.RateAppManager
@@ -28,12 +26,15 @@ import com.daimajia.androidanimations.library.YoYo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.OkHttpClient
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
+
 
 class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener {
     @Suppress("PrivatePropertyName", "unused")
@@ -309,10 +310,13 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                             result?.let {
                                 peopleList.add(it)
                             }
-                    peopleAdapter.notifyDataSetChanged()
+                    peopleOffset += querySize
+                    peopleAdapter.notifyItemRangeInserted(peopleOffset, querySize)
                 } else {
                     showError()
                 }
+                viewBinding.biosLoading.visibility = View.INVISIBLE
+                loadingBios = false
             }
         }
     }
@@ -321,10 +325,13 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * Retrofit implementation to get a people list
      */
     private fun getRetrofitPeoples(): Retrofit {
+        val client = OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS).build()
         return Retrofit.Builder()
             .baseUrl("https://search.torre.co/people/_search/")
             .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            .client(client).build()
     }
 
     /**
@@ -342,7 +349,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                                 opportunityList.add(it)
                             }
                     opportunityOffset += querySize
-                    opportunityAdapter.notifyDataSetChanged()
+                    opportunityAdapter.notifyItemRangeInserted(opportunityOffset, querySize)
                 } else {
                     showError()
                 }
@@ -356,10 +363,13 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * Retrofit implementation to get a opportunity list
      */
     private fun getRetrofitOpportunities(): Retrofit {
+        val client = OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS).build()
         return Retrofit.Builder()
             .baseUrl("https://search.torre.co/opportunities/_search/")
             .addConverterFactory(GsonConverterFactory.create())
-            .build()
+            .client(client).build()
     }
 
     /**

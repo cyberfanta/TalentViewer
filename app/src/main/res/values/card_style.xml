@@ -41,4 +41,7 @@
         <item name="cardElevation">5dp</item>
         <item name="android:layout_marginBottom">10dp</item>
     </style>
+    <style name="card_background_constraints">
+        <item name="android:background">@drawable/background_white_gray_border</item>
+    </style>
 </resources>

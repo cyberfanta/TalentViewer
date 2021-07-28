@@ -7,6 +7,7 @@
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        style="@style/card_background_constraints"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -23,22 +24,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
-<!--        <com.pkmmte.view.CircularImageView-->
-<!--            android:id="@+id/picture"-->
-<!--            android:layout_width="90dp"-->
-<!--            android:layout_height="90dp"-->
-<!--            android:layout_marginStart="32dp"-->
-<!--            android:layout_marginTop="16dp"-->
-<!--            android:layout_marginBottom="16dp"-->
-<!--            android:adjustViewBounds="true"-->
-<!--            android:contentDescription="@string/content_description"-->
-<!--            android:src="@android:mipmap/sym_def_app_icon"-->
-<!--            app:border="true"-->
-<!--            app:border_color="@color/white_torre"-->
-<!--            app:border_width="2dp"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
+        <!--        <com.pkmmte.view.CircularImageView-->
+        <!--            android:id="@+id/picture"-->
+        <!--            android:layout_width="90dp"-->
+        <!--            android:layout_height="90dp"-->
+        <!--            android:layout_marginStart="32dp"-->
+        <!--            android:layout_marginTop="16dp"-->
+        <!--            android:layout_marginBottom="16dp"-->
+        <!--            android:adjustViewBounds="true"-->
+        <!--            android:contentDescription="@string/content_description"-->
+        <!--            android:src="@android:mipmap/sym_def_app_icon"-->
+        <!--            app:border="true"-->
+        <!--            app:border_color="@color/white_torre"-->
+        <!--            app:border_width="2dp"-->
+        <!--            app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--            app:layout_constraintStart_toStartOf="parent"-->
+        <!--            app:layout_constraintTop_toTopOf="parent" />-->
 
         <LinearLayout
             style="@style/card_text_container"

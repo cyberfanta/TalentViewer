@@ -28,7 +28,7 @@
         <item name="android:text">@string/content_description_empty</item>
     </style>
     <style name="detail_text_container">
-        <item name="android:background">@drawable/background_green_white_border</item>
+        <item name="android:background">@drawable/background_green_black_border</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_marginTop">8dp</item>
@@ -61,10 +61,10 @@
     </style>
 
     <style name="detail_scrollview_container_top" parent="detail_scrollview_container_base">
-        <item name="android:background">@drawable/background_gray_black_border_top</item>
+        <item name="android:background">@drawable/background_green_black_border_top</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
-        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingTop">4dp</item>
     </style>
 
     <style name="detail_scrollview_container_middle" parent="detail_scrollview_container_base">
@@ -73,7 +73,7 @@
     </style>
 
     <style name="detail_scrollview_container_middle_dark" parent="detail_scrollview_container_base">
-        <item name="android:background">@drawable/background_gray_black_border_middle_dark</item>
+        <item name="android:background">@drawable/background_green_black_border_middle_dark</item>
         <item name="android:textSize">20sp</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -81,6 +81,7 @@
     <style name="detail_scrollview_container_bottom" parent="detail_scrollview_container_base">
         <item name="android:background">@drawable/background_gray_black_border_bottom</item>
         <item name="android:textSize">16sp</item>
+        <item name="android:paddingBottom">8dp</item>
     </style>
 
 </resources>

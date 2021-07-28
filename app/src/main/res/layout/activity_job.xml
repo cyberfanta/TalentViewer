@@ -40,7 +40,7 @@
         android:src="@android:mipmap/sym_def_app_icon"
         app:border="true"
         app:border_color="@color/white_torre"
-        app:border_width="2dp"
+        app:border_width="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -14,8 +14,8 @@ android {
         applicationId "com.cyberfanta.talentviewer"
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 2
-        versionName "1.1"
+        versionCode 3
+        versionName "1.2"
 
         multiDexEnabled true
 
@@ -83,6 +83,9 @@ dependencies {
     implementation 'com.github.developer-shivam:Crescento:1.2.1'
     implementation 'com.flaviofaria:kenburnsview:1.0.7'
     implementation 'com.pkmmte.view:circularimageview:1.1'
+
+    //Implement charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
     //Firebase
     implementation platform('com.google.firebase:firebase-bom:28.2.0')

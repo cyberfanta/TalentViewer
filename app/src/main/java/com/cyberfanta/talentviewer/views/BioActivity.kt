@@ -14,6 +14,7 @@ import com.cyberfanta.talentviewer.databinding.ActivityBioBinding
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Bios
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
+import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
 import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -140,9 +141,10 @@ class BioActivity : AppCompatActivity() {
             val response : Bios? = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {
-                    Picasso.get().load(response?.person?.picture)
-                        .into(viewBinding.picture)
-
+                    response?.person?.picture?.let {
+                        Picasso.get().load(response.person.picture)
+                            .into(viewBinding.picture)
+                    }
                     response?.person?.name?.let { viewBinding.name.text = response.person.name }
                     response?.person?.professionalHeadline?.let {
                         viewBinding.professionalHeadline.text = response.person.professionalHeadline
@@ -160,7 +162,12 @@ class BioActivity : AppCompatActivity() {
                     }
 
                     response?.person?.links?.let {
-                        val textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        val textView: TextView?
+                        if (response.person.summaryOfBio == null)
+                            textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_top))
+                        else
+                            textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+
                         textView.text = getString(R.string.detail_contact)
                         viewBinding.dataShower.addView(textView)
 
@@ -220,7 +227,8 @@ class BioActivity : AppCompatActivity() {
                         var text = ""
                         for (detail in response.strengths)
                             text += detail?.name + "\n"
-                        textView.text = text.substring(0, text.length - 1)
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 1)
                         viewBinding.dataShower.addView(textView)
                     }
 
@@ -233,7 +241,8 @@ class BioActivity : AppCompatActivity() {
                         var text = ""
                         for (detail in response.interests)
                             text += detail?.name + "\n"
-                        textView.text = text.substring(0, text.length - 1)
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 1)
                         viewBinding.dataShower.addView(textView)
                     }
 
@@ -253,31 +262,20 @@ class BioActivity : AppCompatActivity() {
                             for (organization in detail?.organizations!!)
                                 text += organization?.name + "\n"
 
-                            text += getString(R.string.detail_jobs_responsibilities) + ":\n"
-                            for (responsibilitie in detail.responsibilities!!)
-                                text += "$responsibilitie\n"
+                            detail.responsibilities?.let {
+                                text += getString(R.string.detail_jobs_responsibilities) + ":\n"
+                                for (responsibilitie in detail.responsibilities)
+                                    text += "$responsibilitie\n"
+                            }
 
-
-                            text += getString(R.string.detail_jobs_from) + ": " + detail.fromMonth + " " + detail.fromYear + "\n"
+                            detail.fromMonth?.let { text += getString(R.string.detail_jobs_from) + ": " + detail.fromMonth + " " + detail.fromYear + "\n" }
                             detail.toMonth?.let { text += getString(R.string.detail_jobs_to) + ": " + detail.toMonth + " " + detail.toYear + "\n" }
 
                             text += "\n"
                             counter++
                         }
-                        textView.text = text.substring(0, text.length - 2)
-                        viewBinding.dataShower.addView(textView)
-                    }
-
-                    response?.languages?.let {
-                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
-                        textView.text = getString(R.string.detail_languages)
-                        viewBinding.dataShower.addView(textView)
-
-                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_bottom))
-                        var text = ""
-                        for (detail in response.languages)
-                            text += detail?.language + ": " + detail?.fluency + "\n"
-                        textView.text = text.substring(0, text.length - 1)
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 2)
                         viewBinding.dataShower.addView(textView)
                     }
 
@@ -302,6 +300,50 @@ class BioActivity : AppCompatActivity() {
 //                        textView.text = text.substring(0, text.length - 1)
 //                        viewBinding.dataShower.addView(textView)
 //                    }
+
+//                    response?.personalityTraitsResults?.let {
+//                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+//                        textView.text = getString(R.string.detail_personalityTraitsResults)
+//                        viewBinding.dataShower.addView(textView)
+//
+//                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+//
+//                        val personalityTraitList: ArrayList<PersonalityTraitsData>? = null
+//                        for (detail in response.personalityTraitsResults.groups!!){
+//                            val personalityTrait = PersonalityTraitsData(detail?.id, detail?.order, detail?.median, detail?.stddev, null)
+//                            personalityTraitList?.add(personalityTrait)
+//                        }
+//                        for (detail in response.personalityTraitsResults.analyses!!){
+//                            when(detail?.groupId){
+//                                "extraversion" -> personalityTraitList?.get(0)?.analysis = detail.analysis
+//                                "openness-to-experience" -> personalityTraitList?.get(0)?.analysis = detail.analysis
+//                                "conscientiousness" -> personalityTraitList?.get(0)?.analysis = detail.analysis
+//                                "agreeableness" -> personalityTraitList?.get(0)?.analysis = detail.analysis
+//                                "honesty-humility" -> personalityTraitList?.get(0)?.analysis = detail.analysis
+//                                "emotionality" -> personalityTraitList?.get(0)?.analysis = detail.analysis
+//                            }
+//                        }
+//
+//
+//
+//                        var text = ""
+//                        textView.text = text.substring(0, text.length - 1)
+//                        viewBinding.dataShower.addView(textView)
+//                    }
+
+                    response?.languages?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_languages)
+                        viewBinding.dataShower.addView(textView)
+
+                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_bottom))
+                        var text = ""
+                        for (detail in response.languages)
+                            text += detail?.language + ": " + (detail?.fluency ?: getString(R.string.detail_languages_null)) + "\n"
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 1)
+                        viewBinding.dataShower.addView(textView)
+                    }
 
                     viewBinding.applyNowButton.setOnClickListener {
                         DeviceUtils.openURL(this@BioActivity,

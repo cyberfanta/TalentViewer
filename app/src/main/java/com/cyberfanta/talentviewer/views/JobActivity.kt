@@ -142,9 +142,10 @@ class JobActivity : AppCompatActivity() {
             val response : Jobs? = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {
-                    Picasso.get().load(response?.organizations?.get(0)?.picture)
+                    response?.organizations?.get(0)?.picture?.let {
+                        Picasso.get().load(response.organizations.get(0)?.picture)
                         .into(viewBinding.picture)
-
+                    }
                     response?.objective?.let{ viewBinding.objective.text = response.objective }
                     response?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = response.organizations[0]?.name }
 
@@ -171,7 +172,8 @@ class JobActivity : AppCompatActivity() {
                         var text = ""
                         for (detail in response.details)
                             text += detail?.content + "\n"
-                        textView.text = text.substring(0, text.length - 1)
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 1)
                         viewBinding.dataShower.addView(textView)
                     }
 
@@ -184,7 +186,8 @@ class JobActivity : AppCompatActivity() {
                         var text = ""
                         for (detail in response.strengths)
                             text += "• " + detail?.name + ": " + detail?.experience + "\n"
-                        textView.text = text.substring(0, text.length - 1)
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 1)
                         viewBinding.dataShower.addView(textView)
                     }
 
@@ -197,7 +200,8 @@ class JobActivity : AppCompatActivity() {
                         var text = ""
                         for (detail in response.languages)
                             text += "• " + detail?.language?.name + ": " + detail?.fluency + "\n"
-                        textView.text = text.substring(0, text.length - 1)
+                        if (text.length > 1)
+                            textView.text = text.substring(0, text.length - 1)
                         viewBinding.dataShower.addView(textView)
                     }
 
@@ -230,7 +234,8 @@ class JobActivity : AppCompatActivity() {
                         else
                             text = text.substring(0, text.length - 3)
 
-                        textView.text = text
+                        if (text.length > 2)
+                            textView.text = text
                         viewBinding.dataShower.addView(textView)
                     }
 
