@@ -179,7 +179,7 @@ data class AnalysesItem(
 	val groupId: String? = null,
 
 	@field:SerializedName("analysis")
-	val analysis: Double? = null
+	val analysis: Float? = null
 )
 
 data class MediaItemsItem(
@@ -194,13 +194,13 @@ data class MediaItemsItem(
 data class GroupsItem(
 
 	@field:SerializedName("median")
-	val median: Double? = null,
+	val median: Float? = null,
 
 	@field:SerializedName("id")
 	val id: String? = null,
 
 	@field:SerializedName("stddev")
-	val stddev: Double? = null,
+	val stddev: Float? = null,
 
 	@field:SerializedName("order")
 	val order: Int? = null

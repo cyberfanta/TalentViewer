@@ -103,6 +103,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewBios.adapter = peopleAdapter
 
+        viewBinding.biosLoading.visibility = View.VISIBLE
         getPeoples(PageData(peopleOffset.toString(), querySize.toString(), currentAggregators))
         DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
 
@@ -168,6 +169,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding.recyclerViewJobs.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewJobs.adapter = opportunityAdapter
 
+        viewBinding.jobsLoading.visibility = View.VISIBLE
         getOpportunities(PageData(opportunityOffset.toString(), querySize.toString(), currentAggregators))
 
         opportunityAdapter.setOnItemClickListener(object:

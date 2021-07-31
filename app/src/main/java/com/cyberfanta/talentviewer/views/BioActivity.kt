@@ -2,8 +2,11 @@ package com.cyberfanta.talentviewer.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +19,12 @@ import com.cyberfanta.talentviewer.models.Bios
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
 import com.cyberfanta.talentviewer.presenters.RateAppManager
+import com.github.mikephil.charting.charts.HorizontalBarChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.components.YAxis
+import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.renderer.XAxisRenderer
+import com.github.mikephil.charting.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -23,7 +32,6 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -162,11 +170,10 @@ class BioActivity : AppCompatActivity() {
                     }
 
                     response?.person?.links?.let {
-                        val textView: TextView?
-                        if (response.person.summaryOfBio == null)
-                            textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_top))
+                        val textView: TextView = if (response.person.summaryOfBio == null)
+                            TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_top))
                         else
-                            textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                            TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
 
                         textView.text = getString(R.string.detail_contact)
                         viewBinding.dataShower.addView(textView)
@@ -301,35 +308,144 @@ class BioActivity : AppCompatActivity() {
 //                        viewBinding.dataShower.addView(textView)
 //                    }
 
-//                    response?.personalityTraitsResults?.let {
-//                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
-//                        textView.text = getString(R.string.detail_personalityTraitsResults)
-//                        viewBinding.dataShower.addView(textView)
-//
-//                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
-//
-//                        val personalityTraitList: ArrayList<PersonalityTraitsData>? = null
-//                        for (detail in response.personalityTraitsResults.groups!!){
-//                            val personalityTrait = PersonalityTraitsData(detail?.id, detail?.order, detail?.median, detail?.stddev, null)
-//                            personalityTraitList?.add(personalityTrait)
-//                        }
-//                        for (detail in response.personalityTraitsResults.analyses!!){
-//                            when(detail?.groupId){
-//                                "extraversion" -> personalityTraitList?.get(0)?.analysis = detail.analysis
-//                                "openness-to-experience" -> personalityTraitList?.get(0)?.analysis = detail.analysis
-//                                "conscientiousness" -> personalityTraitList?.get(0)?.analysis = detail.analysis
-//                                "agreeableness" -> personalityTraitList?.get(0)?.analysis = detail.analysis
-//                                "honesty-humility" -> personalityTraitList?.get(0)?.analysis = detail.analysis
-//                                "emotionality" -> personalityTraitList?.get(0)?.analysis = detail.analysis
-//                            }
-//                        }
-//
-//
-//
-//                        var text = ""
-//                        textView.text = text.substring(0, text.length - 1)
-//                        viewBinding.dataShower.addView(textView)
-//                    }
+                    response?.personalityTraitsResults?.let {
+                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
+                        textView.text = getString(R.string.detail_personality_traits_results)
+                        viewBinding.dataShower.addView(textView)
+
+                        val personalityTraitList: ArrayList<PersonalityTraitsData> = ArrayList()
+                        for (detail in response.personalityTraitsResults.groups!!){
+                            val personalityTrait = PersonalityTraitsData(detail?.id, detail?.order, detail?.median, detail?.stddev, null, "")
+                            personalityTraitList.add(personalityTrait)
+                        }
+                        for ((i, detail) in response.personalityTraitsResults.analyses!!.withIndex()){
+                            if (i>5) break
+                            when(detail?.groupId){
+                                "extraversion" -> personalityTraitList[i].analysis = detail.analysis
+                                "openness-to-experience" -> personalityTraitList[i].analysis = detail.analysis
+                                "conscientiousness" -> personalityTraitList[i].analysis = detail.analysis
+                                "agreeableness" -> personalityTraitList[i].analysis = detail.analysis
+                                "honesty-humility" -> personalityTraitList[i].analysis = detail.analysis
+                                "emotionality" -> personalityTraitList[i].analysis = detail.analysis
+                                "altruism" -> personalityTraitList[i].analysis = detail.analysis
+                            }
+                            personalityTraitList[i].group = detail?.groupId
+                        }
+
+                        Utils.init(this@BioActivity)
+                        val chartLinearLayout = LinearLayout(ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
+                        chartLinearLayout.orientation = LinearLayout.VERTICAL
+                        chartLinearLayout.layoutParams =
+                            LinearLayout.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT
+                            )
+
+                        val sideItemWeight = 1.8f
+                        val middleItemWeight = 6.4f
+                        val itemWeightSum = 10f
+
+                        val detailPersonalityTraitsSideStart = resources.getStringArray(R.array.detail_personality_traits_side_start)
+                        val detailPersonalityTraitsSideEnd = resources.getStringArray(R.array.detail_personality_traits_side_end)
+
+                        for (i in 0..5) {
+                            val barLinearLayout = LinearLayout(this@BioActivity)
+                            barLinearLayout.orientation = LinearLayout.HORIZONTAL
+                            barLinearLayout.layoutParams =
+                                LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT
+                                )
+                            barLinearLayout.weightSum = itemWeightSum
+
+                            textView = TextView(
+                                ContextThemeWrapper(
+                                    this@BioActivity,
+                                    R.style.detail_chart_text_sides
+                                )
+                            )
+                            textView.layoutParams =
+                                LinearLayout.LayoutParams(
+                                    0,
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    sideItemWeight
+                                )
+                            textView.text = detailPersonalityTraitsSideStart[i]
+                            barLinearLayout.addView(textView)
+
+                            val entry: ArrayList<BarEntry> = ArrayList()
+                            personalityTraitList[i].analysis?.let {
+                                    it1 -> BarEntry(0f, it1)
+                            }?.let {
+                                    it2 -> entry.add(it2)
+                            }
+                            Log.i(
+                                TAG,
+                                "** personalityTraitList?.get($i)?.analysis ****** " + personalityTraitList[i].analysis + " ****** " + personalityTraitList[i].group + "**** entry:" + entry.get(0).y
+                            )
+                            Log.i(
+                                TAG,
+                                "** personalityTraitList?.get($i)?.median ****** " + personalityTraitList[i].median
+                            )
+                            Log.i(
+                                TAG,
+                                "** personalityTraitList.get($i).stddev!! ****** " + personalityTraitList[i].stddev!!
+                            )
+
+                            val datset = BarDataSet(entry, getString(R.string.detail_personality_traits_analysis))
+                            datset.valueTextSize = 10f
+
+//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+                            @SuppressLint("NewApi")
+                                datset.color = getColor(R.color.black_torre)
+//                            else
+//                                datset.color = Color.BLACK
+
+                            val data = BarData(datset)
+
+                            val chart = HorizontalBarChart(this@BioActivity)
+                            chart.layoutParams =
+                                LinearLayout.LayoutParams(
+                                    0,
+                                    DeviceUtils.convertDpToPx(this@BioActivity, 60f),
+                                    middleItemWeight
+                                )
+                            chart.data = data
+                            chart.description.isEnabled = false
+                            chart.xAxis.setDrawLabels(false)
+                            chart.xAxis.setDrawGridLines(false)
+                            chart.axisLeft.setDrawLabels(false)
+                            chart.axisRight.axisMinimum = 0f
+                            chart.axisRight.axisMaximum = 5.83f
+                            chart.axisLeft.axisMinimum = 0f
+                            chart.axisLeft.axisMaximum = 5.83f
+                            chart.legend.isEnabled = false
+                            chart.setScaleEnabled(false)
+                            chart.invalidate()
+
+                            barLinearLayout.addView(chart)
+
+                            textView = TextView(
+                                ContextThemeWrapper(
+                                    this@BioActivity,
+                                    R.style.detail_chart_text_sides
+                                )
+                            )
+                            textView.layoutParams =
+                                LinearLayout.LayoutParams(
+                                    0,
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    sideItemWeight
+                                )
+                            textView.text = detailPersonalityTraitsSideEnd[i]
+                            barLinearLayout.addView(textView)
+
+
+                            chartLinearLayout.addView(barLinearLayout)
+                        }
+
+                        viewBinding.dataShower.addView(chartLinearLayout)
+                    }
 
                     response?.languages?.let {
                         var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))

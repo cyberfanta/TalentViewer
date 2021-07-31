@@ -84,4 +84,18 @@
         <item name="android:paddingBottom">8dp</item>
     </style>
 
+    <style name="detail_chart_text_sides">
+<!--        <item name="android:background">@drawable/background_gray_black_border_middle</item>-->
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">10sp</item>
+        <item name="autoSizeMaxTextSize">12sp</item>
+        <item name="autoSizeMinTextSize">4sp</item>
+        <item name="android:textColor">@color/black_torre</item>
+        <item name="autoSizeStepGranularity">1sp</item>
+        <item name="autoSizeTextType">uniform</item>
+        <item name="android:maxLines">3</item>
+        <item name="android:gravity">center</item>
+    </style>
+
 </resources>

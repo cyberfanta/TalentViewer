@@ -30,7 +30,24 @@
     <string name="detail_jobs_from">From</string>
     <string name="detail_jobs_to">To</string>
     <string name="detail_languages_null">Unknown</string>
-    <string name="detail_personalityTraitsResults">Personal Traits</string>
+    <string name="detail_personality_traits_results">Personal Traits</string>
+    <string-array name="detail_personality_traits_side_start">
+        <item>Solitary Reserved</item>
+        <item>Consistent Cautious</item>
+        <item>Easy-going Spontaneous</item>
+        <item>Competitive Argumentative</item>
+        <item>Sly Avid</item>
+        <item>Secure Confident</item>
+    </string-array>
+    <string-array name="detail_personality_traits_side_end">
+        <item>Outgoing Energetic</item>
+        <item>Inventive Curious</item>
+        <item>Efficient Organized</item>
+        <item>Friendly Compassionate</item>
+        <item>Sincere Modest</item>
+        <item>Sensitive Nervous</item>
+    </string-array>
+    <string name="detail_personality_traits_analysis">Analysis</string>
 
     <!--    Ads View-->
     <string name="ads_banner" translatable="false">ca-app-pub-2321980263900338/1599942696</string>
