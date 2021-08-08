@@ -9,16 +9,16 @@ class FirebaseManager (context: Context) {
         @Suppress("PrivatePropertyName", "unused")
         private val TAG = this::class.java.simpleName
 
-        var mFirebaseAnalytics: FirebaseAnalytics? = null
+        private lateinit var mFirebaseAnalytics: FirebaseAnalytics
 
         @Suppress("unused")
-        fun getFirebaseAnalytics(): FirebaseAnalytics? {
+        fun getFirebaseAnalytics(): FirebaseAnalytics {
             return mFirebaseAnalytics
         }
 
         private fun logRawEvent (itemName: String, eventType: String) {
             //Firebase Data Collection
-            mFirebaseAnalytics!!.logEvent(eventType) {
+            mFirebaseAnalytics.logEvent(eventType) {
                 param("Item_Name", itemName)
             }
 
@@ -55,7 +55,6 @@ class FirebaseManager (context: Context) {
     }
 
     init {
-        if (mFirebaseAnalytics == null)
-            mFirebaseAnalytics = FirebaseAnalytics.getInstance(context)
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(context)
     }
 }

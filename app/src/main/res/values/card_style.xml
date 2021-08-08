@@ -2,26 +2,32 @@
 <resources>
     <style name="card_text_bold" parent="card_text_extras">
         <item name="android:textStyle">bold</item>
-        <item name="android:textSize">24sp</item>
-        <item name="autoSizeMaxTextSize">24sp</item>
-        <item name="autoSizeMinTextSize">12sp</item>
+        <item name="android:textSize">20sp</item>
+<!--        <item name="android:textSize">24sp</item>-->
+<!--        <item name="autoSizeMaxTextSize">24sp</item>-->
+<!--        <item name="autoSizeMinTextSize">12sp</item>-->
     </style>
     <style name="card_text_normal" parent="card_text_extras">
-        <item name="android:textSize">20sp</item>
-        <item name="autoSizeMaxTextSize">20sp</item>
-        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:textSize">16sp</item>
+<!--        <item name="android:textSize">20sp</item>-->
+<!--        <item name="autoSizeMaxTextSize">20sp</item>-->
+<!--        <item name="autoSizeMinTextSize">10sp</item>-->
 
     </style>
     <style name="card_text_normal_footer" parent="card_text_extras">
-        <item name="android:textSize">18sp</item>
-        <item name="autoSizeMaxTextSize">18sp</item>
-        <item name="autoSizeMinTextSize">10sp</item>
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:textSize">12sp</item>
+<!--        <item name="fontFamily">@font/rancho_regular</item>-->
+<!--        <item name="android:textSize">18sp</item>-->
+<!--        <item name="autoSizeMaxTextSize">18sp</item>-->
+<!--        <item name="autoSizeMinTextSize">10sp</item>-->
     </style>
     <style name="card_text_extras">
         <item name="android:textColor">@color/black_torre</item>
-        <item name="autoSizeStepGranularity">1sp</item>
-        <item name="autoSizeTextType">uniform</item>
-        <item name="android:maxLines">2</item>
+<!--        <item name="autoSizeStepGranularity">1sp</item>-->
+<!--        <item name="autoSizeTextType">uniform</item>-->
+        <item name="android:maxLines">3</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>

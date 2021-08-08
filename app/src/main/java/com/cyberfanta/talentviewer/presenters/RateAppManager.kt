@@ -12,11 +12,11 @@ class RateAppManager (context: Context) {
         @Suppress("PrivatePropertyName", "unused")
         private val TAG = this::class.java.simpleName
 
-        var reviewManager : ReviewManager? = null
+        lateinit var reviewManager : ReviewManager
 
         fun requestReview (context: Context) {
-            val request = reviewManager?.requestReviewFlow()
-            request?.addOnCompleteListener { task ->
+            val request = reviewManager.requestReviewFlow()
+            request.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val reviewInfo = task.result
                     FirebaseManager.logEvent("Menu: Rate App - Success", "Open_Menu")
@@ -38,7 +38,6 @@ class RateAppManager (context: Context) {
 
     }
     init {
-        if (reviewManager == null)
-            reviewManager = ReviewManagerFactory.create(context)
+        reviewManager = ReviewManagerFactory.create(context)
     }
 }

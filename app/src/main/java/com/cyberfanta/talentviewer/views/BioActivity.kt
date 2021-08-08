@@ -20,10 +20,7 @@ import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
 import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.github.mikephil.charting.charts.HorizontalBarChart
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.renderer.XAxisRenderer
 import com.github.mikephil.charting.utils.Utils
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -34,7 +31,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 class BioActivity : AppCompatActivity() {
     @Suppress("PrivatePropertyName", "unused")
@@ -128,7 +124,7 @@ class BioActivity : AppCompatActivity() {
      * Set a random background each run
      */
     private fun setRandomKenBurnsBackground(){
-        when (DeviceUtils.getRandomNumber(1, 8)) {
+        when (DeviceUtils.getRandomNumber(1, 7)) {
             1 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_1)
             2 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_2)
             3 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_3)
@@ -381,7 +377,7 @@ class BioActivity : AppCompatActivity() {
                             }
                             Log.i(
                                 TAG,
-                                "** personalityTraitList?.get($i)?.analysis ****** " + personalityTraitList[i].analysis + " ****** " + personalityTraitList[i].group + "**** entry:" + entry.get(0).y
+                                "** personalityTraitList?.get($i)?.analysis ****** " + personalityTraitList[i].analysis + " ****** " + personalityTraitList[i].group + "**** entry:" + entry[0].y
                             )
                             Log.i(
                                 TAG,
@@ -395,11 +391,11 @@ class BioActivity : AppCompatActivity() {
                             val datset = BarDataSet(entry, getString(R.string.detail_personality_traits_analysis))
                             datset.valueTextSize = 10f
 
-//                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-                            @SuppressLint("NewApi")
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+//                            @SuppressLint("NewApi")
                                 datset.color = getColor(R.color.black_torre)
-//                            else
-//                                datset.color = Color.BLACK
+                            else
+                                datset.color = Color.BLACK
 
                             val data = BarData(datset)
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:targetApi="o" >
+    <font
+        android:fontStyle="normal"
+        android:font="@font/lato_regular" />
+    <font
+        android:fontStyle="italic"
+        android:font="@font/lato_italic" />
+<!--    <font-->
+<!--        android:fontStyle="black"-->
+<!--        android:font="@font/lato_black" />-->
+<!--    <font-->
+<!--        android:fontStyle="black_italic"-->
+<!--        android:font="@font/lato_black_italic" />-->
+<!--    <font-->
+<!--        android:fontStyle="bold"-->
+<!--        android:font="@font/lato_bold" />-->
+<!--    <font-->
+<!--        android:fontStyle="bold_italic"-->
+<!--        android:font="@font/lato_bold_italic" />-->
+<!--    <font-->
+<!--        android:fontStyle="light"-->
+<!--        android:font="@font/lato_light" />-->
+<!--    <font-->
+<!--        android:fontStyle="light_italic"-->
+<!--        android:font="@font/lato_light_italic" />-->
+<!--    <font-->
+<!--        android:fontStyle="thin"-->
+<!--        android:font="@font/lato_thin" />-->
+<!--    <font-->
+<!--        android:fontStyle="thin_italic"-->
+<!--        android:font="@font/lato_thin_italic" />-->
+</font-family>

@@ -16,7 +16,6 @@ import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Jobs
-import com.cyberfanta.talentviewer.presenters.AdsManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.squareup.picasso.Picasso
@@ -121,7 +120,7 @@ class JobActivity : AppCompatActivity() {
      * Set a random background each run
      */
     private fun setRandomKenBurnsBackground(){
-        when (DeviceUtils.getRandomNumber(1, 8)) {
+        when (DeviceUtils.getRandomNumber(1, 7)) {
             1 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_1)
             2 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_2)
             3 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_3)
@@ -143,7 +142,7 @@ class JobActivity : AppCompatActivity() {
             runOnUiThread {
                 if (call.isSuccessful) {
                     response?.organizations?.get(0)?.picture?.let {
-                        Picasso.get().load(response.organizations.get(0)?.picture)
+                        Picasso.get().load(response.organizations[0]?.picture)
                         .into(viewBinding.picture)
                     }
                     response?.objective?.let{ viewBinding.objective.text = response.objective }

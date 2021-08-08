@@ -39,7 +39,7 @@
         android:adjustViewBounds="true"
         android:src="@android:mipmap/sym_def_app_icon"
         app:border="true"
-        app:border_color="@color/white_torre"
+        app:border_color="@color/black_torre"
         app:border_width="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,7 +89,7 @@
 
         <TextView
             android:id="@+id/compensation"
-            style="@style/detail_text_normal" />
+            style="@style/detail_text_normal_footer" />
     </LinearLayout>
 
     <ScrollView

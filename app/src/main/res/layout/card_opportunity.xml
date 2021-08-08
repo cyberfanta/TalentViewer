@@ -26,6 +26,7 @@
             tools:srcCompat="@tools:sample/avatars" />
 
         <LinearLayout
+            android:id="@+id/texts"
             style="@style/card_text_container"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -51,6 +52,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/finger"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            android:contentDescription="@string/content_description"
+            app:layout_constraintBottom_toBottomOf="@id/texts"
+            app:layout_constraintStart_toEndOf="@+id/texts"
+            app:srcCompat="@drawable/ic_fingerprint" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
