@@ -11,7 +11,6 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
 import com.cyberfanta.talentviewer.models.APIService
@@ -24,8 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -57,9 +54,6 @@ class JobActivity : AppCompatActivity() {
         loadObject()
 
         bindOnClickListener()
-
-//todo:for future use
-//        AdsManager.attachBannerAd (adView)
 
         //Load firebase manager
         FirebaseManager.logEvent("$TAG: Opened", "Activity_Job")

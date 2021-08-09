@@ -28,13 +28,9 @@ import com.daimajia.androidanimations.library.YoYo
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import okhttp3.OkHttpClient
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
 
@@ -95,10 +91,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         fillRecyclerViewJobs()
         bindOnClickListener()
         initializeRecyclerViewHelpers()
-
-//todo:for future use
-        //Loading ads manager
-//        AdsManager.loadBannerAds(applicationContext, deviceDimension[0].toFloat())
     }
 
     /**

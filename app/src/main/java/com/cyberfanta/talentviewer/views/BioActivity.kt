@@ -10,7 +10,6 @@ import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
-import androidx.constraintlayout.widget.ConstraintLayout
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityBioBinding
 import com.cyberfanta.talentviewer.models.APIService
@@ -58,9 +57,6 @@ class BioActivity : AppCompatActivity() {
         loadObject()
 
         bindOnClickListener()
-
-//todo:for future use
-//        AdsManager.attachBannerAd (adView)
 
         //Load firebase manager
         FirebaseManager.logEvent("$TAG: Opened", "Activity_Bio")
