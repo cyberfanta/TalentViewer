@@ -9,7 +9,7 @@ import com.cyberfanta.talentviewer.databinding.CardOpportunityBinding
 import com.cyberfanta.talentviewer.models.OpportunityItem
 import com.squareup.picasso.Picasso
 
-class OpportunitiesAdapter (private val items: List<OpportunityItem?>) : RecyclerView.Adapter<OpportunitiesAdapter.OpportunitiesViewHolder>(){
+class OpportunitiesAdapter (private val items: MutableMap<String, OpportunityItem>) : RecyclerView.Adapter<OpportunitiesAdapter.OpportunitiesViewHolder>(){
     //Internal Variables
     private var itemClickListener: OnItemClickListener? = null
     private var bottomReachedListener: OnBottomReachedListener? = null
@@ -35,13 +35,20 @@ class OpportunitiesAdapter (private val items: List<OpportunityItem?>) : Recycle
     class OpportunitiesViewHolder (view: View, itemClickListener: OnItemClickListener?) : RecyclerView.ViewHolder(view) {
         private val viewBinding = CardOpportunityBinding.bind(view)
 
-        fun bind (item: OpportunityItem?) {
-            item?.organizations?.get(0)?.picture?.let { Picasso.get().load(item.organizations.get(0)?.picture).into(viewBinding.organizationsPicture) }
-            item?.objective?.let{ viewBinding.objective.text = item.objective }
-            item?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = item.organizations.get(0)?.name }
+        fun bind (item: OpportunityItem) {
+            if (item.organizations?.isNotEmpty() == true) {
+                item.organizations[0]?.picture?.let {
+                    Picasso.get().load(item.organizations[0]?.picture)
+                        .into(viewBinding.organizationsPicture)
+                }
+                item.organizations[0]?.name?.let {
+                    viewBinding.organizationsName.text = item.organizations[0]?.name
+                }
+            }
+            item.objective?.let{ viewBinding.objective.text = item.objective }
 
             var string = this.itemView.context.getString(R.string.card_compensation_hidden)
-            item?.compensation?.visible?.let{
+            item.compensation?.visible?.let{
                 if (item.compensation.visible) {
                     string = ""
                     if (item.compensation.data?.minAmount != null)
@@ -73,7 +80,8 @@ class OpportunitiesAdapter (private val items: List<OpportunityItem?>) : Recycle
 
     //Bind an object with a card item
     override fun onBindViewHolder(holder: OpportunitiesViewHolder, position: Int) {
-        val item : OpportunityItem? = items[position]
+        val itemlist = items.values
+        val item : OpportunityItem = itemlist.elementAt(position)
         holder.bind(item)
 
         if (position > itemCount - 12)

@@ -9,7 +9,7 @@ import com.cyberfanta.talentviewer.databinding.CardPeopleBinding
 import com.cyberfanta.talentviewer.models.PeopleItem
 import com.squareup.picasso.Picasso
 
-class PeoplesAdapter (private val items: List<PeopleItem?>) : RecyclerView.Adapter<PeoplesAdapter.PeoplesViewHolder>(){
+class PeoplesAdapter (private val items: MutableMap<String, PeopleItem>) : RecyclerView.Adapter<PeoplesAdapter.PeoplesViewHolder>(){
     //Internal Variables
     private var itemClickListener: OnItemClickListener? = null
     private var bottomReachedListener: OnBottomReachedListener? = null
@@ -35,12 +35,10 @@ class PeoplesAdapter (private val items: List<PeopleItem?>) : RecyclerView.Adapt
     class PeoplesViewHolder (view: View, itemClickListener: OnItemClickListener?) : RecyclerView.ViewHolder(view) {
         private val viewBinding = CardPeopleBinding.bind(view)
 
-        fun bind (item: PeopleItem?){
-            item?.picture?.let { Picasso.get().load(item.picture).into(viewBinding.picture) }
-            item?.name?.let{ viewBinding.name.text = item.name }
-            item?.professionalHeadline?.let { viewBinding.professionalHeadline.text =
-                item.professionalHeadline
-            }
+        fun bind (item: PeopleItem){
+            item.picture?.let { Picasso.get().load(item.picture).into(viewBinding.picture) }
+            item.name?.let{ viewBinding.name.text = item.name }
+            item.professionalHeadline?.let { viewBinding.professionalHeadline.text = item.professionalHeadline }
         }
 
         init {
@@ -61,7 +59,8 @@ class PeoplesAdapter (private val items: List<PeopleItem?>) : RecyclerView.Adapt
 
     //Bind an object with a card item
     override fun onBindViewHolder(holder: PeoplesViewHolder, position: Int) {
-        val item : PeopleItem? = items[position]
+        val itemlist = items.values
+        val item : PeopleItem = itemlist.elementAt(position)
         holder.bind(item)
 
         if (position > itemCount - 12)

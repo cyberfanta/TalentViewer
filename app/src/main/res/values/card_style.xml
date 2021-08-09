@@ -3,36 +3,27 @@
     <style name="card_text_bold" parent="card_text_extras">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
-<!--        <item name="android:textSize">24sp</item>-->
-<!--        <item name="autoSizeMaxTextSize">24sp</item>-->
-<!--        <item name="autoSizeMinTextSize">12sp</item>-->
     </style>
+
     <style name="card_text_normal" parent="card_text_extras">
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textSize">16sp</item>
-<!--        <item name="android:textSize">20sp</item>-->
-<!--        <item name="autoSizeMaxTextSize">20sp</item>-->
-<!--        <item name="autoSizeMinTextSize">10sp</item>-->
-
     </style>
+
     <style name="card_text_normal_footer" parent="card_text_extras">
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:textSize">12sp</item>
-<!--        <item name="fontFamily">@font/rancho_regular</item>-->
-<!--        <item name="android:textSize">18sp</item>-->
-<!--        <item name="autoSizeMaxTextSize">18sp</item>-->
-<!--        <item name="autoSizeMinTextSize">10sp</item>-->
     </style>
+
     <style name="card_text_extras">
         <item name="android:textColor">@color/black_torre</item>
-<!--        <item name="autoSizeStepGranularity">1sp</item>-->
-<!--        <item name="autoSizeTextType">uniform</item>-->
         <item name="android:maxLines">3</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:text">@string/content_description</item>
     </style>
+
     <style name="card_text_container">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">0dp</item>
@@ -41,12 +32,14 @@
         <item name="android:layout_marginStart">16dp</item>
         <item name="android:layout_marginEnd">32dp</item>
     </style>
+
     <style name="card_background">
         <item name="cardBackgroundColor">@color/white_torre</item>
         <item name="cardCornerRadius">40dp</item>
         <item name="cardElevation">5dp</item>
         <item name="android:layout_marginBottom">10dp</item>
     </style>
+
     <style name="card_background_constraints">
         <item name="android:background">@drawable/background_white_gray_border</item>
     </style>

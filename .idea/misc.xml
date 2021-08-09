@@ -7,14 +7,16 @@
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_green_black_border_top.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_green_gray_border.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_white_black_border.xml" value="0.2296875" />
+        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_white_black_border_cornerless.xml" value="0.21770833333333334" />
+        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_white_black_border_cornerless_bottom.xml" value="0.22135416666666666" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_white_black_border_top.xml" value="0.2296875" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/background_white_gray_border.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/ic_fingerprint.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/drawable/ic_floatingarrow.xml" value="0.21770833333333334" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/font/lato.xml" value="0.67" />
-        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/activity_bio.xml" value="0.2015625" />
-        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/activity_job.xml" value="0.4142538975501114" />
-        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/activity_main.xml" value="0.2015625" />
+        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/activity_bio.xml" value="0.67" />
+        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/activity_job.xml" value="0.67" />
+        <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/activity_main.xml" value="0.5" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/card_opportunity.xml" value="0.6454849498327759" />
         <entry key="..\:/Users/Adrii/AndroidStudioProjects/TalentViewer/app/src/main/res/layout/card_people.xml" value="0.67" />
       </map>

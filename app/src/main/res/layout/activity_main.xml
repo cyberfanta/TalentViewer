@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background_activities"
+    android:focusableInTouchMode="true"
     tools:context=".views.MainActivity">
 
     <SearchView
@@ -15,7 +16,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:background="@drawable/background_white_gray_border"
+        android:background="@drawable/background_white_black_border"
+        android:iconifiedByDefault="false"
         android:inputType="textNoSuggestions"
         android:queryHint="@string/main_activity_search_hint"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,6 +53,70 @@
         app:layout_constraintTop_toBottomOf="@+id/searchView">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <LinearLayout
+        android:id="@+id/helper_bios"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/searchView"
+        app:layout_constraintStart_toStartOf="@+id/searchView"
+        app:layout_constraintTop_toBottomOf="@+id/searchView">
+
+        <TextView
+            android:id="@+id/helper_bios_1"
+            style="@style/search_view_helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_empty" />
+
+        <TextView
+            android:id="@+id/helper_bios_2"
+            style="@style/search_view_helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_empty" />
+
+        <TextView
+            android:id="@+id/helper_bios_3"
+            style="@style/search_view_helper_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_empty" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/helper_jobs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="@+id/searchView"
+        app:layout_constraintStart_toStartOf="@+id/searchView"
+        app:layout_constraintTop_toBottomOf="@+id/searchView">
+
+        <TextView
+            android:id="@+id/helper_jobs_1"
+            style="@style/search_view_helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_empty" />
+
+        <TextView
+            android:id="@+id/helper_jobs_2"
+            style="@style/search_view_helper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_empty" />
+
+        <TextView
+            android:id="@+id/helper_jobs_3"
+            style="@style/search_view_helper_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/content_description_empty" />
+    </LinearLayout>
 
     <View
         android:id="@+id/view"

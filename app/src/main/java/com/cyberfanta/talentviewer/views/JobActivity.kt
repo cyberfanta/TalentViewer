@@ -16,6 +16,7 @@ import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Jobs
+import com.cyberfanta.talentviewer.presenters.ApiManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.squareup.picasso.Picasso
@@ -57,6 +58,7 @@ class JobActivity : AppCompatActivity() {
 
         bindOnClickListener()
 
+//todo:for future use
 //        AdsManager.attachBannerAd (adView)
 
         //Load firebase manager
@@ -71,6 +73,7 @@ class JobActivity : AppCompatActivity() {
             authorSelected(viewBinding.author)
             authorOpened = false
         }
+
         viewBinding.authorId.setOnClickListener {
             FirebaseManager.logEvent("Sending email: Author", "Send_Email")
             @Suppress("SpellCheckingInspection")
@@ -84,6 +87,7 @@ class JobActivity : AppCompatActivity() {
                 getString(R.string.authorEmailChooser) + ""
             )
         }
+
         viewBinding.poweredId.setOnClickListener {
             FirebaseManager.logEvent("Open website: API - " + getString(R.string.poweredByUrl), "Open_Api")
             DeviceUtils.openURL(this, getString(R.string.poweredByUrl))
@@ -94,16 +98,15 @@ class JobActivity : AppCompatActivity() {
      * Process the behavior of the app when user press back button
      */
     override fun onBackPressed() {
-        val constraintLayout : ConstraintLayout = findViewById(R.id.author)
         if (authorOpened) {
-            authorSelected(constraintLayout)
+            authorSelected(viewBinding.author)
             authorOpened = false
 
             FirebaseManager.logEvent("Device Button: Back", "Device_Button")
             return
         }
 
-        FirebaseManager.logEvent("$TAG: Closed", "App_Closed")
+        FirebaseManager.logEvent("$TAG: Return", "Return_Main_Activity")
         super.onBackPressed()
     }
 
@@ -128,7 +131,6 @@ class JobActivity : AppCompatActivity() {
             5 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_5)
             6 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_6)
             7 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_7)
-            8 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_8)
         }
     }
 
@@ -137,7 +139,7 @@ class JobActivity : AppCompatActivity() {
      */
     private fun loadObject() {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Jobs> = getRetrofitJob().create(APIService::class.java).getJob(id)
+            val call : Response<Jobs> = ApiManager.getRetrofitJob().create(APIService::class.java).getJob(id)
             val response : Jobs? = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {
@@ -145,8 +147,20 @@ class JobActivity : AppCompatActivity() {
                         Picasso.get().load(response.organizations[0]?.picture)
                         .into(viewBinding.picture)
                     }
-                    response?.objective?.let{ viewBinding.objective.text = response.objective }
-                    response?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text = response.organizations[0]?.name }
+                    response?.objective?.let{ viewBinding.objective.text =
+                        response.objective.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        }
+                    }
+                    response?.organizations?.get(0)?.name?.let{ viewBinding.organizationsName.text =
+                        response.organizations[0]?.name?.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        }
+                    }
 
                     var string = getString(R.string.card_compensation_hidden)
                     response?.compensation?.visible?.let{
@@ -160,7 +174,11 @@ class JobActivity : AppCompatActivity() {
                             response.compensation.periodicity?.let { string += " " + response.compensation.periodicity }
                         }
                     }
-                    viewBinding.compensation.text = string
+                    viewBinding.compensation.text = string.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }
 
                     response?.details?.let {
                         var textView = TextView (ContextThemeWrapper(this@JobActivity, R.style.detail_scrollview_container_top))
@@ -254,23 +272,12 @@ class JobActivity : AppCompatActivity() {
     }
 
     /**
-     * Retrofit implementation to get a job detail
-     */
-    private fun getRetrofitJob(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://torre.co/api/opportunities/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    /**
      * Show error message when device have a problem with the internet
      */
     private fun showError() {
         Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }
 
-    //Main Menu
     /**
      * Show the developer info
      */
@@ -322,6 +329,7 @@ class JobActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+//todo:for future use
 //    /**
 //     * Actions made when app start
 //     */

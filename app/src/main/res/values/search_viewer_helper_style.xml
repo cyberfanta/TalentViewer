@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="search_view_helper">
+        <item name="android:textSize">20sp</item>
+        <item name="android:paddingStart">12dp</item>
+        <item name="android:paddingEnd">12dp</item>
+<!--        <item name="android:paddingTop">2dp</item>-->
+        <item name="android:paddingBottom">2dp</item>
+        <item name="android:layout_marginStart">32dp</item>
+        <item name="android:layout_marginEnd">32dp</item>
+        <item name="android:background">@drawable/background_white_black_border_cornerless</item>
+    </style>
+
+    <style name="search_view_helper_bottom" parent="search_view_helper">
+        <item name="android:background">@drawable/background_white_black_border_cornerless_bottom</item>
+    </style>
+</resources>

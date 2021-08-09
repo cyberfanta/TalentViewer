@@ -2,13 +2,12 @@ package com.cyberfanta.talentviewer.views
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -16,6 +15,7 @@ import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityBioBinding
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Bios
+import com.cyberfanta.talentviewer.presenters.ApiManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
 import com.cyberfanta.talentviewer.presenters.RateAppManager
@@ -27,8 +27,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -61,6 +59,7 @@ class BioActivity : AppCompatActivity() {
 
         bindOnClickListener()
 
+//todo:for future use
 //        AdsManager.attachBannerAd (adView)
 
         //Load firebase manager
@@ -75,6 +74,7 @@ class BioActivity : AppCompatActivity() {
             authorSelected(viewBinding.author)
             authorOpened = false
         }
+
         viewBinding.authorId.setOnClickListener {
             FirebaseManager.logEvent("Sending email: Author", "Send_Email")
             @Suppress("SpellCheckingInspection")
@@ -88,6 +88,7 @@ class BioActivity : AppCompatActivity() {
                 getString(R.string.authorEmailChooser) + ""
             )
         }
+
         viewBinding.poweredId.setOnClickListener {
             FirebaseManager.logEvent("Open website: API - " + getString(R.string.poweredByUrl), "Open_Api")
             DeviceUtils.openURL(this, getString(R.string.poweredByUrl))
@@ -98,16 +99,15 @@ class BioActivity : AppCompatActivity() {
      * Process the behavior of the app when user press back button
      */
     override fun onBackPressed() {
-        val constraintLayout : ConstraintLayout = findViewById(R.id.author)
         if (authorOpened) {
-            authorSelected(constraintLayout)
+            authorSelected(viewBinding.author)
             authorOpened = false
 
             FirebaseManager.logEvent("Device Button: Back", "Device_Button")
             return
         }
 
-        FirebaseManager.logEvent("$TAG: Closed", "App_Closed")
+        FirebaseManager.logEvent("$TAG: Return", "Return_Main_Activity")
         super.onBackPressed()
     }
 
@@ -132,7 +132,6 @@ class BioActivity : AppCompatActivity() {
             5 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_5)
             6 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_6)
             7 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_7)
-            8 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_8)
         }
     }
 
@@ -141,7 +140,7 @@ class BioActivity : AppCompatActivity() {
      */
     private fun loadObject() {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Bios> = getRetrofitBio().create(APIService::class.java).getBio(username)
+            val call : Response<Bios> = ApiManager.getRetrofitBio().create(APIService::class.java).getBio(username)
             val response : Bios? = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {
@@ -149,9 +148,19 @@ class BioActivity : AppCompatActivity() {
                         Picasso.get().load(response.person.picture)
                             .into(viewBinding.picture)
                     }
-                    response?.person?.name?.let { viewBinding.name.text = response.person.name }
+                    response?.person?.name?.let { viewBinding.name.text =
+                        response.person.name.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        }
+                    }
                     response?.person?.professionalHeadline?.let {
-                        viewBinding.professionalHeadline.text = response.person.professionalHeadline
+                        viewBinding.professionalHeadline.text = response.person.professionalHeadline.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(
+                                Locale.getDefault()
+                            ) else it.toString()
+                        }
                     }
 
                     response?.person?.summaryOfBio?.let {
@@ -282,6 +291,8 @@ class BioActivity : AppCompatActivity() {
                         viewBinding.dataShower.addView(textView)
                     }
 
+//todo:for future use
+//Add the rest of bio data
 //                    experiences
 //                    awards
 //                    projects
@@ -375,27 +386,12 @@ class BioActivity : AppCompatActivity() {
                             }?.let {
                                     it2 -> entry.add(it2)
                             }
-                            Log.i(
-                                TAG,
-                                "** personalityTraitList?.get($i)?.analysis ****** " + personalityTraitList[i].analysis + " ****** " + personalityTraitList[i].group + "**** entry:" + entry[0].y
-                            )
-                            Log.i(
-                                TAG,
-                                "** personalityTraitList?.get($i)?.median ****** " + personalityTraitList[i].median
-                            )
-                            Log.i(
-                                TAG,
-                                "** personalityTraitList.get($i).stddev!! ****** " + personalityTraitList[i].stddev!!
-                            )
 
                             val datset = BarDataSet(entry, getString(R.string.detail_personality_traits_analysis))
                             datset.valueTextSize = 10f
 
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-//                            @SuppressLint("NewApi")
-                                datset.color = getColor(R.color.black_torre)
-                            else
-                                datset.color = Color.BLACK
+                            @RequiresApi(Build.VERSION_CODES.M)
+                            datset.color = getColor(R.color.black_torre)
 
                             val data = BarData(datset)
 
@@ -473,23 +469,12 @@ class BioActivity : AppCompatActivity() {
     }
 
     /**
-     * Retrofit implementation to get a bio detail
-     */
-    private fun getRetrofitBio(): Retrofit {
-        return Retrofit.Builder()
-            .baseUrl("https://torre.bio/api/bios/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
-
-    /**
      * Show error message when device have a problem with the internet
      */
     private fun showError() {
         Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }
 
-    //Main Menu
     /**
      * Show the developer info
      */
@@ -541,6 +526,7 @@ class BioActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+//todo:for future use
 //    /**
 //     * Actions made when app start
 //     */

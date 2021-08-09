@@ -58,7 +58,7 @@
             android:layout_height="50dp"
             app:backgroundTint="@color/gray_torre_00"
             app:cornerRadius="50dp"
-            app:icon="@drawable/ic_floatingarrow"
+            app:icon="@drawable/ic_floatingarrow2"
             app:iconGravity="textStart"
             app:iconPadding="0dp"
             app:iconSize="50dp"

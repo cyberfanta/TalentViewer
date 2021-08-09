@@ -3,32 +3,27 @@
     <style name="detail_text_bold" parent="detail_text_extras">
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">20sp</item>
-<!--        <item name="autoSizeMaxTextSize">20sp</item>-->
-<!--        <item name="autoSizeMinTextSize">12sp</item>-->
     </style>
+
     <style name="detail_text_normal" parent="detail_text_extras">
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:textSize">16sp</item>
-<!--        <item name="autoSizeMaxTextSize">16sp</item>-->
-<!--        <item name="autoSizeMinTextSize">10sp</item>-->
-
     </style>
+
     <style name="detail_text_normal_footer" parent="detail_text_extras">
         <item name="android:layout_marginTop">2dp</item>
         <item name="android:textSize">12sp</item>
-<!--        <item name="autoSizeMaxTextSize">14sp</item>-->
-<!--        <item name="autoSizeMinTextSize">10sp</item>-->
     </style>
+
     <style name="detail_text_extras">
         <item name="android:textColor">@color/black_torre</item>
-<!--        <item name="autoSizeStepGranularity">1sp</item>-->
-<!--        <item name="autoSizeTextType">uniform</item>-->
         <item name="android:maxLines">3</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:text">@string/content_description_empty</item>
     </style>
+
     <style name="detail_text_container">
         <item name="android:background">@drawable/background_white_black_border</item>
         <item name="android:layout_height">wrap_content</item>
@@ -87,17 +82,11 @@
     </style>
 
     <style name="detail_chart_text_sides">
-<!--        <item name="android:background">@drawable/background_gray_black_border_middle</item>-->
         <item name="android:layout_width">0dp</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">10sp</item>
-<!--        <item name="autoSizeMaxTextSize">12sp</item>-->
-<!--        <item name="autoSizeMinTextSize">4sp</item>-->
         <item name="android:textColor">@color/black_torre</item>
-<!--        <item name="autoSizeStepGranularity">1sp</item>-->
-<!--        <item name="autoSizeTextType">uniform</item>-->
         <item name="android:maxLines">3</item>
         <item name="android:gravity">center</item>
     </style>
-
 </resources>

@@ -3,22 +3,21 @@ package com.cyberfanta.talentviewer.views
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
 import com.cyberfanta.talentviewer.models.*
+import com.cyberfanta.talentviewer.presenters.ApiManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PageData
 import com.cyberfanta.talentviewer.presenters.RateAppManager
@@ -40,6 +39,7 @@ import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener {
+
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
 
@@ -49,17 +49,18 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     //UI variables
     private var authorOpened: Boolean = false
     private lateinit var deviceDimension: IntArray
+    private var filteringRV = false
 
     //Manage RecyclerViews
     private lateinit var peopleAdapter: PeoplesAdapter
     private lateinit var opportunityAdapter: OpportunitiesAdapter
-    private val peopleList = mutableListOf<PeopleItem>()
-    private val opportunityList = mutableListOf<OpportunityItem>()
+    private val peopleList = mutableMapOf<String, PeopleItem>()
+    private val opportunityList = mutableMapOf<String, OpportunityItem>()
 
     //Manage query sizes
-    private var querySize = 30
+    private var querySize = 50
     private var peopleOffset = 0
-    private var currentAggregators = ""
+    private var currentAggregators = false
     private var opportunityOffset = 0
     private var opportunitySwitch = true //true: Opportunity - false: Peoples
 
@@ -93,7 +94,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         fillRecyclerViewBios()
         fillRecyclerViewJobs()
         bindOnClickListener()
+        initializeRecyclerViewHelpers()
 
+//todo:for future use
         //Loading ads manager
 //        AdsManager.loadBannerAds(applicationContext, deviceDimension[0].toFloat())
     }
@@ -113,12 +116,12 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         peopleAdapter.setOnItemClickListener(object:
             PeoplesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-//                FirebaseManager.logEvent("Character Detail: " + (position+1) + " - " + queryManager.getCharacterDetail(position+1).name, "Get_Character_Detail")
+                FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
 
                 //Activating Loading Arrow
                 viewBinding.biosLoading.visibility = View.VISIBLE
 
-                peopleList[position].username?.let { getBio(it) }
+                peopleList.values.elementAt(position).username?.let { getBio(it) }
             }
         })
 
@@ -129,7 +132,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                     //Activating Loading Arrow
                     viewBinding.biosLoading.visibility = View.VISIBLE
 
-//                FirebaseManager.logEvent("Character Page: $characterPagesLoaded", "Get_Character_Page")
+                    FirebaseManager.logEvent("People Page", "Get_People_Page")
                     getPeoples(
                         PageData(
                             peopleOffset.toString(),
@@ -150,7 +153,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                         //Activating Loading Arrow
                         viewBinding.biosLoading.visibility = View.VISIBLE
 
-//                    FirebaseManager.logEvent("Character Page: $characterPagesLoaded", "Get_Character_Page")
+                        FirebaseManager.logEvent("People Page", "Get_People_Page")
                         getPeoples(
                             PageData(
                                 peopleOffset.toString(),
@@ -175,15 +178,15 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding.jobsLoading.visibility = View.VISIBLE
         getOpportunities(PageData(opportunityOffset.toString(), querySize.toString(), currentAggregators))
 
-        opportunityAdapter.setOnItemClickListener(object:
+        opportunityAdapter.setOnItemClickListener(object :
             OpportunitiesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-//                FirebaseManager.logEvent("Character Detail: " + (position+1) + " - " + queryManager.getCharacterDetail(position+1).name, "Get_Character_Detail")
+                FirebaseManager.logEvent("Job Detail: $position", "Get_Job_Detail")
 
                 //Activating Loading Arrow
                 viewBinding.jobsLoading.visibility = View.VISIBLE
 
-                opportunityList[position].id?.let { getJob(it) }
+                opportunityList.values.elementAt(position).id?.let { getJob(it) }
             }
         })
 
@@ -194,7 +197,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                     //Activating Loading Arrow
                     viewBinding.jobsLoading.visibility = View.VISIBLE
 
-//                FirebaseManager.logEvent("Character Page: $characterPagesLoaded", "Get_Character_Page")
+                    FirebaseManager.logEvent("Opportunity Page", "Get_Opportunity_Page")
                     getOpportunities(
                         PageData(
                             opportunityOffset.toString(),
@@ -203,6 +206,20 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                         )
                     )
                 }
+                //todo: make update for filtered results
+//                if (filteringRV) {
+//                    //Activating Loading Arrow
+//                    viewBinding.jobsLoading.visibility = View.VISIBLE
+//
+//                    FirebaseManager.logEvent("Opportunity Page Filtered", "Get_Opportunity_Page_Filtered")
+//                    getOpportunities(
+//                        PageData(
+//                            opportunityOffset.toString(),
+//                            querySize.toString(),
+//                            currentAggregators
+//                        )
+//                    )
+//                }
             }
         })
 
@@ -215,7 +232,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                         //Activating Loading Arrow
                         viewBinding.jobsLoading.visibility = View.VISIBLE
 
-//                    FirebaseManager.logEvent("Character Page: $characterPagesLoaded", "Get_Character_Page")
+                        FirebaseManager.logEvent("Opportunity Page", "Get_Opportunity_Page")
                         getOpportunities(
                             PageData(
                                 opportunityOffset.toString(),
@@ -259,6 +276,80 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     }
 
     /**
+     * Load all onClick functions for search views helpers on MainActivity
+     */
+    private fun initializeRecyclerViewHelpers() {
+        viewBinding.searchView.setOnClickListener {
+            viewBinding.searchView.requestFocus()
+            if (opportunitySwitch)
+                viewBinding.helperJobs.visibility = View.VISIBLE
+            else
+                viewBinding.helperBios.visibility = View.VISIBLE
+        }
+
+        val helperListBios = resources.getStringArray(R.array.search_view_helper_bios)
+        var text = getString(R.string.search_view_helper_message) + " " + helperListBios[0] + ":"
+        viewBinding.helperBios1.text = text
+        viewBinding.helperBios1.setOnClickListener {
+            setHelperList(helperListBios[0])
+            viewBinding.helperBios.visibility = View.GONE
+            viewBinding.searchView.requestFocus()
+        }
+
+        text = getString(R.string.search_view_helper_message) + " " + helperListBios[1] + ":"
+        viewBinding.helperBios2.text = text
+        viewBinding.helperBios2.setOnClickListener {
+            setHelperList(helperListBios[1])
+            viewBinding.helperBios.visibility = View.GONE
+            viewBinding.searchView.requestFocus()
+        }
+
+        text = getString(R.string.search_view_helper_message) + " " + helperListBios[2] + ":"
+        viewBinding.helperBios3.text = text
+        viewBinding.helperBios3.setOnClickListener {
+            setHelperList(helperListBios[2])
+            viewBinding.helperBios.visibility = View.GONE
+            viewBinding.searchView.requestFocus()
+        }
+
+        val helperListJobs = resources.getStringArray(R.array.search_view_helper_jobs)
+        text = getString(R.string.search_view_helper_message) + " " + helperListJobs[0] + ":"
+        viewBinding.helperJobs1.text = text
+        viewBinding.helperJobs1.setOnClickListener {
+            setHelperList(helperListJobs[0])
+            viewBinding.helperJobs.visibility = View.GONE
+            viewBinding.searchView.requestFocus()
+        }
+
+        text = getString(R.string.search_view_helper_message) + " " + helperListJobs[1] + ":"
+        viewBinding.helperJobs2.text = text
+        viewBinding.helperJobs2.setOnClickListener {
+            setHelperList(helperListJobs[1])
+            viewBinding.helperJobs.visibility = View.GONE
+            viewBinding.searchView.requestFocus()
+        }
+
+        text = getString(R.string.search_view_helper_message) + " " + helperListJobs[2] + ":"
+        viewBinding.helperJobs3.text = text
+        viewBinding.helperJobs3.setOnClickListener {
+            setHelperList(helperListJobs[2])
+            viewBinding.helperJobs.visibility = View.GONE
+            viewBinding.searchView.requestFocus()
+        }
+    }
+
+    /**
+     * Set text on search view according to the helper
+     */
+    private fun setHelperList(helperList: String) {
+        val querySplited = viewBinding.searchView.query.split(":")
+        if (querySplited.size > 1)
+            viewBinding.searchView.setQuery("$helperList:" + querySplited[1], false)
+        else
+            viewBinding.searchView.setQuery("$helperList:" + querySplited[0], false)
+    }
+
+    /**
      * Load all initial loading arrow animations
      */
     private fun initializeLoadingArrowAnimations() {
@@ -271,6 +362,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      */
     override fun onDestroy() {
         super.onDestroy()
+        FirebaseManager.logEvent("App Closed", "App_Closed")
 
         //This way don't wait for Android Garbage collection. However, Android Studio work better with this.
         exitProcess(0)
@@ -293,6 +385,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         super.onBackPressed()
     }
 
+//todo:for future use
 //    /**
 //     * Actions made when app start
 //     */
@@ -306,17 +399,20 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      */
     private fun getPeoples(pageData: PageData) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Peoples> = getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
+            val call : Response<Peoples> = ApiManager.getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
             val response : Peoples? = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
+                    val currentPeopleOffset = peopleOffset
                     for (result in response?.results!!)
-                        if (!peopleList.contains(result))
+                        if (!peopleList.containsKey(result?.username))
                             result?.let {
-                                peopleList.add(it)
+                                it.username?.let { it1 -> peopleList.put(it1, it) }
+                                peopleAdapter.notifyItemRangeInserted(peopleOffset, 1)
+                                peopleOffset++
                             }
-                    peopleOffset += querySize
-                    peopleAdapter.notifyItemRangeInserted(peopleOffset, querySize)
+                    if (peopleOffset == currentPeopleOffset)
+                        getPeoples(PageData(peopleOffset.toString(), (peopleOffset + querySize).toString(), currentAggregators))
                 } else {
                     showError()
                 }
@@ -327,34 +423,24 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     }
 
     /**
-     * Retrofit implementation to get a people list
-     */
-    private fun getRetrofitPeoples(): Retrofit {
-        val client = OkHttpClient.Builder()
-            .connectTimeout(100, TimeUnit.SECONDS)
-            .readTimeout(100, TimeUnit.SECONDS).build()
-        return Retrofit.Builder()
-            .baseUrl("https://search.torre.co/people/_search/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client).build()
-    }
-
-    /**
      * Load opportunity list into job recycler view
      */
     private fun getOpportunities(pageData: PageData) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Opportunities> = getRetrofitOpportunities().create(APIService::class.java).getOpportunities(pageData.toString())
+            val call : Response<Opportunities> = ApiManager.getRetrofitOpportunities().create(APIService::class.java).getOpportunities(pageData.toString())
             val response : Opportunities? = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
+                    val currentOpportunityOffset = opportunityOffset
                     for (result in response?.results!!)
-                        if (!opportunityList.contains(result))
+                        if (!opportunityList.containsKey(result?.id))
                             result?.let {
-                                opportunityList.add(it)
+                                it.id?.let { it1 -> opportunityList.put(it1, it) }
+                                opportunityAdapter.notifyItemRangeInserted(opportunityOffset, 1)
+                                opportunityOffset++
                             }
-                    opportunityAdapter.notifyItemRangeInserted(opportunityOffset, querySize)
-                    opportunityOffset += querySize
+                    if (opportunityOffset == currentOpportunityOffset)
+                        getOpportunities(PageData(opportunityOffset.toString(), (opportunityOffset + querySize).toString(), currentAggregators))
                 } else {
                     showError()
                 }
@@ -362,19 +448,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 loadingJobs = false
             }
         }
-    }
-
-    /**
-     * Retrofit implementation to get a opportunity list
-     */
-    private fun getRetrofitOpportunities(): Retrofit {
-        val client = OkHttpClient.Builder()
-            .connectTimeout(100, TimeUnit.SECONDS)
-            .readTimeout(100, TimeUnit.SECONDS).build()
-        return Retrofit.Builder()
-            .baseUrl("https://search.torre.co/opportunities/_search/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client).build()
     }
 
     /**
@@ -409,6 +482,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * Show error message when device have a problem with the internet
      */
     private fun showError() {
+        FirebaseManager.logEvent("Error", "Error_Loading_Data")
         Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }
 
@@ -416,54 +490,160 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * Called when user clicks on submit button
      */
     override fun onQueryTextSubmit(query: String?): Boolean {
-        if (!query.isNullOrEmpty()) {
-            hideKeyboard()
-
-            if (opportunitySwitch) {
-                opportunityList.clear()
-                opportunityOffset = 0
-                currentAggregators = query.lowercase(Locale.getDefault())
-
-                //Activating Loading Arrow
-                viewBinding.jobsLoading.visibility = View.VISIBLE
-
-                getOpportunities(
-                    PageData(
-                        opportunityOffset.toString(),
-                        querySize.toString(),
-                        currentAggregators
-                    )
-                )
-            } else {
-                peopleList.clear()
-                peopleOffset = 0
-                currentAggregators = query.lowercase(Locale.getDefault())
-
-                //Activating Loading Arrow
-                viewBinding.biosLoading.visibility = View.VISIBLE
-
-                getPeoples(
-                    PageData(
-                        peopleOffset.toString(),
-                        querySize.toString(),
-                        currentAggregators
-                    )
-                )
-            }
-        }
+        hideKeyboard()
         return true
     }
 
     /**
      * Called when the query text is changed by the user.
      *
-     * @param newText the new content of the query text field.
+     * @param query the new content of the query text field.
      *
      * @return false if the SearchView should perform the default action of showing any
      * suggestions if available, true if the action was handled by the listener.
      */
-    override fun onQueryTextChange(newText: String?): Boolean {
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onQueryTextChange(query: String?): Boolean {
+        filteringRV = true
+        if (!query.isNullOrEmpty()) {
+            updateFilteredRV(query)
+            return true
+        }
+        filteringRV = false
+        if (opportunitySwitch) {
+            opportunityAdapter = OpportunitiesAdapter(opportunityList)
+            viewBinding.recyclerViewJobs.adapter = opportunityAdapter
+            opportunityAdapter.setOnItemClickListener(object :
+                OpportunitiesAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    FirebaseManager.logEvent("Job Detail: $position", "Get_Job_Detail")
+
+                    //Activating Loading Arrow
+                    viewBinding.jobsLoading.visibility = View.VISIBLE
+
+                    opportunityList.values.elementAt(position).id?.let { getJob(it) }
+                }
+            })
+            opportunityAdapter.notifyDataSetChanged()
+        } else {
+            peopleAdapter = PeoplesAdapter(peopleList)
+            viewBinding.recyclerViewBios.adapter = peopleAdapter
+            peopleAdapter.setOnItemClickListener(object:
+                PeoplesAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
+
+                    //Activating Loading Arrow
+                    viewBinding.biosLoading.visibility = View.VISIBLE
+
+                    peopleList.values.elementAt(position).username?.let { getBio(it) }
+                }
+            })
+            peopleAdapter.notifyDataSetChanged()
+        }
         return true
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun updateFilteredRV(query: String) {
+        if (opportunitySwitch) {
+            val filter = mutableMapOf<String, OpportunityItem>()
+            for (item in opportunityList.values) {
+                val jobsHelper = resources.getStringArray(R.array.search_view_helper_jobs)
+                if (query.lowercase(Locale.getDefault()).contains(jobsHelper[0] + ":")) {
+                    val querySplited = query.split(jobsHelper[0] + ":").toMutableList()
+                    removeFirstChar(querySplited)
+                    if (item.objective?.lowercase()
+                            ?.contains(querySplited[1].lowercase(Locale.getDefault())) == true
+                    )
+                        item.objective.let { filter.put(it, item) }
+                } else if (query.lowercase(Locale.getDefault()).contains(jobsHelper[1] + ":")) {
+                    val querySplited = query.split(jobsHelper[1] + ":").toMutableList()
+                    removeFirstChar(querySplited)
+                    if (item.organizations?.get(0)?.name?.lowercase()
+                            ?.contains(querySplited[1].lowercase(Locale.getDefault())) == true
+                    )
+                        item.organizations[0]?.name?.let { filter.put(it, item) }
+                } else if (query.lowercase(Locale.getDefault()).contains(jobsHelper[2] + ":")) {
+                    val querySplited = query.split(jobsHelper[2] + ":").toMutableList()
+                    removeFirstChar(querySplited)
+                    for (skill in item.skills!!)
+                        if (skill?.name?.lowercase()
+                                ?.contains(querySplited[1].lowercase(Locale.getDefault())) == true
+                        )
+                            skill.name.let { filter.put(it, item) }
+                } else if ((item.objective?.lowercase()
+                        ?.contains(query.lowercase(Locale.getDefault())) == true)
+                )
+                    item.objective.let { filter.put(it, item) }
+            }
+            opportunityAdapter = OpportunitiesAdapter(filter)
+            viewBinding.recyclerViewJobs.adapter = opportunityAdapter
+            opportunityAdapter.setOnItemClickListener(object :
+                OpportunitiesAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    FirebaseManager.logEvent("Job Detail: $position", "Get_Job_Detail")
+
+                    //Activating Loading Arrow
+                    viewBinding.jobsLoading.visibility = View.VISIBLE
+
+                    filter.values.elementAt(position).id?.let { getJob(it) }
+                }
+            })
+            opportunityAdapter.notifyDataSetChanged()
+        } else {
+            val filter = mutableMapOf<String, PeopleItem>()
+            for (item in peopleList.values) {
+                val biosHelper = resources.getStringArray(R.array.search_view_helper_bios)
+                if (query.lowercase(Locale.getDefault()).contains(biosHelper[0] + ":")) {
+                    val querySplited = query.split(biosHelper[0] + ":").toMutableList()
+                    removeFirstChar(querySplited)
+                    if (item.name?.lowercase()
+                            ?.contains(querySplited[1].lowercase(Locale.getDefault())) == true
+                    )
+                        item.name.let { filter.put(it, item) }
+                } else if (query.lowercase(Locale.getDefault()).contains(biosHelper[1] + ":")) {
+                    val querySplited = query.split(biosHelper[1] + ":").toMutableList()
+                    removeFirstChar(querySplited)
+                    if (item.professionalHeadline?.lowercase()
+                            ?.contains(querySplited[1].lowercase(Locale.getDefault())) == true
+                    )
+                        item.professionalHeadline.let { filter.put(it, item) }
+                } else if (query.lowercase(Locale.getDefault()).contains(biosHelper[2] + ":")) {
+                    val querySplited = query.split(biosHelper[2] + ":").toMutableList()
+                    removeFirstChar(querySplited)
+                    if (item.username?.lowercase()
+                            ?.contains(querySplited[1].lowercase(Locale.getDefault())) == true
+                    )
+                        item.username.let { filter.put(it, item) }
+                } else if ((item.name?.lowercase()
+                        ?.contains(query.lowercase(Locale.getDefault())) == true)
+                )
+                    item.name.let { filter.put(it, item) }
+            }
+            peopleAdapter = PeoplesAdapter(filter)
+            viewBinding.recyclerViewBios.adapter = peopleAdapter
+            peopleAdapter.setOnItemClickListener(object :
+                PeoplesAdapter.OnItemClickListener {
+                override fun onItemClick(position: Int) {
+                    FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
+
+                    //Activating Loading Arrow
+                    viewBinding.biosLoading.visibility = View.VISIBLE
+
+                    filter.values.elementAt(position).username?.let { getBio(it) }
+                }
+            })
+            peopleAdapter.notifyDataSetChanged()
+        }
+    }
+
+    /**
+     * Remove start characters from query if this is a space character
+     */
+    private fun removeFirstChar(querySplited: MutableList<String>) {
+        if (querySplited[1].isNotEmpty())
+            querySplited[1] = querySplited[1].trimStart()
     }
 
     /**
@@ -482,6 +662,11 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 1f * deviceDimension[0], 0f)
             DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
             opportunitySwitch = true
+
+            if (viewBinding.helperBios.isVisible) {
+                viewBinding.helperBios.visibility = View.GONE
+                viewBinding.helperJobs.visibility = View.VISIBLE
+            }
 
             //Firebase Data Collection
             FirebaseManager.logEvent("Footer Button: Jobs", "Footer_Button")
@@ -504,6 +689,11 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, -1f * deviceDimension[0], 0f)
             opportunitySwitch = false
 
+            if (viewBinding.helperJobs.isVisible) {
+                viewBinding.helperJobs.visibility = View.GONE
+                viewBinding.helperBios.visibility = View.VISIBLE
+            }
+
             //Firebase Data Collection
             FirebaseManager.logEvent("Footer Button: Bios", "Footer_Button")
         } else {
@@ -516,7 +706,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         }
     }
 
-    //Main Menu
     /**
      * Show the developer info
      */

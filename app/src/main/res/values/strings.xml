@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Talent Viewer</string>
 
-    <string name="content_description">Content Description Content Description</string>
-    <string name="content_description_empty"> </string>
+    <string name="content_description" translatable="false">Content Description Content Description</string>
+    <string name="content_description_empty" translatable="false"> </string>
 
     <string name="main_activity_search_hint">Search</string>
     <string name="main_activity_button_bios_name">Bios</string>
@@ -49,6 +49,19 @@
     </string-array>
     <string name="detail_personality_traits_analysis">Analysis</string>
 
+    <!--    Search View-->
+    <string-array name="search_view_helper_bios">
+        <item>name</item>
+        <item>role</item>
+        <item>username</item>
+    </string-array>
+    <string-array name="search_view_helper_jobs">
+        <item>objective</item>
+        <item>company</item>
+        <item>skill</item>
+    </string-array>
+    <string name="search_view_helper_message">Click to add -></string>
+
     <!--    Ads View-->
     <string name="ads_banner" translatable="false">ca-app-pub-2321980263900338/1599942696</string>
     <string name="ads_interstitial" translatable="false">ca-app-pub-2321980263900338/6684748418</string>
@@ -60,7 +73,6 @@
     <string name="item_about">About</string>
     <string name="item_rate_success">Thanks for your review</string>
     <string name="item_rate_fail">Error rating this app</string>
-
 
     <!--    Author Menu-->
     <string name="authorName1" translatable="false">Julio César Alberto</string>

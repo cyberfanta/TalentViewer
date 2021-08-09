@@ -17,7 +17,6 @@ class FirebaseManager (context: Context) {
         }
 
         private fun logRawEvent (itemName: String, eventType: String) {
-            //Firebase Data Collection
             mFirebaseAnalytics.logEvent(eventType) {
                 param("Item_Name", itemName)
             }

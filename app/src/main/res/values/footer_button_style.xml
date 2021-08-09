@@ -10,6 +10,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:gravity">center_vertical</item>
     </style>
+
     <style name="footer_text_bold" parent="background_view">
         <item name="android:textColor">@color/black_torre</item>
         <item name="android:textStyle">bold</item>
