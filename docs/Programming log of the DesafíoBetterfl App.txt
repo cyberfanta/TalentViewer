@@ -53,3 +53,34 @@ July 25,2021
 July 26,2021
 12pm Today's goal is to activate all the elements already configured now in the bios recycler view. Make the intradocumented. Make the final class diagram. Do the README.md. Incorporate firebase.
 3pm Activation of the recycler view for bios, ready. Intradocument, ready.
+
+August 6, 2021
+8pm I received a feedback with this list of changes:
+
+Pros:
+-Decent enough project planning with design assets, prototype, and UML diagrams.
+-The app is working well, overall, with an okay navigation and loading statuses.
+
+Cons:
+-Some design inconsistencies that ended up reflected in the final solution.
+-Font-size changes for the same data/information.
+-Messenger button for a job posting.
+-I'm not confident about the reasoning behind the architectural pattern that was chosen. There isn't clear evidence of the why.
+-The search input is not working and the intended value is lost.
+-There are unnecessary fragments of code that are commented out.
+-There are redundant and repeated codes in some places; they could've been added to a common file and reused.
+-There's no evidence of a test suite or related skills
+
+However my wife got an accident and I was part of this time healing her and dealing with other medical duties. I made my best.
+
+-About design inconsistencies, I changed the color of the detailed view to make them match to the main activity design.
+-Font Changes, is because I used a auto size for long text. I changed for a fixed text size.
+-Messenger Button, changed the icon for a glass icon to make its meaning nearest to the real idea of that button.
+-Architectural Pattern, I delayed this requirement for another programming cycle because no enough time. Pending to do.
+-Search Input, is now working, but I will implement a better filter way because at this moment is depending of how many items are loaded during unfilter step.
+-Unnecessary Comments, I must apologize, I left some code for future use to make as a professional porfolio. This was solved.
+-Redudant Code, I will clean this in the new programming cycle. Pending to do.
+-Test Suite, I added some unit test. These will grow more with the new programming cycle. Pending to improve.
+
+August 11, 2021
+8pm In this programming cycle, I will full implement MVP pattern, eliminate the redundant code and improve the unit test files. Also planning to make a horizontal look and feel to activate the responsivity for the app. And prepare a final version with the Google ads and publish it on Google Play Store.
