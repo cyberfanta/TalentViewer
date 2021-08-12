@@ -287,30 +287,6 @@ class BioActivity : AppCompatActivity() {
                         viewBinding.dataShower.addView(textView)
                     }
 
-//todo:for future use
-//Add the rest of bio data
-//                    experiences
-//                    awards
-//                    projects
-//                    publications
-//                    education
-//                    opportunities
-//                    personalityTraitsResults
-//                    professionalCultureGenomeResults
-
-//                    response?.person?.summaryOfBio?.let {
-//                        var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
-//                        textView.text = getString(R.string.detail_summaryOfBio)
-//                        viewBinding.dataShower.addView(textView)
-//
-//                        textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle))
-//                        var text = ""
-//                        for (detail in response.details)
-//                            text += detail?.content + "\n"
-//                        textView.text = text.substring(0, text.length - 1)
-//                        viewBinding.dataShower.addView(textView)
-//                    }
-
                     response?.personalityTraitsResults?.let {
                         var textView = TextView (ContextThemeWrapper(this@BioActivity, R.style.detail_scrollview_container_middle_dark))
                         textView.text = getString(R.string.detail_personality_traits_results)
@@ -521,13 +497,4 @@ class BioActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-//todo:for future use
-//    /**
-//     * Actions made when app start
-//     */
-//    override fun onStart() {
-//        AdsManager.attachBannerAd(viewBinding.adView)
-//        super.onStart()
-//    }
 }

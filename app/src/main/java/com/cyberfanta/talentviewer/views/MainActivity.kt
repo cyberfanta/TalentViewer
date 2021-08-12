@@ -198,20 +198,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                         )
                     )
                 }
-                //todo: make update for filtered results
-//                if (filteringRV) {
-//                    //Activating Loading Arrow
-//                    viewBinding.jobsLoading.visibility = View.VISIBLE
-//
-//                    FirebaseManager.logEvent("Opportunity Page Filtered", "Get_Opportunity_Page_Filtered")
-//                    getOpportunities(
-//                        PageData(
-//                            opportunityOffset.toString(),
-//                            querySize.toString(),
-//                            currentAggregators
-//                        )
-//                    )
-//                }
             }
         })
 
@@ -377,15 +363,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         super.onBackPressed()
     }
 
-//todo:for future use
-//    /**
-//     * Actions made when app start
-//     */
-//    override fun onStart() {
-//        AdsManager.attachBannerAd(viewBinding.adView)
-//        super.onStart()
-//    }
-//
     /**
      * Load people list into bio recycler view
      */

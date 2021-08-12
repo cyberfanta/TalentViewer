@@ -322,13 +322,4 @@ class JobActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
-//todo:for future use
-//    /**
-//     * Actions made when app start
-//     */
-//    override fun onStart() {
-//        AdsManager.attachBannerAd(viewBinding.adView)
-//        super.onStart()
-//    }
 }
