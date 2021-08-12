@@ -1,37 +1,70 @@
-## Welcome to GitHub Pages
+# TalentViewer
+This is an app to visualize the talent that is suscribed into torre.co website.
 
-You can use the [editor on GitHub](https://github.com/cyberfanta/TalentViewer/edit/gh-pages/index.md) to maintain and preview the content for your website in Markdown files.
+## To Obtain 🚀
+Clone this repo to your computer using any Git manager.
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+Use this url -> https://github.com/cyberfanta/TalentViewer.git
+or this other -> git@github.com:cyberfanta/TalentViewer.git (For secure connection)
 
-### Markdown
+### Requirements 📋
+Last version of [Android Studio](https://developer.android.com/studio)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
-
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
+### Instalation 🔧
+```
+* Open your Android Studio
+* Go to File -> New -> Project from Version Control
+* Paste the URL.
+* Select a Directory.
+* Click on Clone button. Will take some minutes.
 ```
 
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
+### To Run It 📦
+```
+You have 2 options:
 
-### Jekyll Themes
+1. By Hardware
+* Connect your Android device to your computer using a USB cable.
+* If your first time follow the device user manual to install its drivers.
+* Once your Android Studio detect your device, just Run using the Green Triangle Button.
 
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/cyberfanta/TalentViewer/settings/pages). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
+2. By Software
+* Go to Tool -> AVD Manager
+* Click on Create Virtual Device.
+* Create a Virtual Device according to your preferences.
+* Once finish it and your Android Studio detect your device, just Run using the Green Triangle Button.
+```
+---
+## Architecture 🚀
+This project was made using [Kotlin](https://developer.android.com/kotlin?hl=es-419&gclid=Cj0KCQjwktKFBhCkARIsAJeDT0hrjixFC0axADTFNpfkGERyGvlLu6grPKO6XBMN7R5YPUlLXTKQWz8aAtv4EALw_wcB&gclsrc=aw.ds)
 
-### Support or Contact
+With architecture MVP (Model View Presenter) to make sure that the app will make its best to show the content with no delay to the user.
 
-Having trouble with Pages? Check out our [documentation](https://docs.github.com/categories/github-pages-basics/) or [contact support](https://support.github.com/contact) and we’ll help you sort it out.
+## Class Diagram 🎯
+The graphical internal description of this project can be found [Here](https://github.com/cyberfanta/TalentViewer/blob/master/docs/Class%20Diagram.drawio)
+and the picture is here: <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/Class%20Diagram.png" alt="Screenshot 1" width="800"/>
+
+## Programming Log 📔
+The log about how I made this app can be found [here](https://github.com/cyberfanta/TalentViewer/blob/master/docs/Programming%20log%20of%20the%20Desaf%C3%ADoBetterfl%20App.txt)
+
+## UI Design 🎨
+The planning for the UI was made using [Figma](https://www.figma.com/downloads/)
+The link for the project is [Here](https://www.figma.com/file/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?node-id=1%3A19)
+If you want also can access to the UI [Prototipe](https://www.figma.com/proto/2PDqUTu9WmAAfjjwvrLiCR/Talent-Viewer?page-id=1%3A19&node-id=10%3A1153&viewport=523%2C275%2C0.4222502112388611&scaling=scale-down&starting-point-node-id=10%3A1153)
+
+## Screenshots 🖼
+<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175922_Talent%20Viewer.webp" alt="Screenshot 1" width="300"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175941_Talent%20Viewer.webp" alt="Screenshot 2" width="300"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-175950_Talent%20Viewer.webp" alt="Screenshot 3" width="300"/>
+<img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180000_Talent%20Viewer.webp" alt="Screenshot 4" width="300"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180013_Talent%20Viewer.webp" alt="Screenshot 5" width="300"/> <img src="https://github.com/cyberfanta/TalentViewer/blob/master/docs/screenshots/Screenshot_20210726-180043_Talent%20Viewer.webp" alt="Screenshot 6" width="300"/>
+
+## Try this project ⚔
+**Use this project on your phone** with this [APK](https://github.com/cyberfanta/TalentViewer/blob/master/app/release/app-debug.apk), just install it and enjoy.
+**You can also can get it** from [Firebase](https://appdistribution.firebase.dev/i/2f6cac4afa8cced3) 
+
+## License 📄
+This project is under license (Apache License) - please check the file [LICENSE.md](https://github.com/cyberfanta/TalentViewer/blob/master/LICENSE.md) for details
+
+## Author ✒️
+* **Julio César León** - *Initial Work* - [Julio León](https://github.com/cyberfanta)
+Project Link: [Project](https://github.com/cyberfanta/TalentViewer)
+
+Enjoy my app.
