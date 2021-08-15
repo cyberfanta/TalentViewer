@@ -1,8 +1,8 @@
 package com.cyberfanta.talentviewer.views
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,10 +10,10 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
 import com.cyberfanta.talentviewer.models.*
@@ -33,8 +33,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.system.exitProcess
 
-
-class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener {
+class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener, MenuManager {
 
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
@@ -43,9 +42,14 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private lateinit var viewBinding: ActivityMainBinding
 
     //UI variables
-    private var authorOpened: Boolean = false
     private lateinit var deviceDimension: IntArray
     private var filteringRV = false
+
+    //Menu variables
+    override var deviceWidth: Float = 0.0f
+    override var authorOpened: Boolean = false
+    override lateinit var contextMenu: Context
+    override lateinit var viewBindingMenu: ViewBinding
 
     //Manage RecyclerViews
     private lateinit var peopleAdapter: PeoplesAdapter
@@ -73,18 +77,21 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
+        //Calculate device dimensions
+        deviceDimension = DeviceUtils.calculateDeviceDimensions(this)
+
         //Obtain the FirebaseAnalytics instance
         FirebaseManager(this)
         FirebaseManager.logEvent("$TAG: Opened", "App_Opened")
+
+        //Manu Interface
+        initializeMenu(this, deviceDimension, viewBinding)
 
         //Obtain rate my app instance
         RateAppManager(this)
 
         //Set search view listeners
         viewBinding.searchView.setOnQueryTextListener(this)
-
-        //Calculate device dimensions
-        deviceDimension = DeviceUtils.calculateDeviceDimensions(this)
 
         initializeLoadingArrowAnimations()
         fillRecyclerViewBios()
@@ -350,17 +357,8 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * Process the behavior of the app when user press back button
      */
     override fun onBackPressed() {
-        val constraintLayout : ConstraintLayout = findViewById(R.id.author)
-        if (authorOpened) {
-            authorSelected(constraintLayout)
-            authorOpened = false
-
-            FirebaseManager.logEvent("Device Button: Back", "Device_Button")
-            return
-        }
-
-        FirebaseManager.logEvent("$TAG: Closed", "App_Closed")
-        super.onBackPressed()
+        if (backPressed())
+            super.onBackPressed()
     }
 
     /**
@@ -676,53 +674,17 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     }
 
     /**
-     * Show the developer info
-     */
-    private fun authorSelected(view: View) {
-        DeviceUtils.setAnimation(view, "translationX", 300, false, 0f, deviceDimension[0].toFloat())
-    }
-
-    /**
      * Create the setting menu of the application
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
+        return createOptionsMenu(menu, menuInflater)
     }
 
     /**
      * Handle the setting menu of the application
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.item_policy -> {
-                FirebaseManager.logEvent("Menu: Policy", "Open_Menu")
-                val uri = Uri.parse(getString(R.string.item_policy_page))
-                val intent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intent)
-                return true
-            }
-            R.id.item_rate -> {
-                FirebaseManager.logEvent("Menu: Rate App", "Open_Menu")
-                RateAppManager.requestReview(applicationContext)
-                return true
-            }
-            R.id.item_about -> {
-                FirebaseManager.logEvent("Menu: Author", "Open_Menu")
-                viewBinding.author.visibility = View.VISIBLE
-                DeviceUtils.setAnimation(
-                    viewBinding.author,
-                    "translationX",
-                    300,
-                    false,
-                    deviceDimension[0].toFloat(),
-                    0f
-                )
-                authorOpened = true
-                return true
-            }
-        }
+        optionsItemSelected(item)
         return super.onOptionsItemSelected(item)
     }
 

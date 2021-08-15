@@ -1,6 +1,7 @@
 package com.cyberfanta.talentviewer.views
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -11,6 +12,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.viewbinding.ViewBinding
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
 import com.cyberfanta.talentviewer.models.APIService
@@ -26,7 +28,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class JobActivity : AppCompatActivity() {
+class JobActivity : AppCompatActivity(), MenuManager {
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
 
@@ -34,9 +36,14 @@ class JobActivity : AppCompatActivity() {
     private lateinit var viewBinding: ActivityJobBinding
 
     //UI variables
-    private var authorOpened: Boolean = false
     private var deviceDimension = intArrayOf(0, 0)
     private var id = ""
+
+    //Menu variables
+    override var deviceWidth: Float = 0.0f
+    override var authorOpened: Boolean = false
+    override lateinit var contextMenu: Context
+    override lateinit var viewBindingMenu: ViewBinding
 
     /**
      * The initial point of this activity
@@ -57,7 +64,10 @@ class JobActivity : AppCompatActivity() {
 
         //Load firebase manager
         FirebaseManager.logEvent("$TAG: Opened", "Activity_Job")
-   }
+
+        //Manu Interface
+        initializeMenu(this, deviceDimension, viewBinding)
+    }
 
     /**
      * Load all onClick functions for all views on MainActivity
@@ -92,16 +102,8 @@ class JobActivity : AppCompatActivity() {
      * Process the behavior of the app when user press back button
      */
     override fun onBackPressed() {
-        if (authorOpened) {
-            authorSelected(viewBinding.author)
-            authorOpened = false
-
-            FirebaseManager.logEvent("Device Button: Back", "Device_Button")
-            return
-        }
-
-        FirebaseManager.logEvent("$TAG: Return", "Return_Main_Activity")
-        super.onBackPressed()
+        if (backPressed())
+            super.onBackPressed()
     }
 
     /**
@@ -273,53 +275,17 @@ class JobActivity : AppCompatActivity() {
     }
 
     /**
-     * Show the developer info
-     */
-    private fun authorSelected(view: View) {
-        DeviceUtils.setAnimation(view, "translationX", 300, false, 0f, deviceDimension[0].toFloat())
-    }
-
-    /**
      * Create the setting menu of the application
      */
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        val inflater = menuInflater
-        inflater.inflate(R.menu.menu, menu)
-        return true
+        return createOptionsMenu(menu, menuInflater)
     }
 
     /**
      * Handle the setting menu of the application
      */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.item_policy -> {
-                FirebaseManager.logEvent("Menu: Policy", "Open_Menu")
-                val uri = Uri.parse(getString(R.string.item_policy_page))
-                val intent = Intent(Intent.ACTION_VIEW, uri)
-                startActivity(intent)
-                return true
-            }
-            R.id.item_rate -> {
-                FirebaseManager.logEvent("Menu: Rate App", "Open_Menu")
-                RateAppManager.requestReview(applicationContext)
-                return true
-            }
-            R.id.item_about -> {
-                FirebaseManager.logEvent("Menu: Author", "Open_Menu")
-                viewBinding.author.visibility = View.VISIBLE
-                DeviceUtils.setAnimation(
-                    viewBinding.author,
-                    "translationX",
-                    300,
-                    false,
-                    deviceDimension[0].toFloat(),
-                    0f
-                )
-                authorOpened = true
-                return true
-            }
-        }
+        optionsItemSelected(item)
         return super.onOptionsItemSelected(item)
     }
 }
