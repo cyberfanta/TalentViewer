@@ -2,8 +2,6 @@ package com.cyberfanta.talentviewer.views
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.view.*
@@ -19,7 +17,6 @@ import com.cyberfanta.talentviewer.models.Bios
 import com.cyberfanta.talentviewer.presenters.ApiManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
-import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.Utils

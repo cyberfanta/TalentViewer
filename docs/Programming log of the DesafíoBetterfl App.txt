@@ -85,3 +85,5 @@ However my wife got an accident and I was part of this time healing her and deal
 August 11, 2021
 8pm In this programming cycle, I will full implement MVP pattern, eliminate the redundant code and improve the unit test files. Also planning to make a horizontal look and feel to activate the responsivity for the app. And prepare a final version with the Google ads and publish it on Google Play Store.
 
+August 15, 2021
+7pm Added the composite parttern with menu items.

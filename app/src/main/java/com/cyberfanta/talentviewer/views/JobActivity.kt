@@ -2,8 +2,6 @@ package com.cyberfanta.talentviewer.views
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,7 +17,6 @@ import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Jobs
 import com.cyberfanta.talentviewer.presenters.ApiManager
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
-import com.cyberfanta.talentviewer.presenters.RateAppManager
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
