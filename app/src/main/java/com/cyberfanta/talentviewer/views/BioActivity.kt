@@ -12,11 +12,10 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.viewbinding.ViewBinding
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityBioBinding
+import com.cyberfanta.talentviewer.models.APIAdapter
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Bios
-import com.cyberfanta.talentviewer.models.APIAdapter
-import com.cyberfanta.talentviewer.presenters.FirebaseManager
-import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
+import com.cyberfanta.talentviewer.presenters.*
 import com.github.mikephil.charting.charts.HorizontalBarChart
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.utils.Utils
@@ -28,7 +27,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class BioActivity : AppCompatActivity(), MenuManager {
+class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
 
@@ -45,6 +44,9 @@ class BioActivity : AppCompatActivity(), MenuManager {
     override lateinit var contextMenu: Context
     override lateinit var viewBindingMenu: ViewBinding
 
+    //MVP variables
+    private lateinit var bioActivityPresenter: BioActivityPresenter
+
     /**
      * The initial point of this activity
      */
@@ -53,13 +55,10 @@ class BioActivity : AppCompatActivity(), MenuManager {
         viewBinding = ActivityBioBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        getDeviceDimensions()
-
         DeviceUtils.setAnimation(viewBinding.loading, "rotation", 1000, true, 0f, 360f)
 
+        getDeviceDimensions()
         setRandomKenBurnsBackground()
-        loadObject()
-
         bindOnClickListener()
 
         //Load firebase manager
@@ -67,35 +66,18 @@ class BioActivity : AppCompatActivity(), MenuManager {
 
         //Manu Interface
         initializeMenu(this, deviceDimension, viewBinding)
+
+        //MVP variables
+        bioActivityPresenter = BioActivityPresenterImpl(this)
+
+        loadObject()
     }
 
     /**
      * Load all onClick functions for all views on MainActivity
      */
     private fun bindOnClickListener() {
-        viewBinding.author.setOnClickListener {
-            authorSelected(viewBinding.author)
-            authorOpened = false
-        }
-
-        viewBinding.authorId.setOnClickListener {
-            FirebaseManager.logEvent("Sending email: Author", "Send_Email")
-            @Suppress("SpellCheckingInspection")
-            @SuppressLint("SimpleDateFormat")
-            val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            DeviceUtils.sendAuthorEmail(
-                this,
-                "masterjulioleon@gmail.com",
-                getString(R.string.app_name) + " --- " + getString(R.string.authorEmailSubject) + " --- " + dateHour,
-                getString(R.string.authorEmailBody) + "",
-                getString(R.string.authorEmailChooser) + ""
-            )
-        }
-
-        viewBinding.poweredId.setOnClickListener {
-            FirebaseManager.logEvent("Open website: API - " + getString(R.string.poweredByUrl), "Open_Api")
-            DeviceUtils.openURL(this, getString(R.string.poweredByUrl))
-        }
+        bindClickListener(this)
     }
 
     /**
@@ -459,5 +441,26 @@ class BioActivity : AppCompatActivity(), MenuManager {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemSelected(item)
         return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Update activity data
+     */
+    override fun showBio(bio: Bios) {
+        TODO("Not yet implemented")
+    }
+
+    /**
+     * Show error message when fail loading data
+     */
+    override fun errorLoadingBio() {
+        DeviceUtils.showToast(this, getString(R.string.error_loading_bio))
+    }
+
+    /**
+     * Manege the obtain data
+     */
+    override fun getBio() {
+        bioActivityPresenter.getBio()
     }
 }

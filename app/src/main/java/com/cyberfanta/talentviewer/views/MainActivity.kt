@@ -54,10 +54,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private val opportunityList = mutableMapOf<String, OpportunityItem>()
 
     //Manage query sizes
-    private var querySize = 50
-    private var peopleOffset = 0
-    private var currentAggregators = false
-    private var opportunityOffset = 0
     private var opportunitySwitch = true //true: Opportunity - false: Peoples
 
     //To control coroutines
@@ -92,80 +88,14 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         //Set search view listeners
         viewBinding.searchView.setOnQueryTextListener(this)
 
+        //MVP variables
+        mainActivityPresenter = MainActivityPresenterImpl(this)
+
         initializeLoadingArrowAnimations()
         fillRecyclerViewBios()
         fillRecyclerViewJobs()
         bindOnClickListener()
         initializeRecyclerViewHelpers()
-
-        //MVP variables
-        mainActivityPresenter = MainActivityPresenterImpl(this)
-    }
-
-    /**
-     * The initialize the bios recyclerView
-     */
-    private fun fillRecyclerViewBios() {
-        peopleAdapter = PeoplesAdapter (peopleList)
-        viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
-        viewBinding.recyclerViewBios.adapter = peopleAdapter
-
-        viewBinding.biosLoading.visibility = View.VISIBLE
-        getPeoples(PageData(peopleOffset.toString(), querySize.toString(), currentAggregators))
-        DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
-
-        peopleAdapter.setOnItemClickListener(object:
-            PeoplesAdapter.OnItemClickListener {
-            override fun onItemClick(position: Int) {
-                FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
-
-                //Activating Loading Arrow
-                viewBinding.biosLoading.visibility = View.VISIBLE
-
-                peopleList.values.elementAt(position).username?.let { getBio(it) }
-            }
-        })
-
-        peopleAdapter.setOnBottomReachedListener(object:
-            PeoplesAdapter.OnBottomReachedListener {
-            override fun onBottomReached(position: Int) {
-                if (!loadingBios) {
-                    //Activating Loading Arrow
-                    viewBinding.biosLoading.visibility = View.VISIBLE
-
-                    FirebaseManager.logEvent("People Page", "Get_People_Page")
-                    getPeoples(
-                        PageData(
-                            peopleOffset.toString(),
-                            querySize.toString(),
-                            currentAggregators
-                        )
-                    )
-                }
-            }
-        })
-
-        viewBinding.recyclerViewBios.addOnScrollListener(object:
-            RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1)) {
-                    if (!loadingBios) {
-                        //Activating Loading Arrow
-                        viewBinding.biosLoading.visibility = View.VISIBLE
-
-                        FirebaseManager.logEvent("People Page", "Get_People_Page")
-                        getPeoples(
-                            PageData(
-                                peopleOffset.toString(),
-                                querySize.toString(),
-                                currentAggregators
-                            )
-                        )
-                    }
-                }
-            }
-        })
     }
 
     /**
@@ -176,17 +106,15 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         viewBinding.recyclerViewJobs.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewJobs.adapter = opportunityAdapter
 
-        viewBinding.jobsLoading.visibility = View.VISIBLE
-        getOpportunities(PageData(opportunityOffset.toString(), querySize.toString(), currentAggregators))
+        getJobPage()
 
         opportunityAdapter.setOnItemClickListener(object :
             OpportunitiesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
-                FirebaseManager.logEvent("Job Detail: $position", "Get_Job_Detail")
-
                 //Activating Loading Arrow
                 viewBinding.jobsLoading.visibility = View.VISIBLE
 
+                FirebaseManager.logEvent("Job Detail: $position", "Get_Job_Detail")
                 opportunityList.values.elementAt(position).id?.let { getJob(it) }
             }
         })
@@ -194,19 +122,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         opportunityAdapter.setOnBottomReachedListener(object:
             OpportunitiesAdapter.OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
-                if (!loadingJobs) {
-                    //Activating Loading Arrow
-                    viewBinding.jobsLoading.visibility = View.VISIBLE
-
-                    FirebaseManager.logEvent("Opportunity Page", "Get_Opportunity_Page")
-                    getOpportunities(
-                        PageData(
-                            opportunityOffset.toString(),
-                            querySize.toString(),
-                            currentAggregators
-                        )
-                    )
-                }
+                getJobPage()
             }
         })
 
@@ -215,19 +131,47 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!recyclerView.canScrollVertically(1)) {
-                    if (!loadingJobs) {
-                        //Activating Loading Arrow
-                        viewBinding.jobsLoading.visibility = View.VISIBLE
+                    getJobPage()
+                }
+            }
+        })
+    }
 
-                        FirebaseManager.logEvent("Opportunity Page", "Get_Opportunity_Page")
-                        getOpportunities(
-                            PageData(
-                                opportunityOffset.toString(),
-                                querySize.toString(),
-                                currentAggregators
-                            )
-                        )
-                    }
+    /**
+     * The initialize the bios recyclerView
+     */
+    private fun fillRecyclerViewBios() {
+        peopleAdapter = PeoplesAdapter (peopleList)
+        viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
+        viewBinding.recyclerViewBios.adapter = peopleAdapter
+
+        getBioPage()
+        DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
+
+        peopleAdapter.setOnItemClickListener(object:
+            PeoplesAdapter.OnItemClickListener {
+            override fun onItemClick(position: Int) {
+                //Activating Loading Arrow
+                viewBinding.biosLoading.visibility = View.VISIBLE
+
+                FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
+                peopleList.values.elementAt(position).username?.let { getBio(it) }
+            }
+        })
+
+        peopleAdapter.setOnBottomReachedListener(object:
+            PeoplesAdapter.OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+                getBioPage()
+            }
+        })
+
+        viewBinding.recyclerViewBios.addOnScrollListener(object:
+            RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (!recyclerView.canScrollVertically(1)) {
+                    getBioPage()
                 }
             }
         })
@@ -239,27 +183,8 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private fun bindOnClickListener() {
         viewBinding.jobsButton.setOnClickListener { jobsButtonPressed() }
         viewBinding.biosButton.setOnClickListener { biosButtonPressed() }
-        viewBinding.author.setOnClickListener {
-            authorSelected(viewBinding.author)
-            authorOpened = false
-        }
-        viewBinding.authorId.setOnClickListener {
-            FirebaseManager.logEvent("Sending email: Author", "Send_Email")
-            @Suppress("SpellCheckingInspection")
-            @SuppressLint("SimpleDateFormat")
-            val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            DeviceUtils.sendAuthorEmail(
-                this,
-                "masterjulioleon@gmail.com",
-                getString(R.string.app_name) + " --- " + getString(R.string.authorEmailSubject) + " --- " + dateHour,
-                getString(R.string.authorEmailBody) + "",
-                getString(R.string.authorEmailChooser) + ""
-            )
-        }
-        viewBinding.poweredId.setOnClickListener {
-            FirebaseManager.logEvent("Open website: API - " + getString(R.string.poweredByUrl), "Open_Api")
-            DeviceUtils.openURL(this, getString(R.string.poweredByUrl))
-        }
+
+        bindClickListener(this)
     }
 
     /**
@@ -364,39 +289,15 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     }
 
     /**
-     * Load people list into bio recycler view
+     * Open the JobActivity to show the details of a job
      */
-    private fun getPeoples(pageData: PageData) {
-        CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Peoples> = APIAdapter.getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
-            val response : Peoples? = call.body()
-            runOnUiThread {
-                if (call.isSuccessful){
-                    val currentPeopleOffset = peopleOffset
-                    for (result in response?.results!!)
-                        if (!peopleList.containsKey(result?.username))
-                            result?.let {
-                                it.username?.let { it1 -> peopleList.put(it1, it) }
-                                peopleAdapter.notifyItemRangeInserted(peopleOffset, 1)
-                                peopleOffset++
-                            }
-                    if (peopleOffset == currentPeopleOffset)
-                        getPeoples(PageData(peopleOffset.toString(), (peopleOffset + querySize).toString(), currentAggregators))
-                } else {
-                    showError()
-                }
-                viewBinding.biosLoading.visibility = View.INVISIBLE
-                loadingBios = false
-            }
-        }
-    }
+    fun getJob(id: String) {
+        val intent = Intent(this, JobActivity::class.java)
+        intent.putExtra("id", id)
+        startActivity(intent)
 
-    /**
-     * Load opportunity list into job recycler view
-     */
-    private fun getOpportunities(pageData: PageData) {
-        CoroutineScope(Dispatchers.IO).launch {
-        }
+        //Deactivating Loading Arrow
+        viewBinding.jobsLoading.visibility = View.INVISIBLE
     }
 
     /**
@@ -404,27 +305,11 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      */
     fun getBio(username: String) {
         val intent = Intent(this, BioActivity::class.java)
-        intent.putExtra("deviceWidth", deviceDimension[0].toString())
-        intent.putExtra("deviceHeight", deviceDimension[1].toString())
         intent.putExtra("username", username)
         startActivity(intent)
 
         //Deactivating Loading Arrow
         viewBinding.biosLoading.visibility = View.INVISIBLE
-    }
-
-    /**
-     * Open the JobActivity to show the details of a job
-     */
-    fun getJob(id: String) {
-        val intent = Intent(this, JobActivity::class.java)
-        intent.putExtra("deviceWidth", deviceDimension[0].toString())
-        intent.putExtra("deviceHeight", deviceDimension[1].toString())
-        intent.putExtra("id", id)
-        startActivity(intent)
-
-        //Deactivating Loading Arrow
-        viewBinding.jobsLoading.visibility = View.INVISIBLE
     }
 
     /**
@@ -444,6 +329,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * suggestions if available, true if the action was handled by the listener.
      */
     @SuppressLint("NotifyDataSetChanged")
+    //TODO: Revisar
     override fun onQueryTextChange(query: String?): Boolean {
         filteringRV = true
         if (!query.isNullOrEmpty()) {
@@ -485,7 +371,13 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         return true
     }
 
+    /**
+     * Update recycler view during searching
+     *
+     * @param query the new content of the query text field.
+     **/
     @SuppressLint("NotifyDataSetChanged")
+    //TODO: Revisar
     private fun updateFilteredRV(query: String) {
         if (opportunitySwitch) {
             val filter = mutableMapOf<String, OpportunityItem>()
@@ -616,6 +508,8 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 .duration(500)
                 .playOn(viewBinding.jobsButton)
 
+            DeviceUtils.showToast(this, getString(R.string.error_you_are_in_job))
+
             //Firebase Data Collection
             FirebaseManager.logEvent("Footer Button: Jobs - Dance", "Footer_Button")
         }
@@ -642,6 +536,8 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 .duration(500)
                 .playOn(viewBinding.biosButton)
 
+            DeviceUtils.showToast(this, getString(R.string.error_you_are_in_bio))
+
             //Firebase Data Collection
             FirebaseManager.logEvent("Footer Button: Bios - Dance", "Footer_Button")
         }
@@ -662,20 +558,58 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         return super.onOptionsItemSelected(item)
     }
 
+    /**
+     * Update recyclerViewJobs
+     */
     override fun showJobPage(peopleList: Map<String, OpportunityItem>) {
         TODO("Not yet implemented")
     }
 
+    /**
+     * Update recyclerViewBios
+     */
     override fun showBioPage(peopleList: Map<String, PeopleItem>) {
         TODO("Not yet implemented")
     }
 
-    override fun getJobPage() {
-        TODO("Not yet implemented")
+    /**
+     * Show error message when fail loading a job page
+     */
+    override fun errorLoadingJobPage() {
+        DeviceUtils.showToast(this, getString(R.string.error_loading_jobs))
     }
 
+    /**
+     * Show error message when fail loading a bio page
+     */
+    override fun errorLoadingBioPage() {
+        DeviceUtils.showToast(this, getString(R.string.error_loading_bios))
+    }
+
+    /**
+     * Manege the obtain of a job page
+     */
+    override fun getJobPage() {
+        if (!loadingJobs) {
+            //Activating Loading Arrow
+            viewBinding.jobsLoading.visibility = View.VISIBLE
+
+            FirebaseManager.logEvent("Opportunity Page", "Get_Opportunity_Page")
+            mainActivityPresenter.getJobPage()
+        }
+    }
+
+    /**
+     * Manege the obtain of a bio page
+     */
     override fun getBioPage() {
-        TODO("Not yet implemented")
+        if (!loadingBios) {
+            //Activating Loading Arrow
+            viewBinding.biosLoading.visibility = View.VISIBLE
+
+            FirebaseManager.logEvent("People Page", "Get_People_Page")
+            mainActivityPresenter.getBioPage()
+        }
     }
 
 }

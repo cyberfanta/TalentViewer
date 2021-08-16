@@ -11,6 +11,12 @@ interface Interactor {
     fun showJob(job: Jobs)
     fun showBio(bio: Bios)
 
+    //Presenter Errors
+    fun errorLoadingJobPage()
+    fun errorLoadingBioPage()
+    fun errorLoadingJob()
+    fun errorLoadingBio()
+
     //Repository
     fun getJobPage()
     fun getBioPage()

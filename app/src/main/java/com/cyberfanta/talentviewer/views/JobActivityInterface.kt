@@ -1,12 +1,12 @@
-package com.cyberfanta.talentviewer.presenters
+package com.cyberfanta.talentviewer.views
 
 import com.cyberfanta.talentviewer.models.Jobs
 
-interface JobActivityPresenter {
+interface JobActivityInterface {
     //View
     fun showJob(job: Jobs)
     fun errorLoadingJob()
 
-    //Interactor
+    //Presenter
     fun getJob()
 }

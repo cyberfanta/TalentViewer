@@ -9,6 +9,8 @@ interface MainActivityPresenter {
     //View
     fun showJobPage(peopleList: Map<String, OpportunityItem>, current: Int)
     fun showBioPage(peopleList: Map<String, PeopleItem>, current: Int)
+    fun errorLoadingJobPage()
+    fun errorLoadingBioPage()
 
     //Interactor
     fun getJobPage()

@@ -1,8 +1,8 @@
-package com.cyberfanta.talentviewer.presenters
+package com.cyberfanta.talentviewer.views
 
 import com.cyberfanta.talentviewer.models.Bios
 
-interface BioActivityPresenter {
+interface BioActivityInterface {
     //View
     fun showBio(bio: Bios)
     fun errorLoadingBio()

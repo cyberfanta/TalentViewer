@@ -1,5 +1,7 @@
 package com.cyberfanta.talentviewer.views
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -14,6 +16,8 @@ import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.RateAppManager
+import java.text.SimpleDateFormat
+import java.util.*
 
 interface MenuManager {
     var authorOpened: Boolean
@@ -117,6 +121,93 @@ interface MenuManager {
     fun createOptionsMenu(menu: Menu?, menuInflater: MenuInflater): Boolean {
         menuInflater.inflate(R.menu.menu, menu)
         return true
+    }
+
+    /**
+     * Actions for About Option Menu
+     */
+    fun bindClickListener(activity: Activity) {
+        when (viewBindingMenu){
+            is ActivityMainBinding -> {
+                val viewBinding = viewBindingMenu as ActivityMainBinding
+
+                viewBinding.author.setOnClickListener {
+                    authorSelected(viewBinding.author)
+                    authorOpened = false
+                }
+                viewBinding.authorId.setOnClickListener {
+                    FirebaseManager.logEvent("Sending email: Author", "Send_Email")
+                    @Suppress("SpellCheckingInspection")
+                    @SuppressLint("SimpleDateFormat")
+                    val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                    DeviceUtils.sendAuthorEmail(
+                        activity,
+                        "masterjulioleon@gmail.com",
+                        activity.getString(R.string.app_name) + " --- " + activity.getString(R.string.authorEmailSubject) + " --- " + dateHour,
+                        activity.getString(R.string.authorEmailBody) + "",
+                        activity.getString(R.string.authorEmailChooser) + ""
+                    )
+                }
+                viewBinding.poweredId.setOnClickListener {
+                    FirebaseManager.logEvent("Open website: API - " + activity.getString(R.string.poweredByUrl), "Open_Api")
+                    DeviceUtils.openURL(activity, activity.getString(R.string.poweredByUrl))
+                }
+            }
+            is ActivityJobBinding -> {
+                val viewBinding = viewBindingMenu as ActivityJobBinding
+
+                viewBinding.author.setOnClickListener {
+                    authorSelected(viewBinding.author)
+                    authorOpened = false
+                }
+
+                viewBinding.authorId.setOnClickListener {
+                    FirebaseManager.logEvent("Sending email: Author", "Send_Email")
+                    @Suppress("SpellCheckingInspection")
+                    @SuppressLint("SimpleDateFormat")
+                    val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                    DeviceUtils.sendAuthorEmail(
+                        activity,
+                        "masterjulioleon@gmail.com",
+                        activity.getString(R.string.app_name) + " --- " + activity.getString(R.string.authorEmailSubject) + " --- " + dateHour,
+                        activity.getString(R.string.authorEmailBody) + "",
+                        activity.getString(R.string.authorEmailChooser) + ""
+                    )
+                }
+
+                viewBinding.poweredId.setOnClickListener {
+                    FirebaseManager.logEvent("Open website: API - " + activity.getString(R.string.poweredByUrl), "Open_Api")
+                    DeviceUtils.openURL(activity, activity.getString(R.string.poweredByUrl))
+                }
+            }
+            is ActivityBioBinding -> {
+                val viewBinding = viewBindingMenu as ActivityBioBinding
+
+                viewBinding.author.setOnClickListener {
+                    authorSelected(viewBinding.author)
+                    authorOpened = false
+                }
+
+                viewBinding.authorId.setOnClickListener {
+                    FirebaseManager.logEvent("Sending email: Author", "Send_Email")
+                    @Suppress("SpellCheckingInspection")
+                    @SuppressLint("SimpleDateFormat")
+                    val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
+                    DeviceUtils.sendAuthorEmail(
+                        activity,
+                        "masterjulioleon@gmail.com",
+                        activity.getString(R.string.app_name) + " --- " + activity.getString(R.string.authorEmailSubject) + " --- " + dateHour,
+                        activity.getString(R.string.authorEmailBody) + "",
+                        activity.getString(R.string.authorEmailChooser) + ""
+                    )
+                }
+
+                viewBinding.poweredId.setOnClickListener {
+                    FirebaseManager.logEvent("Open website: API - " + activity.getString(R.string.poweredByUrl), "Open_Api")
+                    DeviceUtils.openURL(activity, activity.getString(R.string.poweredByUrl))
+                }
+            }
+        }
     }
 
 }

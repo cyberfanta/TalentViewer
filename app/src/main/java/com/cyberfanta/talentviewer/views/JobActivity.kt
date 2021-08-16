@@ -13,10 +13,12 @@ import androidx.appcompat.view.ContextThemeWrapper
 import androidx.viewbinding.ViewBinding
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
+import com.cyberfanta.talentviewer.models.APIAdapter
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Jobs
-import com.cyberfanta.talentviewer.models.APIAdapter
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
+import com.cyberfanta.talentviewer.presenters.JobActivityPresenter
+import com.cyberfanta.talentviewer.presenters.JobActivityPresenterImpl
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -25,7 +27,7 @@ import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
-class JobActivity : AppCompatActivity(), MenuManager {
+class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
 
@@ -42,6 +44,9 @@ class JobActivity : AppCompatActivity(), MenuManager {
     override lateinit var contextMenu: Context
     override lateinit var viewBindingMenu: ViewBinding
 
+    //MVP variables
+    private lateinit var jobActivityPresenter: JobActivityPresenter
+
     /**
      * The initial point of this activity
      */
@@ -50,13 +55,10 @@ class JobActivity : AppCompatActivity(), MenuManager {
         viewBinding = ActivityJobBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        getDeviceDimensions()
-
         DeviceUtils.setAnimation(viewBinding.loading, "rotation", 1000, true, 0f, 360f)
 
+        getDeviceDimensions()
         setRandomKenBurnsBackground()
-        loadObject()
-
         bindOnClickListener()
 
         //Load firebase manager
@@ -64,35 +66,18 @@ class JobActivity : AppCompatActivity(), MenuManager {
 
         //Manu Interface
         initializeMenu(this, deviceDimension, viewBinding)
+
+        //MVP variables
+        jobActivityPresenter = JobActivityPresenterImpl(this)
+
+        loadObject()
     }
 
     /**
      * Load all onClick functions for all views on MainActivity
      */
     private fun bindOnClickListener() {
-        viewBinding.author.setOnClickListener {
-            authorSelected(viewBinding.author)
-            authorOpened = false
-        }
-
-        viewBinding.authorId.setOnClickListener {
-            FirebaseManager.logEvent("Sending email: Author", "Send_Email")
-            @Suppress("SpellCheckingInspection")
-            @SuppressLint("SimpleDateFormat")
-            val dateHour = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-            DeviceUtils.sendAuthorEmail(
-                this,
-                "masterjulioleon@gmail.com",
-                getString(R.string.app_name) + " --- " + getString(R.string.authorEmailSubject) + " --- " + dateHour,
-                getString(R.string.authorEmailBody) + "",
-                getString(R.string.authorEmailChooser) + ""
-            )
-        }
-
-        viewBinding.poweredId.setOnClickListener {
-            FirebaseManager.logEvent("Open website: API - " + getString(R.string.poweredByUrl), "Open_Api")
-            DeviceUtils.openURL(this, getString(R.string.poweredByUrl))
-        }
+        bindClickListener(this)
     }
 
     /**
@@ -107,8 +92,7 @@ class JobActivity : AppCompatActivity(), MenuManager {
      * Get the device dimension
      */
     private fun getDeviceDimensions(){
-        deviceDimension[0] = intent.getStringExtra("deviceWidth")!!.toInt()
-        deviceDimension[1] = intent.getStringExtra("deviceHeight")!!.toInt()
+        deviceDimension = DeviceUtils.getDeviceDimensions()
         id = intent.getStringExtra("id")!!
     }
 
@@ -284,5 +268,26 @@ class JobActivity : AppCompatActivity(), MenuManager {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemSelected(item)
         return super.onOptionsItemSelected(item)
+    }
+
+    /**
+     * Update activity data
+     */
+    override fun showJob(job: Jobs) {
+        TODO("Not yet implemented")
+    }
+
+    /**
+     * Show error message when fail loading data
+     */
+    override fun errorLoadingJob() {
+        DeviceUtils.showToast(this, getString(R.string.error_loading_job))
+    }
+
+    /**
+     * Manege the obtain data
+     */
+    override fun getJob() {
+        jobActivityPresenter.getJob()
     }
 }

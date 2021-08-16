@@ -9,7 +9,13 @@
     <string name="main_activity_button_jobs_name">Jobs</string>
 
     <string name="error_loading">Error loading data from API server</string>
+    <string name="error_loading_jobs">Error loading jobs from API server</string>
+    <string name="error_loading_job">Error loading this job from API server</string>
+    <string name="error_loading_bios">Error loading bios from API server</string>
+    <string name="error_loading_bio">Error loading this bio from API server</string>
     <string name="error_wrong_link">Error: Wrong link</string>
+    <string name="error_you_are_in_job">You are already in Jobs</string>
+    <string name="error_you_are_in_bio">You are already in Bios</string>
 
     <string name="card_compensation_hidden">Compensation Hidden</string>
 

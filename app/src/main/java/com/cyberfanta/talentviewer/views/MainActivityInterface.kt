@@ -7,6 +7,8 @@ interface MainActivityInterface {
     //View
     fun showJobPage(peopleList: Map<String, OpportunityItem>)
     fun showBioPage(peopleList: Map<String, PeopleItem>)
+    fun errorLoadingJobPage()
+    fun errorLoadingBioPage()
 
     //Presenter
     fun getJobPage()

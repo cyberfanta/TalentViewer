@@ -1,6 +1,5 @@
 package com.cyberfanta.talentviewer.models
 
-import android.util.Log
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PageData
 import com.google.gson.Gson
@@ -19,9 +18,8 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
 
         call.enqueue(object : Callback<JsonObject> {
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.e("ERROR: ", t.message.toString())
-                t.stackTrace
-                showError()
+                FirebaseManager.logEvent("Error_Loading_Job_Page", "Error_Loading_Data")
+                interactor.errorLoadingJobPage()
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -43,9 +41,8 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
 
         call.enqueue(object : Callback<JsonObject> {
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.e("ERROR: ", t.message.toString())
-                t.stackTrace
-                showError()
+                FirebaseManager.logEvent("Error_Loading_Bio_Page", "Error_Loading_Data")
+                interactor.errorLoadingBioPage()
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -67,9 +64,8 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
 
         call.enqueue(object : Callback<JsonObject> {
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.e("ERROR: ", t.message.toString())
-                t.stackTrace
-                showError()
+                FirebaseManager.logEvent("Error_Loading_Job", "Error_Loading_Data")
+                interactor.errorLoadingJob()
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -86,9 +82,10 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
 
         call.enqueue(object : Callback<JsonObject> {
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                Log.e("ERROR: ", t.message.toString())
-                t.stackTrace
-                showError()
+                FirebaseManager.logEvent("Error_Loading_Bio", "Error_Loading_Data")
+                interactor.errorLoadingBio()
+//                Log.e("ERROR: ", t.message.toString())
+//                t.stackTrace
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -96,17 +93,4 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
             }
         })
     }
-
-    /**
-     * Show error message when device have a problem with the internet
-     */
-    private fun showError() {
-        FirebaseManager.logEvent("Error", "Error_Loading_Data")
-//        Toast.makeText(
-//            this,
-//            MainActivity::getString(R.string.error_loading),
-//            Toast.LENGTH_SHORT
-//        ).show()
-    }
-
 }

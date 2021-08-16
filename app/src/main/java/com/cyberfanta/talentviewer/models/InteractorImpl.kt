@@ -2,8 +2,8 @@ package com.cyberfanta.talentviewer.models
 
 import com.cyberfanta.talentviewer.presenters.BioActivityPresenter
 import com.cyberfanta.talentviewer.presenters.JobActivityPresenter
-import com.cyberfanta.talentviewer.presenters.PageData
 import com.cyberfanta.talentviewer.presenters.MainActivityPresenter
+import com.cyberfanta.talentviewer.presenters.PageData
 
 class InteractorImpl : Interactor {
     companion object {
@@ -20,9 +20,12 @@ class InteractorImpl : Interactor {
     }
 
     private var pageSize = 30
+//    private var currentAggregators = false
 
     private var repositoryAPI: RepositoryAPI = RepositoryAPIImpl(this)
-//    private var repositoryDB: RepositoryDB = RepositoryDBImpl(this)
+    private var repositoryDB: RepositoryDB = RepositoryDBImpl(this)
+
+    //Presenter
 
     /**
      * Send the job page obtained
@@ -57,6 +60,38 @@ class InteractorImpl : Interactor {
         bio.person?.publicId?.let { bios.put(it, bio) }
         bioPresenter?.showBio(bio)
     }
+
+    //Presenter errors
+
+    /**
+     * Show error when loading a job page
+     */
+    override fun errorLoadingJobPage() {
+        mainPresenter?.errorLoadingJobPage()
+    }
+
+    /**
+     * Show error when loading a bio page
+     */
+    override fun errorLoadingBioPage() {
+        mainPresenter?.errorLoadingBioPage()
+    }
+
+    /**
+     * Show error when loading a job
+     */
+    override fun errorLoadingJob() {
+        jobPresenter?.errorLoadingJob()
+    }
+
+    /**
+     * Show error when loading a bio
+     */
+    override fun errorLoadingBio() {
+        bioPresenter?.errorLoadingBio()
+    }
+
+    //Repository
 
     /**
      * Manage the job page obtain
@@ -95,6 +130,8 @@ class InteractorImpl : Interactor {
             null
         }
     }
+
+    //Setters
 
     /**
      * Connect interactor with MainActivityPresenter
