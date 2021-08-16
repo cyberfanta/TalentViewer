@@ -1,19 +1,20 @@
 package com.cyberfanta.talentviewer.presenters
 
-import com.cyberfanta.talentviewer.models.Interactor
-import com.cyberfanta.talentviewer.models.InteractorImpl
-import com.cyberfanta.talentviewer.models.OpportunityItem
-import com.cyberfanta.talentviewer.models.PeopleItem
+import com.cyberfanta.talentviewer.models.*
 import com.cyberfanta.talentviewer.views.MainActivityInterface
 
-class MainActivityPresenterImpl (var view: MainActivityInterface) : MainActivityPresenter{
-    var interactorImpl: Interactor = InteractorImpl (this)
+class MainActivityPresenterImpl (var view: MainActivityInterface) : MainActivityPresenter {
+    private var interactorImpl: Interactor = InteractorImpl ()
 
-    override fun showJobPage(peopleList: Map<String, OpportunityItem>) {
+    init {
+        interactorImpl.setMainActivityPresenter(this)
+    }
+
+    override fun showJobPage(peopleList: Map<String, OpportunityItem>, current: Int) {
         TODO("Not yet implemented")
     }
 
-    override fun showBioPage(peopleList: Map<String, PeopleItem>) {
+    override fun showBioPage(peopleList: Map<String, PeopleItem>, current: Int) {
         TODO("Not yet implemented")
     }
 

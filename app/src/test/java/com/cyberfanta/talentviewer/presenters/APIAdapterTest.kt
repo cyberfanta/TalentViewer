@@ -7,12 +7,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.junit.Assert
 
-class ApiManagerTest : TestCase() {
+class APIAdapterTest : TestCase() {
 
     fun testGetRetrofitBioOk () {
         CoroutineScope(Dispatchers.IO).launch {
             Assert.assertSame(
-                ApiManager.getRetrofitBio().create(APIService::class.java).getBio("julioleon2004")
+                APIAdapter.getRetrofitBio().create(APIService::class.java).getBio("julioleon2004")
                     .body(),
                 Bios::class.java
             )
@@ -22,7 +22,7 @@ class ApiManagerTest : TestCase() {
     fun testGetRetrofitJobOk () {
         CoroutineScope(Dispatchers.IO).launch {
             Assert.assertSame(
-                ApiManager.getRetrofitJob().create(APIService::class.java).getJob("NrJ67KAr")
+                APIAdapter.getRetrofitJob().create(APIService::class.java).getJob("NrJ67KAr")
                     .body(),
                 Bios::class.java
             )
@@ -32,7 +32,7 @@ class ApiManagerTest : TestCase() {
     fun testGetRetrofitPeoplesOk () {
         CoroutineScope(Dispatchers.IO).launch {
             Assert.assertSame(
-                ApiManager.getRetrofitPeoples().create(APIService::class.java).getPeoples(PageData("0", "20", false).toString())
+                APIAdapter.getRetrofitPeoples().create(APIService::class.java).getPeoples(PageData("0", "20", false).toString())
                     .body(),
                 Peoples::class.java
             )
@@ -42,7 +42,7 @@ class ApiManagerTest : TestCase() {
     fun testGetRetrofitOpportunitiesOk () {
         CoroutineScope(Dispatchers.IO).launch {
             Assert.assertSame(
-                ApiManager.getRetrofitOpportunities().create(APIService::class.java).getOpportunities(PageData("0", "20", false).toString())
+                APIAdapter.getRetrofitOpportunities().create(APIService::class.java).getOpportunities(PageData("0", "20", false).toString())
                     .body(),
                 Opportunities::class.java
             )

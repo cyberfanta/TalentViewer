@@ -15,7 +15,7 @@ import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityJobBinding
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Jobs
-import com.cyberfanta.talentviewer.presenters.ApiManager
+import com.cyberfanta.talentviewer.models.APIAdapter
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.CoroutineScope
@@ -132,7 +132,7 @@ class JobActivity : AppCompatActivity(), MenuManager {
      */
     private fun loadObject() {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Jobs> = ApiManager.getRetrofitJob().create(APIService::class.java).getJob(id)
+            val call : Response<Jobs> = APIAdapter.getRetrofitJob().create(APIService::class.java).getJob(id)
             val response : Jobs? = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {

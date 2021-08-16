@@ -14,7 +14,7 @@ import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityBioBinding
 import com.cyberfanta.talentviewer.models.APIService
 import com.cyberfanta.talentviewer.models.Bios
-import com.cyberfanta.talentviewer.presenters.ApiManager
+import com.cyberfanta.talentviewer.models.APIAdapter
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PersonalityTraitsData
 import com.github.mikephil.charting.charts.HorizontalBarChart
@@ -135,7 +135,7 @@ class BioActivity : AppCompatActivity(), MenuManager {
      */
     private fun loadObject() {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Bios> = ApiManager.getRetrofitBio().create(APIService::class.java).getBio(username)
+            val call : Response<Bios> = APIAdapter.getRetrofitBio().create(APIService::class.java).getBio(username)
             val response : Bios? = call.body()
             runOnUiThread {
                 if (call.isSuccessful) {

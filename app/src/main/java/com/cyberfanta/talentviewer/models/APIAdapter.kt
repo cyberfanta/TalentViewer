@@ -1,11 +1,11 @@
-package com.cyberfanta.talentviewer.presenters
+package com.cyberfanta.talentviewer.models
 
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
-class ApiManager {
+class APIAdapter {
     companion object {
         /**
          * Retrofit implementation to get a bio detail

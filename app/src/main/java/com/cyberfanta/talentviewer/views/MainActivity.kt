@@ -8,7 +8,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -66,7 +65,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private var loadingBios = false
 
     //MVP variables
-    private lateinit var presenter: MainActivityPresenter
+    private lateinit var mainActivityPresenter: MainActivityPresenter
 
     /**
      * The initial point of this app
@@ -100,7 +99,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         initializeRecyclerViewHelpers()
 
         //MVP variables
-        presenter = MainActivityPresenterImpl(this)
+        mainActivityPresenter = MainActivityPresenterImpl(this)
     }
 
     /**
@@ -369,7 +368,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      */
     private fun getPeoples(pageData: PageData) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Peoples> = ApiManager.getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
+            val call : Response<Peoples> = APIAdapter.getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
             val response : Peoples? = call.body()
             runOnUiThread {
                 if (call.isSuccessful){
@@ -397,26 +396,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      */
     private fun getOpportunities(pageData: PageData) {
         CoroutineScope(Dispatchers.IO).launch {
-            val call : Response<Opportunities> = ApiManager.getRetrofitOpportunities().create(APIService::class.java).getOpportunities(pageData.toString())
-            val response : Opportunities? = call.body()
-            runOnUiThread {
-                if (call.isSuccessful){
-                    val currentOpportunityOffset = opportunityOffset
-                    for (result in response?.results!!)
-                        if (!opportunityList.containsKey(result?.id))
-                            result?.let {
-                                it.id?.let { it1 -> opportunityList.put(it1, it) }
-                                opportunityAdapter.notifyItemRangeInserted(opportunityOffset, 1)
-                                opportunityOffset++
-                            }
-                    if (opportunityOffset == currentOpportunityOffset)
-                        getOpportunities(PageData(opportunityOffset.toString(), (opportunityOffset + querySize).toString(), currentAggregators))
-                } else {
-                    showError()
-                }
-                viewBinding.jobsLoading.visibility = View.INVISIBLE
-                loadingJobs = false
-            }
         }
     }
 
@@ -446,14 +425,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
 
         //Deactivating Loading Arrow
         viewBinding.jobsLoading.visibility = View.INVISIBLE
-    }
-
-    /**
-     * Show error message when device have a problem with the internet
-     */
-    private fun showError() {
-        FirebaseManager.logEvent("Error", "Error_Loading_Data")
-        Toast.makeText(this, getString(R.string.error_loading), Toast.LENGTH_SHORT).show()
     }
 
     /**
