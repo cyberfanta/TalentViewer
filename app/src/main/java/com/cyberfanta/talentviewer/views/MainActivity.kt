@@ -17,10 +17,7 @@ import androidx.viewbinding.ViewBinding
 import com.cyberfanta.talentviewer.R
 import com.cyberfanta.talentviewer.databinding.ActivityMainBinding
 import com.cyberfanta.talentviewer.models.*
-import com.cyberfanta.talentviewer.presenters.ApiManager
-import com.cyberfanta.talentviewer.presenters.FirebaseManager
-import com.cyberfanta.talentviewer.presenters.PageData
-import com.cyberfanta.talentviewer.presenters.RateAppManager
+import com.cyberfanta.talentviewer.presenters.*
 import com.cyberfanta.talentviewer.views.cards.OpportunitiesAdapter
 import com.cyberfanta.talentviewer.views.cards.PeoplesAdapter
 import com.daimajia.androidanimations.library.Techniques
@@ -33,7 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.system.exitProcess
 
-class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener, MenuManager {
+class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener, MenuManager, MainActivityInterface {
 
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
@@ -68,6 +65,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     private var loadingJobs = false
     private var loadingBios = false
 
+    //MVP variables
+    private lateinit var presenter: MainActivityPresenter
+
     /**
      * The initial point of this app
      */
@@ -84,7 +84,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         FirebaseManager(this)
         FirebaseManager.logEvent("$TAG: Opened", "App_Opened")
 
-        //Manu Interface
+        //Menu Interface
         initializeMenu(this, deviceDimension, viewBinding)
 
         //Obtain rate my app instance
@@ -98,6 +98,9 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         fillRecyclerViewJobs()
         bindOnClickListener()
         initializeRecyclerViewHelpers()
+
+        //MVP variables
+        presenter = MainActivityPresenterImpl(this)
     }
 
     /**
@@ -686,6 +689,22 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         optionsItemSelected(item)
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun showJobPage(peopleList: Map<String, OpportunityItem>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showBioPage(peopleList: Map<String, PeopleItem>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun getJobPage() {
+        TODO("Not yet implemented")
+    }
+
+    override fun getBioPage() {
+        TODO("Not yet implemented")
     }
 
 }
