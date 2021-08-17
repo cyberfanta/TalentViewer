@@ -35,7 +35,7 @@ class BioActivityPresenterImpl (var view: BioActivityInterface) : BioActivityPre
     /**
      * Manage the single bio obtain
      */
-    override fun getBio(publicId: String) {
-        interactorImpl.getBio(publicId)
+    override fun getBio(publicId: String): Bios? {
+        return interactorImpl.getBio(publicId)
     }
 }

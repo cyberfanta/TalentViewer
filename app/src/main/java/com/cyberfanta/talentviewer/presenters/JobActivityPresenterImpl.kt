@@ -35,7 +35,7 @@ class JobActivityPresenterImpl (var view: JobActivityInterface) : JobActivityPre
     /**
      * Manage the single job obtain
      */
-    override fun getJob(id: String) {
-        interactorImpl.getJob(id)
+    override fun getJob(id: String): Jobs? {
+        return interactorImpl.getJob(id)
     }
 }

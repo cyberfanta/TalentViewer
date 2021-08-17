@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
@@ -135,6 +136,9 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
                 "https://torre.co/jobs/$id"
             )
         }
+
+        //Deactivating Loading Arrow
+        viewBinding.loading.visibility = View.INVISIBLE
     }
 
     /**
@@ -142,6 +146,7 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
      */
     private fun showPicture(job: Jobs, organizations: List<OrganizationsItem?>) {
         job.organizations?.get(0)?.picture?.let {
+            Picasso.get().isLoggingEnabled = true
             Picasso.get().load(organizations[0]?.picture)
                 .into(viewBinding.picture)
         }
@@ -329,12 +334,16 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
      */
     override fun errorLoadingJob() {
         DeviceUtils.showToast(this, getString(R.string.error_loading_job))
+        viewBinding.loading.visibility = View.INVISIBLE
     }
 
     /**
      * Manege the obtain data
      */
     override fun getJob() {
-        jobActivityPresenter.getJob(id)
+        val job = jobActivityPresenter.getJob(id)
+        if (job != null) {
+            showJob(job)
+        }
     }
 }

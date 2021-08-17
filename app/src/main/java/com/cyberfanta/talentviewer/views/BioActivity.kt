@@ -132,6 +132,9 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
                 "https://torre.co/en/$username"
             )
         }
+
+        //Deactivating Loading Arrow
+        viewBinding.loading.visibility = View.INVISIBLE
     }
 
     /**
@@ -139,6 +142,7 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
      */
     private fun showPicture(bio: Bios, person: Person2) {
         bio.person?.picture?.let {
+            Picasso.get().isLoggingEnabled = true
             Picasso.get().load(person.picture)
                 .into(viewBinding.picture)
         }
@@ -567,12 +571,16 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
      */
     override fun errorLoadingBio() {
         DeviceUtils.showToast(this, getString(R.string.error_loading_bio))
+        viewBinding.loading.visibility = View.INVISIBLE
     }
 
     /**
      * Manege the obtain data
      */
     override fun getBio() {
-        bioActivityPresenter.getBio(username)
+        val bio = bioActivityPresenter.getBio(username)
+        if (bio != null) {
+            showBio(bio)
+        }
     }
 }

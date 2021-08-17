@@ -26,12 +26,17 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                val messageList = Gson().fromJson(response.body(), Opportunities::class.java)
-                val opportunities = mutableMapOf<String, OpportunityItem>()
-                for (result in messageList.results!!)
-                    if (result != null)
-                        result.id?.let { opportunities.put(it, result) }
-                interactor.showOpportunities(opportunities)
+                if (response.body() != null) {
+                    val messageList = Gson().fromJson(response.body(), Opportunities::class.java)
+                    val opportunities = mutableMapOf<String, OpportunityItem>()
+                    for (result in messageList.results!!)
+                        if (result != null)
+                            result.id?.let { opportunities.put(it, result) }
+                    interactor.showOpportunities(opportunities)
+                } else {
+                    FirebaseManager.logEvent("Error_Loading_Opportunities", "Error_Loading_Data")
+                    interactor.errorLoadingOpportunities()
+                }
             }
         })
     }
@@ -49,12 +54,17 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                val messageList = Gson().fromJson(response.body(), Peoples::class.java)
-                val peoples = mutableMapOf<String, PeopleItem>()
-                for (result in messageList.results!!)
-                    if (result != null)
-                        result.username?.let { peoples.put(it, result) }
-                interactor.showPeoples(peoples)
+                if (response.body() != null) {
+                    val messageList = Gson().fromJson(response.body(), Peoples::class.java)
+                    val peoples = mutableMapOf<String, PeopleItem>()
+                    for (result in messageList.results!!)
+                        if (result != null)
+                            result.username?.let { peoples.put(it, result) }
+                    interactor.showPeoples(peoples)
+                } else {
+                    FirebaseManager.logEvent("Error_Loading_Peoples", "Error_Loading_Data")
+                    interactor.errorLoadingPeoples()
+                }
             }
         })
     }
@@ -78,6 +88,7 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
                 if (response.body() != null) {
                     interactor.showJob(Gson().fromJson(response.body(), Jobs::class.java))
                 } else {
+                    FirebaseManager.logEvent("Error_Loading_Job", "Error_Loading_Data")
                     interactor.errorLoadingJob()
                 }
             }
@@ -99,9 +110,13 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
+                Log.i(TAG, "username: $username")
+                Log.i(TAG, "response.body(): " + response.body())
+                Log.i(TAG, "Gson().fromJson(response.body(), Bios::class.java): " + Gson().fromJson(response.body(), Bios::class.java))
                 if (response.body() != null) {
                     interactor.showBio(Gson().fromJson(response.body(), Bios::class.java))
                 } else {
+                    FirebaseManager.logEvent("Error_Loading_Bio", "Error_Loading_Data")
                     interactor.errorLoadingBio()
                 }
             }

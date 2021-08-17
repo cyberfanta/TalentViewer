@@ -14,8 +14,8 @@ android {
         applicationId "com.cyberfanta.talentviewer"
         minSdkVersion 19
         targetSdkVersion 31
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "1.5"
 
         multiDexEnabled true
 
@@ -91,7 +91,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.2.0')
     implementation 'com.google.firebase:firebase-ads:20.2.0'
     implementation 'com.google.firebase:firebase-analytics-ktx:19.0.0'
-    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.0'
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:18.2.1'
     implementation 'com.google.firebase:firebase-perf-ktx:20.0.2'
 
     //Rate my app

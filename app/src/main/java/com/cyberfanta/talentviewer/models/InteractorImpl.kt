@@ -22,7 +22,7 @@ class InteractorImpl : Interactor {
         var bios = mutableMapOf<String, Bios>()
     }
 
-    private var pageSize = 30
+    private var pageSize = 50
 //    private var currentAggregators = false
 
     private var repositoryAPI: RepositoryAPI = RepositoryAPIImpl(this)
@@ -98,14 +98,14 @@ class InteractorImpl : Interactor {
      * Manage the opportunities obtain
      */
     override fun getOpportunities() {
-        repositoryAPI.getOpportunities(PageData("0", opportunities.size.toString() + pageSize.toString(), false))
+        repositoryAPI.getOpportunities(PageData("0", (opportunities.size + pageSize).toString(), false))
     }
 
     /**
      * Manage the peoples obtain
      */
     override fun getPeoples() {
-        repositoryAPI.getPeoples(PageData("0", peoples.size.toString() + pageSize.toString(), false))
+        repositoryAPI.getPeoples(PageData("0", (peoples.size + pageSize).toString(), false))
     }
 
     /**

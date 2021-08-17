@@ -84,7 +84,7 @@ class OpportunitiesAdapter (private val items: MutableMap<String, OpportunityIte
         val item : OpportunityItem = itemlist.elementAt(position)
         holder.bind(item)
 
-        if (position > itemCount - 12)
+        if (position > itemCount - 20)
             bottomReachedListener?.onBottomReached(position)
     }
 

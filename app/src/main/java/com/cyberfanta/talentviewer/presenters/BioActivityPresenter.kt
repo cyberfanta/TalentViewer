@@ -8,5 +8,5 @@ interface BioActivityPresenter {
     fun errorLoadingBio()
 
     //Interactor
-    fun getBio(publicId: String)
+    fun getBio(publicId: String): Bios?
 }

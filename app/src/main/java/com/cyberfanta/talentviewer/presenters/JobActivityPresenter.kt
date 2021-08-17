@@ -8,5 +8,5 @@ interface JobActivityPresenter {
     fun errorLoadingJob()
 
     //Interactor
-    fun getJob(id: String)
+    fun getJob(id: String): Jobs?
 }

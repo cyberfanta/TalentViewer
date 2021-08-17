@@ -2,7 +2,6 @@ package com.cyberfanta.talentviewer.models
 
 import com.google.gson.JsonObject
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Headers
 import retrofit2.http.POST
@@ -17,11 +16,9 @@ interface APIService {
     @POST
     fun getPeoples(@Url url: String) : Call<JsonObject>
 
-    @Headers("Content-Type: application/json")
     @GET
     fun getJob(@Url url: String) : Call<JsonObject>
 
-    @Headers("Content-Type: application/json")
     @GET
     fun getBio(@Url url: String) : Call<JsonObject>
 }

@@ -55,10 +55,6 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     //Manage query sizes
     private var opportunitySwitch = true //true: Opportunity - false: Peoples
 
-    //To control coroutines
-    private var loadingJobs = false
-    private var loadingBios = false
-
     //MVP variables
     private lateinit var mainActivityPresenter: MainActivityPresenter
 
@@ -114,17 +110,17 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 viewBinding.jobsLoading.visibility = View.VISIBLE
 
                 FirebaseManager.logEvent("Job Detail: $position", "Get_Job_Detail")
-//                opportunityList.values.elementAt(position).id?.let { getJob(it) } todo
+                opportunityList.values.elementAt(position).id?.let { getJob(it) }
             }
         })
 
-//        opportunityAdapter.setOnBottomReachedListener(object:
-//            OpportunitiesAdapter.OnBottomReachedListener {
-//            override fun onBottomReached(position: Int) {
-////                if (!loadingJobs)
-//                    getOpportunities()
-//            }
-//        })
+        opportunityAdapter.setOnBottomReachedListener(object:
+            OpportunitiesAdapter.OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+//                if (!loadingJobs)
+                    getOpportunities()
+            }
+        })
 
         viewBinding.recyclerViewJobs.addOnScrollListener(object:
             RecyclerView.OnScrollListener() {
@@ -156,17 +152,17 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
                 viewBinding.biosLoading.visibility = View.VISIBLE
 
                 FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
-//                peopleList.values.elementAt(position).username?.let { getBio(it) } todo
+                peopleList.values.elementAt(position).username?.let { getBio(it) }
             }
         })
 
-//        peopleAdapter.setOnBottomReachedListener(object:
-//            PeoplesAdapter.OnBottomReachedListener {
-//            override fun onBottomReached(position: Int) {
-////                if (!loadingBios)
-//                    getPeoples()
-//            }
-//        })
+        peopleAdapter.setOnBottomReachedListener(object:
+            PeoplesAdapter.OnBottomReachedListener {
+            override fun onBottomReached(position: Int) {
+//                if (!loadingBios)
+                    getPeoples()
+            }
+        })
 
         viewBinding.recyclerViewBios.addOnScrollListener(object:
             RecyclerView.OnScrollListener() {
@@ -587,14 +583,16 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * Show error message when fail loading Opportunities
      */
     override fun errorLoadingOpportunities() {
-        DeviceUtils.showToast(this, getString(R.string.error_loading_jobs))
+        DeviceUtils.showToast(this, getString(R.string.error_loading_opportunities))
+        viewBinding.jobsLoading.visibility = View.INVISIBLE
     }
 
     /**
      * Show error message when fail loading Peoples
      */
     override fun errorLoadingPeoples() {
-        DeviceUtils.showToast(this, getString(R.string.error_loading_bios))
+        DeviceUtils.showToast(this, getString(R.string.error_loading_peoples))
+        viewBinding.biosLoading.visibility = View.INVISIBLE
     }
 
     /**
