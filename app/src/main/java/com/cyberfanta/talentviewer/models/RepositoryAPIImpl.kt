@@ -1,5 +1,6 @@
 package com.cyberfanta.talentviewer.models
 
+import android.util.Log
 import com.cyberfanta.talentviewer.presenters.FirebaseManager
 import com.cyberfanta.talentviewer.presenters.PageData
 import com.google.gson.Gson
@@ -9,17 +10,19 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
+    @Suppress("PrivatePropertyName", "unused")
+    private val TAG = this::class.java.simpleName
 
     /**
-     * Get a job page from API
+     * Get opportunities from API
      */
-    override fun getJobPage(pageData: PageData) {
+    override fun getOpportunities(pageData: PageData) {
         val call = APIAdapter.getRetrofitOpportunities().create(APIService::class.java).getOpportunities(pageData.toString())
 
         call.enqueue(object : Callback<JsonObject> {
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                FirebaseManager.logEvent("Error_Loading_Job_Page", "Error_Loading_Data")
-                interactor.errorLoadingJobPage()
+                FirebaseManager.logEvent("Error_Loading_Opportunities", "Error_Loading_Data")
+                interactor.errorLoadingOpportunities()
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -28,21 +31,21 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
                 for (result in messageList.results!!)
                     if (result != null)
                         result.id?.let { opportunities.put(it, result) }
-                interactor.showJobPage(opportunities)
+                interactor.showOpportunities(opportunities)
             }
         })
     }
 
     /**
-     * Get a bio page from API
+     * Get peoples from API
      */
-    override fun getBioPage(pageData: PageData) {
+    override fun getPeoples(pageData: PageData) {
         val call = APIAdapter.getRetrofitPeoples().create(APIService::class.java).getPeoples(pageData.toString())
 
         call.enqueue(object : Callback<JsonObject> {
             override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                FirebaseManager.logEvent("Error_Loading_Bio_Page", "Error_Loading_Data")
-                interactor.errorLoadingBioPage()
+                FirebaseManager.logEvent("Error_Loading_Peoples", "Error_Loading_Data")
+                interactor.errorLoadingPeoples()
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
@@ -51,7 +54,7 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
                 for (result in messageList.results!!)
                     if (result != null)
                         result.username?.let { peoples.put(it, result) }
-                interactor.showBioPage(peoples)
+                interactor.showPeoples(peoples)
             }
         })
     }
@@ -69,7 +72,14 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                interactor.showJob(Gson().fromJson(response.body(), Jobs::class.java))
+                Log.i(TAG, "id: $id")
+                Log.i(TAG, "response.body(): " + response.body())
+                Log.i(TAG, "Gson().fromJson(response.body(), Jobs::class.java): " + Gson().fromJson(response.body(), Jobs::class.java))
+                if (response.body() != null) {
+                    interactor.showJob(Gson().fromJson(response.body(), Jobs::class.java))
+                } else {
+                    interactor.errorLoadingJob()
+                }
             }
         })
     }
@@ -89,7 +99,11 @@ class RepositoryAPIImpl (var interactor: Interactor) : RepositoryAPI{
             }
 
             override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
-                interactor.showBio(Gson().fromJson(response.body(), Bios::class.java))
+                if (response.body() != null) {
+                    interactor.showBio(Gson().fromJson(response.body(), Bios::class.java))
+                } else {
+                    interactor.errorLoadingBio()
+                }
             }
         })
     }

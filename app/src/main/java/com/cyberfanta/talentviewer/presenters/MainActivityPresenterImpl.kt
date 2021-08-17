@@ -4,6 +4,8 @@ import com.cyberfanta.talentviewer.models.*
 import com.cyberfanta.talentviewer.views.MainActivityInterface
 
 class MainActivityPresenterImpl (var view: MainActivityInterface) : MainActivityPresenter {
+    @Suppress("PrivatePropertyName", "unused")
+    private val TAG = this::class.java.simpleName
     private var interactorImpl: Interactor = InteractorImpl ()
 
     init {
@@ -12,37 +14,49 @@ class MainActivityPresenterImpl (var view: MainActivityInterface) : MainActivity
 
     //View
 
-    override fun showJobPage(peopleList: Map<String, OpportunityItem>, current: Int) {
-        TODO("Not yet implemented")
+    /**
+     * Send Opportunities obtained
+     */
+    override fun showOpportunities(peopleList: Map<String, OpportunityItem>) {
+        view.showOpportunities(peopleList)
     }
 
-    override fun showBioPage(peopleList: Map<String, PeopleItem>, current: Int) {
-        TODO("Not yet implemented")
+    /**
+     * Send Peoples obtained
+     */
+    override fun showPeoples(peopleList: Map<String, PeopleItem>) {
+        view.showPeoples(peopleList)
     }
 
     //View Errors
 
-    override fun errorLoadingJobPage() {
-        TODO("Not yet implemented")
+    /**
+     * Show error when loading Opportunities
+     */
+    override fun errorLoadingOpportunities() {
+        view.errorLoadingOpportunities()
     }
 
-    override fun errorLoadingBioPage() {
-        TODO("Not yet implemented")
+    /**
+     * Show error when loading Peoples
+     */
+    override fun errorLoadingPeoples() {
+        view.errorLoadingPeoples()
     }
 
     //Interactor
 
     /**
-     * Manege the obtain of a job page
+     * Manage the obtain of Opportunities
      */
-    override fun getJobPage() {
-        interactorImpl.getJobPage()
+    override fun getOpportunities() {
+        interactorImpl.getOpportunities()
     }
 
     /**
-     * Manege the obtain of a bio page
+     * Manage the obtain of Peoples
      */
-    override fun getBioPage() {
-        interactorImpl.getBioPage()
+    override fun getPeoples() {
+        interactorImpl.getPeoples()
     }
 }

@@ -5,12 +5,12 @@ import com.cyberfanta.talentviewer.models.PeopleItem
 
 interface MainActivityInterface {
     //View
-    fun showJobPage(peopleList: Map<String, OpportunityItem>)
-    fun showBioPage(peopleList: Map<String, PeopleItem>)
-    fun errorLoadingJobPage()
-    fun errorLoadingBioPage()
+    fun showOpportunities(opportunityList: Map<String, OpportunityItem>)
+    fun showPeoples(peopleList: Map<String, PeopleItem>)
+    fun errorLoadingOpportunities()
+    fun errorLoadingPeoples()
 
     //Presenter
-    fun getJobPage()
-    fun getBioPage()
+    fun getOpportunities()
+    fun getPeoples()
 }

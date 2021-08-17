@@ -7,14 +7,29 @@ import java.util.concurrent.TimeUnit
 
 class APIAdapter {
     companion object {
+        //Client timeout value
+        private val client: OkHttpClient = OkHttpClient.Builder()
+            .connectTimeout(100, TimeUnit.SECONDS)
+            .readTimeout(100, TimeUnit.SECONDS).build()
+
         /**
-         * Retrofit implementation to get a bio detail
+         * Retrofit implementation to get a opportunity list
          */
-        fun getRetrofitBio(): Retrofit {
+        fun getRetrofitOpportunities(): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("https://torre.bio/api/bios/")
+                .baseUrl("https://search.torre.co/opportunities/_search/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .build()
+                .client(client).build()
+        }
+
+        /**
+         * Retrofit implementation to get a people list
+         */
+        fun getRetrofitPeoples(): Retrofit {
+            return Retrofit.Builder()
+                .baseUrl("https://search.torre.co/people/_search/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client).build()
         }
 
         /**
@@ -24,31 +39,15 @@ class APIAdapter {
             return Retrofit.Builder()
                 .baseUrl("https://torre.co/api/opportunities/")
                 .addConverterFactory(GsonConverterFactory.create())
-                .build()
-        }
-
-        /**
-         * Retrofit implementation to get a people list
-         */
-        fun getRetrofitPeoples(): Retrofit {
-            val client = OkHttpClient.Builder()
-                .connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS).build()
-            return Retrofit.Builder()
-                .baseUrl("https://search.torre.co/people/_search/")
-                .addConverterFactory(GsonConverterFactory.create())
                 .client(client).build()
         }
 
         /**
-         * Retrofit implementation to get a opportunity list
+         * Retrofit implementation to get a bio detail
          */
-        fun getRetrofitOpportunities(): Retrofit {
-            val client = OkHttpClient.Builder()
-                .connectTimeout(100, TimeUnit.SECONDS)
-                .readTimeout(100, TimeUnit.SECONDS).build()
+        fun getRetrofitBio(): Retrofit {
             return Retrofit.Builder()
-                .baseUrl("https://search.torre.co/opportunities/_search/")
+                .baseUrl("https://torre.bio/api/bios/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client).build()
         }

@@ -1,18 +1,16 @@
 package com.cyberfanta.talentviewer.presenters
 
-import com.cyberfanta.talentviewer.models.Bios
-import com.cyberfanta.talentviewer.models.Jobs
 import com.cyberfanta.talentviewer.models.OpportunityItem
 import com.cyberfanta.talentviewer.models.PeopleItem
 
 interface MainActivityPresenter {
     //View
-    fun showJobPage(peopleList: Map<String, OpportunityItem>, current: Int)
-    fun showBioPage(peopleList: Map<String, PeopleItem>, current: Int)
-    fun errorLoadingJobPage()
-    fun errorLoadingBioPage()
+    fun showOpportunities(peopleList: Map<String, OpportunityItem>)
+    fun showPeoples(peopleList: Map<String, PeopleItem>)
+    fun errorLoadingOpportunities()
+    fun errorLoadingPeoples()
 
     //Interactor
-    fun getJobPage()
-    fun getBioPage()
+    fun getOpportunities()
+    fun getPeoples()
 }

@@ -6,6 +6,9 @@ import com.cyberfanta.talentviewer.presenters.MainActivityPresenter
 import com.cyberfanta.talentviewer.presenters.PageData
 
 class InteractorImpl : Interactor {
+    @Suppress("PrivatePropertyName", "unused")
+    private val TAG = this::class.java.simpleName
+
     companion object {
         //Class Connectors
         var mainPresenter: MainActivityPresenter? = null
@@ -28,21 +31,19 @@ class InteractorImpl : Interactor {
     //Presenter
 
     /**
-     * Send the job page obtained
+     * Send Opportunities obtained
      */
-    override fun showJobPage(opportunityList: Map<String, OpportunityItem>) {
-        val current = opportunities.size
+    override fun showOpportunities(opportunityList: Map<String, OpportunityItem>) {
         opportunities.putAll(opportunityList)
-        mainPresenter?.showJobPage(opportunities, current)
+        mainPresenter?.showOpportunities(opportunities)
     }
 
     /**
-     * Send the bio page obtained
+     * Send Peoples obtained
      */
-    override fun showBioPage(peopleList: Map<String, PeopleItem>) {
-        val current = peoples.size
+    override fun showPeoples(peopleList: Map<String, PeopleItem>) {
         peoples.putAll(peopleList)
-        mainPresenter?.showBioPage(peoples, current)
+        mainPresenter?.showPeoples(peoples)
     }
 
     /**
@@ -64,17 +65,17 @@ class InteractorImpl : Interactor {
     //Presenter errors
 
     /**
-     * Show error when loading a job page
+     * Show error when loading Opportunities
      */
-    override fun errorLoadingJobPage() {
-        mainPresenter?.errorLoadingJobPage()
+    override fun errorLoadingOpportunities() {
+        mainPresenter?.errorLoadingOpportunities()
     }
 
     /**
-     * Show error when loading a bio page
+     * Show error when loading Peoples
      */
-    override fun errorLoadingBioPage() {
-        mainPresenter?.errorLoadingBioPage()
+    override fun errorLoadingPeoples() {
+        mainPresenter?.errorLoadingPeoples()
     }
 
     /**
@@ -94,17 +95,17 @@ class InteractorImpl : Interactor {
     //Repository
 
     /**
-     * Manage the job page obtain
+     * Manage the opportunities obtain
      */
-    override fun getJobPage() {
-        repositoryAPI.getJobPage(PageData(opportunities.size.toString(), pageSize.toString(), false))
+    override fun getOpportunities() {
+        repositoryAPI.getOpportunities(PageData("0", opportunities.size.toString() + pageSize.toString(), false))
     }
 
     /**
-     * Manage the bio page obtain
+     * Manage the peoples obtain
      */
-    override fun getBioPage() {
-        repositoryAPI.getBioPage(PageData(peoples.size.toString(), pageSize.toString(), false))
+    override fun getPeoples() {
+        repositoryAPI.getPeoples(PageData("0", peoples.size.toString() + pageSize.toString(), false))
     }
 
     /**

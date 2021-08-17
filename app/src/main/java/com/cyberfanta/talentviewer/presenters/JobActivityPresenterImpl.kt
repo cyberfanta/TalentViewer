@@ -4,6 +4,8 @@ import com.cyberfanta.talentviewer.models.*
 import com.cyberfanta.talentviewer.views.JobActivityInterface
 
 class JobActivityPresenterImpl (var view: JobActivityInterface) : JobActivityPresenter {
+    @Suppress("PrivatePropertyName", "unused")
+    private val TAG = this::class.java.simpleName
     private var interactorImpl: Interactor = InteractorImpl ()
 
     init {
@@ -12,19 +14,28 @@ class JobActivityPresenterImpl (var view: JobActivityInterface) : JobActivityPre
 
     //View
 
+    /**
+     * Send the single job obtained
+     */
     override fun showJob(job: Jobs) {
-        TODO("Not yet implemented")
+        view.showJob(job)
     }
 
     //View Errors
 
+    /**
+     * Show error when loading a job
+     */
     override fun errorLoadingJob() {
-        TODO("Not yet implemented")
+        view.errorLoadingJob()
     }
 
     //Interactor
 
-    override fun getJob() {
-        TODO("Not yet implemented")
+    /**
+     * Manage the single job obtain
+     */
+    override fun getJob(id: String) {
+        interactorImpl.getJob(id)
     }
 }

@@ -6,20 +6,20 @@ import com.cyberfanta.talentviewer.presenters.MainActivityPresenter
 
 interface Interactor {
     //Presenter
-    fun showJobPage(opportunityList: Map<String, OpportunityItem>)
-    fun showBioPage(peopleList: Map<String, PeopleItem>)
+    fun showOpportunities(opportunityList: Map<String, OpportunityItem>)
+    fun showPeoples(peopleList: Map<String, PeopleItem>)
     fun showJob(job: Jobs)
     fun showBio(bio: Bios)
 
     //Presenter Errors
-    fun errorLoadingJobPage()
-    fun errorLoadingBioPage()
+    fun errorLoadingOpportunities()
+    fun errorLoadingPeoples()
     fun errorLoadingJob()
     fun errorLoadingBio()
 
     //Repository
-    fun getJobPage()
-    fun getBioPage()
+    fun getOpportunities()
+    fun getPeoples()
     fun getJob(id: String) : Jobs?
     fun getBio(publicId: String) : Bios?
 

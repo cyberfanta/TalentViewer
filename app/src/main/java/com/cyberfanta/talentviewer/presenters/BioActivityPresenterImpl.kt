@@ -4,6 +4,8 @@ import com.cyberfanta.talentviewer.models.*
 import com.cyberfanta.talentviewer.views.BioActivityInterface
 
 class BioActivityPresenterImpl (var view: BioActivityInterface) : BioActivityPresenter {
+    @Suppress("PrivatePropertyName", "unused")
+    private val TAG = this::class.java.simpleName
     private var interactorImpl: Interactor = InteractorImpl ()
 
     init {
@@ -12,19 +14,28 @@ class BioActivityPresenterImpl (var view: BioActivityInterface) : BioActivityPre
 
     //View
 
+    /**
+     * Send the single bio obtained
+     */
     override fun showBio(bio: Bios) {
-        TODO("Not yet implemented")
+        view.showBio(bio)
     }
 
     //View Errors
 
+    /**
+     * Show error when loading a bio
+     */
     override fun errorLoadingBio() {
-        TODO("Not yet implemented")
+        view.errorLoadingBio()
     }
 
     //Interactor
 
-    override fun getBio() {
-        TODO("Not yet implemented")
+    /**
+     * Manage the single bio obtain
+     */
+    override fun getBio(publicId: String) {
+        interactorImpl.getBio(publicId)
     }
 }

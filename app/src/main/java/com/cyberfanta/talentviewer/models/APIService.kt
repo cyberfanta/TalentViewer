@@ -9,18 +9,20 @@ import retrofit2.http.POST
 import retrofit2.http.Url
 
 interface APIService {
-    @GET
-    fun getBio(@Url url: String) : Call<JsonObject>
-
-    @GET
-    fun getJob(@Url url: String) : Call<JsonObject>
+    @Headers("Content-Type: application/json")
+    @POST
+    fun getOpportunities(@Url url: String) : Call<JsonObject>
 
     @Headers("Content-Type: application/json")
     @POST
     fun getPeoples(@Url url: String) : Call<JsonObject>
 
     @Headers("Content-Type: application/json")
-    @POST
-    fun getOpportunities(@Url url: String) : Call<JsonObject>
+    @GET
+    fun getJob(@Url url: String) : Call<JsonObject>
+
+    @Headers("Content-Type: application/json")
+    @GET
+    fun getBio(@Url url: String) : Call<JsonObject>
 }
 
