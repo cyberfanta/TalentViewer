@@ -27,7 +27,7 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
 
     //UI variables
     private var deviceDimension = intArrayOf(0, 0)
-    private lateinit var id : String
+    private lateinit var id: String
 
     //Menu variables
     override var deviceWidth: Float = 0.0f
@@ -67,7 +67,14 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
     /**
      * Process the behavior of the app when user press back button
      */
+    @Deprecated(
+        "Deprecated in Java", ReplaceWith(
+            "if (backPressed()) super.onBackPressed()",
+            "androidx.appcompat.app.AppCompatActivity"
+        )
+    )
     override fun onBackPressed() {
+        @Suppress("DEPRECATION")
         if (backPressed())
             super.onBackPressed()
     }
@@ -75,7 +82,7 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
     /**
      * Get the device dimension
      */
-    private fun getDeviceDimensions(){
+    private fun getDeviceDimensions() {
         deviceDimension = DeviceUtils.getDeviceDimensions()
         id = intent.getStringExtra("id")!!
     }
@@ -83,7 +90,7 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
     /**
      * Set a random background each run
      */
-    private fun setRandomKenBurnsBackground(){
+    private fun setRandomKenBurnsBackground() {
         when (DeviceUtils.getRandomNumber(1, 7)) {
             1 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_1)
             2 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_2)
@@ -132,7 +139,8 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
         job.place?.remote?.let { job.commitment?.let { it1 -> showExtras(job, it, it1) } }
 
         viewBinding.applyNowButton.setOnClickListener {
-            DeviceUtils.openURL(this@JobActivity,
+            DeviceUtils.openURL(
+                this@JobActivity,
                 "https://torre.co/jobs/$id"
             )
         }
@@ -183,7 +191,13 @@ class JobActivity : AppCompatActivity(), MenuManager, JobActivityInterface {
     /**
      * Update compensation data
      */
-    private fun showCompensation(job: Jobs, visible: Boolean, compensation: Compensation, minAmount: Double, maxAmount: Double) {
+    private fun showCompensation(
+        job: Jobs,
+        visible: Boolean,
+        compensation: Compensation,
+        minAmount: Double,
+        maxAmount: Double
+    ) {
         var string = getString(R.string.card_compensation_hidden)
         job.compensation?.visible?.let {
             if (visible) {

@@ -69,7 +69,14 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
     /**
      * Process the behavior of the app when user press back button
      */
+    @Deprecated(
+        "Deprecated in Java", ReplaceWith(
+            "if (backPressed()) super.onBackPressed()",
+            "androidx.appcompat.app.AppCompatActivity"
+        )
+    )
     override fun onBackPressed() {
+        @Suppress("DEPRECATION")
         if (backPressed())
             super.onBackPressed()
     }
@@ -77,7 +84,7 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
     /**
      * Get the device dimension
      */
-    private fun getDeviceDimensions(){
+    private fun getDeviceDimensions() {
         deviceDimension = DeviceUtils.getDeviceDimensions()
         username = intent.getStringExtra("username")!!
     }
@@ -85,7 +92,7 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
     /**
      * Set a random background each run
      */
-    private fun setRandomKenBurnsBackground(){
+    private fun setRandomKenBurnsBackground() {
         when (DeviceUtils.getRandomNumber(1, 7)) {
             1 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_1)
             2 -> viewBinding.pictureBackground.setImageResource(R.drawable.background_2)
@@ -128,7 +135,8 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
         bio.languages?.let { showLanguages(bio, it) }
 
         viewBinding.applyNowButton.setOnClickListener {
-            DeviceUtils.openURL(this@BioActivity,
+            DeviceUtils.openURL(
+                this@BioActivity,
                 "https://torre.co/en/$username"
             )
         }
@@ -390,7 +398,10 @@ class BioActivity : AppCompatActivity(), MenuManager, BioActivityInterface {
     /**
      * Update personalityTraits data
      */
-    private fun showPersonalityTraits(bio: Bios, personalityTraitsResults: PersonalityTraitsResults) {
+    private fun showPersonalityTraits(
+        bio: Bios,
+        personalityTraitsResults: PersonalityTraitsResults
+    ) {
         bio.personalityTraitsResults?.let {
             var textView = TextView(
                 ContextThemeWrapper(

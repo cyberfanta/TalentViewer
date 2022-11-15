@@ -1,6 +1,6 @@
 package com.cyberfanta.talentviewer.presenters
 
-class PageData(var offset: String?, var size: String?, var aggregators: Boolean) {
+class PageData(private var offset: String?, private var size: String?, private var aggregators: Boolean) {
         override fun toString(): String {
             var result = ""
             if (offset != null)
@@ -12,9 +12,9 @@ class PageData(var offset: String?, var size: String?, var aggregators: Boolean)
                 result += "?size=$size"
 
             if (aggregators && result.isNotEmpty())
-                result += "&aggregators=$aggregators"
+                result += "&aggregators=true"
             else if (aggregators)
-                result += "?aggregators=$aggregators"
+                result += "?aggregators=true"
 
             return result
         }

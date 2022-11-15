@@ -6,11 +6,11 @@ import android.content.Context
 import android.util.Log
 import android.widget.FrameLayout
 import com.cyberfanta.talentviewer.R
-import com.cyberfanta.talentviewer.views.DeviceUtils
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.interstitial.InterstitialAd
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 
+@Suppress("unused")
 class AdsManager {
     companion object {
         @Suppress("PrivatePropertyName", "unused")
@@ -28,8 +28,8 @@ class AdsManager {
         @Suppress("unused")
         fun attachBannerAd (adView: AdView) {
             currentBannerAd?.removeView(bannerAd)
-            if (adView.adSize == null)
-                adView.adSize = bannerAd?.adSize
+//            if (adView.adSize == null)
+//                adView.adSize = bannerAd?.adSize
             adView.addView(bannerAd)
             adView.post { bannerAd!!.loadAd(AdRequest.Builder().build()) }
             currentBannerAd = adView
@@ -57,14 +57,14 @@ class AdsManager {
         /**
          * Manage the loading of Banner Ads
          */
-        @Suppress("unused")
+        @Suppress("unused", "UNUSED_PARAMETER")
         fun loadBannerAds(context: Context, deviceWidth: Float) {
             if (bannerAd == null) {
                 bannerAd = AdView(context)
-                bannerAd!!.adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
-                    context,
-                    DeviceUtils.convertPxToDp(context, deviceWidth)
-                )
+//                bannerAd!!.adSize = AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(
+//                    context,
+//                    DeviceUtils.convertPxToDp(context, deviceWidth)
+//                )
                 bannerAd!!.adUnitId = context.resources.getString(R.string.ads_banner)
                 bannerAd!!.adListener = object : AdListener() {
                     override fun onAdLoaded() {

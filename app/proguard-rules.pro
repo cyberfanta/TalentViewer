@@ -22,5 +22,5 @@
 
 #For future use
 -keep class com.cyberfanta.talentviewer.models.* { *; }
--dontwarn java.lang.instrument.ClassFileTransformer
--dontwarn sun.misc.SignalHandler
+#-dontwarn java.lang.instrument.ClassFileTransformer
+#-dontwarn sun.misc.SignalHandler

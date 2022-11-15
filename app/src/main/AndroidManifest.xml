@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.cyberfanta.talentviewer">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission
         android:name="android.permission.INTERNET"
@@ -19,7 +18,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TalentViewer"
-        tools:ignore="AllowBackup">
+        tools:ignore="AllowBackup"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        tools:targetApi="s">
         <activity android:name=".views.BioActivity"
             android:configChanges="orientation|screenSize"
             android:screenOrientation="portrait"

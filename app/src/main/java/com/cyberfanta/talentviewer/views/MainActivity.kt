@@ -28,7 +28,8 @@ import com.daimajia.androidanimations.library.YoYo
 import java.util.*
 import kotlin.system.exitProcess
 
-class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener, MenuManager, MainActivityInterface {
+class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextListener,
+    MenuManager, MainActivityInterface {
 
     @Suppress("PrivatePropertyName", "unused")
     private val TAG = this::class.java.simpleName
@@ -97,7 +98,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * The initialize the jobs recyclerView
      */
     private fun fillRecyclerViewJobs() {
-        opportunityAdapter = OpportunitiesAdapter (opportunityList)
+        opportunityAdapter = OpportunitiesAdapter(opportunityList)
         viewBinding.recyclerViewJobs.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewJobs.adapter = opportunityAdapter
 
@@ -114,21 +115,21 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             }
         })
 
-        opportunityAdapter.setOnBottomReachedListener(object:
+        opportunityAdapter.setOnBottomReachedListener(object :
             OpportunitiesAdapter.OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
 //                if (!loadingJobs)
-                    getOpportunities()
+                getOpportunities()
             }
         })
 
-        viewBinding.recyclerViewJobs.addOnScrollListener(object:
+        viewBinding.recyclerViewJobs.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
 //                    if (!loadingJobs)
-                        getOpportunities()
+                    getOpportunities()
                 }
             }
         })
@@ -138,14 +139,21 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
      * The initialize the bios recyclerView
      */
     private fun fillRecyclerViewBios() {
-        peopleAdapter = PeoplesAdapter (peopleList)
+        peopleAdapter = PeoplesAdapter(peopleList)
         viewBinding.recyclerViewBios.layoutManager = LinearLayoutManager(this)
         viewBinding.recyclerViewBios.adapter = peopleAdapter
 
         getPeoples()
-        DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
+        DeviceUtils.setAnimation(
+            viewBinding.recyclerViewBios,
+            "translationX",
+            300,
+            false,
+            0f,
+            -1f * deviceDimension[0]
+        )
 
-        peopleAdapter.setOnItemClickListener(object:
+        peopleAdapter.setOnItemClickListener(object :
             PeoplesAdapter.OnItemClickListener {
             override fun onItemClick(position: Int) {
                 //Activating Loading Arrow
@@ -156,21 +164,21 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
             }
         })
 
-        peopleAdapter.setOnBottomReachedListener(object:
+        peopleAdapter.setOnBottomReachedListener(object :
             PeoplesAdapter.OnBottomReachedListener {
             override fun onBottomReached(position: Int) {
 //                if (!loadingBios)
-                    getPeoples()
+                getPeoples()
             }
         })
 
-        viewBinding.recyclerViewBios.addOnScrollListener(object:
+        viewBinding.recyclerViewBios.addOnScrollListener(object :
             RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                if (!recyclerView.canScrollVertically(1) && newState==RecyclerView.SCROLL_STATE_IDLE) {
+                if (!recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE) {
 //                    if (!loadingBios)
-                        getPeoples()
+                    getPeoples()
                 }
             }
         })
@@ -282,7 +290,14 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     /**
      * Process the behavior of the app when user press back button
      */
+    @Deprecated(
+        "Deprecated in Java", ReplaceWith(
+            "if (backPressed()) super.onBackPressed()",
+            "androidx.appcompat.app.AppCompatActivity"
+        )
+    )
     override fun onBackPressed() {
+        @Suppress("DEPRECATION")
         if (backPressed())
             super.onBackPressed()
     }
@@ -354,7 +369,7 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
         } else {
             peopleAdapter = PeoplesAdapter(peopleList)
             viewBinding.recyclerViewBios.adapter = peopleAdapter
-            peopleAdapter.setOnItemClickListener(object:
+            peopleAdapter.setOnItemClickListener(object :
                 PeoplesAdapter.OnItemClickListener {
                 override fun onItemClick(position: Int) {
                     FirebaseManager.logEvent("Bio Detail: $position", "Get_Bio_Detail")
@@ -489,10 +504,24 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     /**
      * Manage the swap animation when press jobs button
      */
-    private fun jobsButtonPressed () {
+    private fun jobsButtonPressed() {
         if (!opportunitySwitch) {
-            DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 1f * deviceDimension[0], 0f)
-            DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, 0f, -1f * deviceDimension[0])
+            DeviceUtils.setAnimation(
+                viewBinding.recyclerViewJobs,
+                "translationX",
+                300,
+                false,
+                1f * deviceDimension[0],
+                0f
+            )
+            DeviceUtils.setAnimation(
+                viewBinding.recyclerViewBios,
+                "translationX",
+                300,
+                false,
+                0f,
+                -1f * deviceDimension[0]
+            )
             opportunitySwitch = true
 
             if (viewBinding.helperBios.isVisible) {
@@ -517,10 +546,24 @@ class MainActivity : AppCompatActivity(), android.widget.SearchView.OnQueryTextL
     /**
      * Manage the swap animation when press bios button
      */
-    private fun biosButtonPressed () {
+    private fun biosButtonPressed() {
         if (opportunitySwitch) {
-            DeviceUtils.setAnimation(viewBinding.recyclerViewJobs, "translationX", 300, false, 0f, 1f * deviceDimension[0])
-            DeviceUtils.setAnimation(viewBinding.recyclerViewBios, "translationX", 300, false, -1f * deviceDimension[0], 0f)
+            DeviceUtils.setAnimation(
+                viewBinding.recyclerViewJobs,
+                "translationX",
+                300,
+                false,
+                0f,
+                1f * deviceDimension[0]
+            )
+            DeviceUtils.setAnimation(
+                viewBinding.recyclerViewBios,
+                "translationX",
+                300,
+                false,
+                -1f * deviceDimension[0],
+                0f
+            )
             opportunitySwitch = false
 
             if (viewBinding.helperJobs.isVisible) {
